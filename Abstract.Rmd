@@ -8,34 +8,63 @@ output: pdf_document
 ## Alt - Right Personalities
 
 - Milo Yiannopolis
+
 https://www.facebook.com/myiannopoulos/
+
 - Mike Cernovich
+
 https://www.facebook.com/MikeCernovich/
+
 - Alex Jones
+
 https://www.facebook.com/AlexanderEmerickJones/
+
 - Infowars
+
 https://www.facebook.com/InfoWars-80256732576/?ref=br_rs
+
 - Paul Joseph Watson
+
 https://www.facebook.com/PaulJosephWatson/
+
 - Lauren Southern
+
 https://www.facebook.com/LaurenCSouthern/
+
 - Roaming Millenial
+
 https://www.facebook.com/Roaming-Millennial-1213352768743538/?ref=br_rs
+
 - Barbara4u2c
+
 https://www.facebook.com/Barbara4u2c/
+
 - Tara McCarthy
+
 https://www.facebook.com/profile.php?id=100014041179050
+
 - Murdoch Murdoch
+
 https://www.facebook.com/Murdochx2/
+
 - Mike Enoch
+
 https://www.facebook.com/profile.php?id=100015425435298
+
 - Black Pigeon Speaks
+
 https://www.facebook.com/blackpigeonspeaks/
+
 - Brittany Pettibone
+
 https://www.facebook.com/brittany.a.pettibone
+
 - Red Ice TV
+
 https://www.facebook.com/RedIceCreations/
+
 - Ann Coulter
+
 https://www.facebook.com/OfficialAnnCoulter/
 
 
@@ -43,17 +72,47 @@ https://www.facebook.com/OfficialAnnCoulter/
 ## Media Outlets
 
 - FOX News
+
 https://www.facebook.com/FoxNews/
+
 - MSNBC
+
 https://www.facebook.com/msnbc/
+
 - Breitbart
+
 https://www.facebook.com/Breitbart/
+
 - CNN
+
 https://www.facebook.com/cnn/
+
 - Tucker Carlson
+
 https://www.facebook.com/TuckerCarlsonTonight/
+
 - Sean Hannity
+
 https://www.facebook.com/SeanHannity/
+
 - Rachel Maddow
+
 https://www.facebook.com/therachelmaddowshow/
 
+
+VOX-Pol is convening a two-day workshop titled ‘Combating Online Extremism: State, Private Sector, and Civil Society Responses’ at the University of Oxford on 5 – 6 March, 2018.
+
+The workshop seeks to explore the emerging responses from politicians, think tanks, technology companies, and civil society to the proliferation of extremism and hate online. The workshop will take a global, comparative approach with a view to evaluating approaches to combating online extremism, as well as its implications for governance.
+
+As extreme speech on social media platforms has proliferated, online extremism has received a significant amount of attention from policymakers across the world. In this workshop, we consider how governments, civil society, and the private sector are responding to hate speech, cyber-bullying, and radicalisation online. These concerns have encouraged governments across the world to develop a variety of responses to online extremism, ranging from producing counter-narratives, the empowerment of ‘moderate’ voices, and calling on social media platforms to regulate content posted by their users. While these responses have multiplied, there have been very few rigorous evaluations of their methodologies and the forms of governance that shape them. This workshop seeks to highlight research which fills this gap, providing insight into the design of effective interventions and mapping changes to security practices in response to online hate and extremism.
+
+The main topics of discussion for this workshop include:
+
+Review of initiatives to counter hate speech, extremism, or radicalisation from governments and the private sector;
+Technologies used to identify hate speech, extremism, or radicalisation and their use;
+Comparison of regulations regarding hate speech and extremism across national contexts;
+The responses and responsibilities of technology companies and internet service providers;
+Evaluation of ‘positive’ approaches (e.g. counter-narratives, empowerment and resilience) and ‘negative’ approaches (e.g. removal of content, user suspension) to countering hate speech, extremism, and radicalisation online;
+Inclusion of ethnic and religious minorities in countering hate speech, extremism, and radicalisation online;
+Examination of the logics of governance and regulation that frame responses to online hate speech, extremism, and radicalisation.
+We encourage interested scholars to submit 250-word abstracts on their research to workshop@voxpol.eu by 6 December 2017. We will send notifications of acceptance by 11 January 2018. We will work with participants during and after the workshop to develop contributions into a special issue or an edited volume. Please also include five key words and a short biography from the contributor along with the abstract.
