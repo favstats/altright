@@ -6,7 +6,11 @@ date: "7 Dezember 2017"
 output: pdf_document
 ---
 
-The purpose of this research is to track Alt-Right online discourse on Facebook and analyze sentiments, topics to map them on major news outlets. We use text data from several Alt-Right Network Hubs and Figureheads on Facebook (for example Milo Yiannopolis, Mike Cernovich and Paul Jospeh Watson) and establish connections between those and news. We find that Alt Right Figures are mostly associated with FOX News and Breitbart, less so on MSNBC.
+The general purpose of this research is to track Alt-Right discourse on Facebook and extract psychometric and linguistic features of their online commentary. More specifically, we aim to identify content that aligns with Alt-Right discussion patterns in the comment sections of different media outlets (e. g. CNN, Breitbart, FOX News etc.). With this research we hope to gain insights into how the Alt Right communicates online and contribute an automated content identification system. 
+
+We webscraped the online commentary from several Alt-Right Network Hubs and Figureheads on Facebook (for example Infowars, Milo Yiannopolis, Mike Cernovich and Paul Jospeh Watson etc.) over the course of one year (2016/12/07 - 201//12/079: and establish connections between those and news. We find that Alt Right Figures are mostly associated with FOX News and Breitbart, less so on MSNBC.
+
+analyze sentiments, topics to map them on major news outlets.
 
 "coulter" = "695526053890545"
 
