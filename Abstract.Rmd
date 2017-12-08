@@ -9,12 +9,19 @@ output: pdf_document
 The purpose of this research is to track Alt-Right online discourse on Facebook and analyze sentiments, topics to map them on major news outlets. We use text data from several Alt-Right Network Hubs and Figureheads on Facebook (for example Milo Yiannopolis, Mike Cernovich and Paul Jospeh Watson) and establish connections between those and news. We find that Alt Right Figures are mostly associated with FOX News and Breitbart, less so on MSNBC.
 
 "coulter" = "695526053890545"
+
 "cernovich" = "427302110732180"
+
 "PJW" = "242174545810040"
+
 "lauren" = "184795298567879"
+
 "roaming" = "1213352768743538"
+
 "bps" = "359762154043841"
+
 "blairewhite" = "1136054926414603"
+
 "disdain" = "1772552276096911"
 
 ## Useful Links
