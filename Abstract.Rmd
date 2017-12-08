@@ -24,6 +24,22 @@ The purpose of this research is to track Alt-Right online discourse on Facebook 
 
 "disdain" = "1772552276096911"
 
+
+## Media
+
+"foxnews" = "15704546335"
+
+"msnbc" = "273864989376427"
+
+"breitbart" = "95475020353"
+
+"cnn" = "5550296508"
+
+"tucker" = "368557930146199"
+
+"hannity" = "69813760388"
+
+
 ## Useful Links
 - [fb page id](https://findmyfbid.com/success/95475020353)
 
