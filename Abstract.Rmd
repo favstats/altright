@@ -12,6 +12,8 @@ The purpose of this research is to track Alt-Right online discourse on Facebook 
 
 "cernovich" = "427302110732180"
 
+"alexjones" = "6499393458"
+
 "PJW" = "242174545810040"
 
 "lauren" = "184795298567879"
