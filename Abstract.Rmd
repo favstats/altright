@@ -8,13 +8,15 @@ output: pdf_document
 
 # Abstract
 
-The purpose of this research is to track Alt-Right discourse on Facebook and extract psychometric and linguistic features of their online commentary. More specifically, we aim to identify content that aligns with Alt-Right discussion patterns in the Facebook comment sections of different media outlets (e. g. CNN, Breitbart, FOX News etc.). With this research we hope to gain insights into how the Alt Right communicates online and contribute to an automated content identification system.
+The purpose of this research is to track Alt-Right discourse on Facebook and extract psychometric and linguistic features of their online commentary. More specifically, we aim to identify content that aligns with Alt-Right discussion patterns in the Facebook comment sections of relevant media outlets (e. g. CNN, Breitbart, FOX News etc.). With this research we hope to contribute to an automated content classification system and gain insights into how the Alt Right communicates online.
 
-We webscraped the online commentary from several Alt-Right Network Hubs and Figureheads on Facebook (for example Infowars, Milo Yiannopolis, Mike Cernovich, Paul Jospeh Watson and others) over the course of one year (07.12.2016 - 07/12/2017). We clean the data with the two following methods: 1) using topic modelling, we were able to identify the most common issues discussed (for example race, anti-feminism, fake news and more) and 2) using sentiment analysis to identify hateful comments towards Jewish people, Muslims and non-white people. This allowed us to clean the data of noise, leaving us with a corpus of comments across the different Alt Right network hubs, which can be seen as the core talking points of Alt Right discourse. We then proceed to map the cleaned Alt Right corpus on several news page outlets on Facebook and establish connections between the comment section and Alt Right commentary. We find that the discourse is mostly associated with anger and disappointment and that FOX News and Breitbart have the highest similarity between corpi.
+We gathered 1.3 Million comments from several Alt-Right Network Hubs and Figureheads on Facebook (for example Infowars, Milo Yiannopolis, Mike Cernovich, Paul Jospeh Watson and others) over the course of one year (07.12.2016 - 07/12/2017). As a first step, we cleaned the data using lemmatization and removed common irrelevant words. Next, we applied sentiment analysis to identify hateful and angry comments, leaving us with a dataset of the kind of polarizing commentary that is relevant for our analysis. Moreover, we used topic modelling in order to pinpoint Alt Right talking points (for example "race realism", "anti-feminism", "fake news" and more) resulting in a text corpus where the relevant Alt Right narratives have been isolated. 
+
+We then proceed to map the cleaned Alt Right corpus on the comment sections of several news page outlets on Facebook using a measure of cosinus similarity. We find that Alt Right discourse is mostly found on Fox News and Breitbart but can also be traced to less expected outlets such as CNN and ABC.  
 
 by the means of sentiment analysis we identify hate speech
 
-cosinus similarity between the different commentaries
+ between the different commentaries
 
 analyze sentiments, topics to map them on major news outlets.
 
@@ -35,6 +37,13 @@ analyze sentiments, topics to map them on major news outlets.
 "blairewhite" = "1136054926414603"
 
 "disdain" = "1772552276096911"
+
+"rebel" = "145634995501895"
+
+"tommy" = "381971441938916"
+
+
+
 
 
 ## Media
@@ -124,6 +133,10 @@ https://www.facebook.com/OfficialAnnCoulter/
 - Blaire White
 
 https://www.facebook.com/ImBlaireWhite/?ref=br_rs
+
+- Rebel Media
+
+https://www.facebook.com/jointherebel/
 
 
 
