@@ -6,87 +6,15 @@ date: "7 Dezember 2017"
 output: pdf_document
 ---
 
-Alt Right keywords:
+# Abstract
 
-"cultural marxism"
+The purpose of this research is to track Alt-Right discourse on Facebook and extract psychometric and linguistic features of their online commentary. More specifically, we aim to identify content that aligns with Alt-Right discussion patterns in the Facebook comment sections of different media outlets (e. g. CNN, Breitbart, FOX News etc.). With this research we hope to gain insights into how the Alt Right communicates online and contribute to an automated content identification system.
 
-"white genocide"
-
-"sjw"
-
-"cuck"
-
-"dindu" "dindu nuffin"
-
-"george soros" "soros"
-
-"We must secure the existence of our people and a future for white children"
-
-"((()))"
-
-"anti white"
-
-"Beta"
-
-"Cuckservative"
-
-"Cultural enrichment"
-
-"Hatefact"
-
-"Lügenpresse"
-
-"Mainstream media"
-
-"Mass immigration"
-
-"Political Correctness" "pc"
-
-"Postmodernism"
-
-"Race Realism"
-
-"Red pill"
-
-"remove kebab" "kebab"
-
-"cockroach"
-
-"Safe space"
-
-"Shekel"
-
-"Shoah"
-
-"oh vey"
-
-"Soy Boy"
-
-"snowflake"
-
-"Triggered"
-
-"virtue signal"
-
-"White guilt"
-
-"feminazi"
-
-"White Knight"
-
-"professional victim"
-
-"mangina"
-
-"Third Wave Feminism"
-
-"joo"
-
-The purpose of this research is to track Alt-Right discourse on Facebook and extract psychometric and linguistic features of their online commentary. More specifically, we aim to identify content that aligns with Alt-Right discussion patterns in the Facebook comment sections of different media outlets (e. g. CNN, Breitbart, FOX News etc.). With this research we hope to gain insights into how the Alt Right communicates online and contribute to an automated content identification system. 
-
-We webscraped the online commentary from several Alt-Right Network Hubs and Figureheads on Facebook (for example Infowars, Milo Yiannopolis, Mike Cernovich and Paul Jospeh Watson etc.) over the course of one year (07.12.2016 - 07/12/2017). With the help of estimating cosinus similarity between the different commentaries, we were able to clean the data of noise, leaving us with a corpus of comments across the different Alt Right network hubs, which can be seen as the core talking points of Alt Right discourse. We then proceed to map the cleaned Alt Right corpus on several news page outlets on Facebook and establish connections between the comment section and Alt Right commentary. We find that the discourse is mostly associated with anger and disappointment and that FOX News and Breitbart have the highest similarity between corpi.
+We webscraped the online commentary from several Alt-Right Network Hubs and Figureheads on Facebook (for example Infowars, Milo Yiannopolis, Mike Cernovich, Paul Jospeh Watson and others) over the course of one year (07.12.2016 - 07/12/2017). We clean the data with the two following methods: 1) using topic modelling, we were able to identify the most common issues discussed (for example race, anti-feminism, fake news and more) and 2) using sentiment analysis to identify hateful comments towards Jewish people, Muslims and non-white people. This allowed us to clean the data of noise, leaving us with a corpus of comments across the different Alt Right network hubs, which can be seen as the core talking points of Alt Right discourse. We then proceed to map the cleaned Alt Right corpus on several news page outlets on Facebook and establish connections between the comment section and Alt Right commentary. We find that the discourse is mostly associated with anger and disappointment and that FOX News and Breitbart have the highest similarity between corpi.
 
 by the means of sentiment analysis we identify hate speech
+
+cosinus similarity between the different commentaries
 
 analyze sentiments, topics to map them on major news outlets.
 
@@ -246,3 +174,79 @@ Evaluation of ‘positive’ approaches (e.g. counter-narratives, empowerment an
 Inclusion of ethnic and religious minorities in countering hate speech, extremism, and radicalisation online;
 Examination of the logics of governance and regulation that frame responses to online hate speech, extremism, and radicalisation.
 We encourage interested scholars to submit 250-word abstracts on their research to workshop@voxpol.eu by 6 December 2017. We will send notifications of acceptance by 11 January 2018. We will work with participants during and after the workshop to develop contributions into a special issue or an edited volume. Please also include five key words and a short biography from the contributor along with the abstract.
+
+# Alt Right keywords:
+
+"cultural marxism"
+
+"white genocide"
+
+"sjw"
+
+"cuck"
+
+"dindu" "dindu nuffin"
+
+"george soros" "soros"
+
+"We must secure the existence of our people and a future for white children"
+
+"((()))"
+
+"anti white"
+
+"Beta"
+
+"Cuckservative"
+
+"Cultural enrichment"
+
+"Hatefact"
+
+"Lügenpresse"
+
+"Mainstream media"
+
+"Mass immigration"
+
+"Political Correctness" "pc"
+
+"Postmodernism"
+
+"Race Realism"
+
+"Red pill"
+
+"remove kebab" "kebab"
+
+"cockroach"
+
+"Safe space"
+
+"Shekel"
+
+"Shoah"
+
+"oh vey"
+
+"Soy Boy"
+
+"snowflake"
+
+"Triggered"
+
+"virtue signal"
+
+"White guilt"
+
+"feminazi"
+
+"White Knight"
+
+"professional victim"
+
+"mangina"
+
+"Third Wave Feminism"
+
+"joo"
