@@ -8,11 +8,23 @@ output: pdf_document
 
 # Abstract
 
+**Decrypting the Alt Right: Using Topic Modelling and Sentiment Analysis to identify Alt Right commentary in media outlets**
+
 The purpose of this research is to track Alt-Right discourse on Facebook and extract psychometric and linguistic features of their online commentary. More specifically, we aim to identify content that aligns with Alt-Right discussion patterns in the Facebook comment sections of relevant media outlets (e. g. CNN, Breitbart, FOX News etc.). With this research we hope to contribute to an automated content classification system and gain insights into how the Alt Right communicates online.
 
 We gathered 1.3 Million comments from several Alt-Right network hubs and figureheads on Facebook (for example Infowars, Milo Yiannopolis, Mike Cernovich, Paul Jospeh Watson and others) over the course of one year (07.12.2016 - 07/12/2017). As a first step, we cleaned the data by removing common & irrelevant words and lemmatizing words. Next, we applied sentiment analysis to identify hateful and angry comments, leaving us with a dataset of polarized commentary. Moreover, we used topic modelling in order to pinpoint Alt Right talking points (for example "race realism", "anti-feminism", "fake news" and more) resulting in a text corpus where the relevant Alt Right narratives were succesfully isolated. 
 
 We then proceed to map the cleaned Alt Right corpus on the comment sections of several news page outlets using a measure of cosinus similarity. We find that Alt Right discourse is mostly found on Fox News and Breitbart but can also be traced on less expected media outlets such as CNN and ABC.  
+
+**Bächti Version**
+
+**Decrypting [Was ist damit gemeint: den Begriff finde ich nicht so gut] the Alt Right: Using Topic Modelling and Sentiment Analysis to identify Alt Right commentary in media outlets**
+
+This paper aims to track the “Alt Right” discourse on Facebook and extract psychometric and linguistic features of their online commentary. More specifically, we identify content[Was für content?] that aligns with Alt Right discussion patterns in the Facebook comment sections of relevant media outlets.
+
+We gathered 1.3 Million comments from several Alt-Right network hubs and figureheads on Facebook (for example Infowars, Milo Yiannopolis, Mike Cernovich, Paul Jospeh Watson and others) over the course of one year (07.12.2016 - 07/12/2017). As a first step, we cleaned the data by removing common words and lemmatization. Next, we applied sentiment analysis to identify hateful comments, leaving us with a dataset of polarized commentaries. Moreover, we used topic modelling  to pinpoint Alt Right talking points (for example "race realism", "anti-feminism" and more) resulting in a text corpus where the relevant Alt Right narratives were successfully isolated. 
+ 
+In a last step, we collected 2.1 million comments on several media outlets (e. g. CNN, Breitbart, FOX News etc.) over the same time range in order to compare them to our cleaned Alt Right corpus. We estimated the cosine similarity between the document term matrices to unravel the prevalence of Alt Right discourse on media outlets. We find that Alt Right talking points are mostly found on Fox News and Breitbart but they can also be found in mainstream media outlets such as CNN and ABC. Our results provide a first methodological attempt at classifying Alt Right content and its spread into mainstream media channels, which could be applied across different contexts and over time in the future.
 
 by the means of sentiment analysis we identify hate speech
 
