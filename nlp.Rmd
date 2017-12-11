@@ -1,0 +1,498 @@
+---
+title: "NLP against radicalization"
+subtitle: "Corpus validation"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+
+# Packages
+
+```{r setup, include=FALSE}
+#rm(list=ls())
+pacman::p_load(tidyverse, dplyr, ggplot2, stringr, scales, lubridate, tidytext, tidyr, ggthemes, Rfacebook)
+```
+
+# Data 
+
+```{r}
+load("coments_all.Rdata")
+glimpse(comments)
+
+
+table(str_replace(comments$origin, pattern = "_.*?$", ""))
+```
+
+# Prepare Data
+
+```{r}
+str_clean <- function(x, new_stop = NULL){
+  
+  sw <- tm::stopwords("eng")
+  if(!is.null(new_stop)) sw <- append(sw, new_stop)
+  
+  library(dplyr)
+  text_dat <- data.frame(id = 1:length(x), ctext = x, stringsAsFactors = F) %>%
+    mutate(block = ntile(id, 100))
+  
+  stopwords <- function(x) {
+    temp <- x %>%
+      tidytext::unnest_tokens(word, ctext) %>%
+      anti_join(data.frame(word = sw, stringsAsFactors = F), by = "word") %>%
+      group_by(id) %>%
+      summarise(comment = paste(word, collapse = " ")) %>%
+      mutate(comment = 
+        comment %>% 
+          stringr::str_replace_all("http.*", "") %>%
+          textstem::lemmatize_strings() %>%
+          stringr::str_replace_all("\\'", "") %>%
+          stringr::str_replace_all("\\b[[:alpha:]]{1,1}\\b", "") %>%
+          stringr::str_to_lower() %>% 
+          stringr::str_replace_all("[^a-z\\s]", " ") %>%
+          stringr::str_replace_all("\\s+", " ") %>%
+          stringr::str_trim()
+      )
+    return(temp)
+  }
+  
+  cleaned <- list()
+  for(jj in seq_along(unique(text_dat$block))){
+    cleaned[[jj]] <- stopwords(x = text_dat[text_dat$block == jj,])
+    cat("block:", jj, "von 100\n")
+  }
+  text_dat <- bind_rows(cleaned)
+  
+  cat("... FINISHED ...")
+  return(text_dat)
+}
+```
+
+
+
+
+
+
+```{r}
+library(textstem)
+library(systats)
+### clean shit of
+comments_smp <- comments %>%
+  filter(message != "")# %>%
+  #slice(1:100000)
+  #sample_n(size = 10000)
+
+words <- comments_smp$message %>%
+  str_split("\\s+") 
+comments_smp$nword <- sapply(words, length)
+
+comments_smp <- comments_smp %>%
+  filter(nword > 10)
+
+cleand_smp <- str_clean(x = comments_smp$message)
+
+comments_final <- comments_smp %>%
+  mutate(id = 1:n()) %>%
+  left_join(cleand_smp, by = "id")
+
+library(magrittr)
+#comments_smp %<>%
+#  drop_na(ctext)
+
+#save(comments_final, file ="comments_final.Rdata")
+```
+
+# Sentiment Analysis
+
+Start here!
+
+```{r}
+load("comments_final.Rdata")
+str_sentiment <- function(x){
+  tab <- data.frame(x = x, stringsAsFactors = F) %>%
+   mutate(id = 1:n()) %>%
+   unnest_tokens(word, x) 
+
+  bing <- tab %>% 
+    inner_join(get_sentiments("bing")) %>%
+    mutate(method = "bing")
+  
+  nrc <- tab %>% 
+    inner_join(get_sentiments("nrc")) %>% 
+    filter(sentiment %in% c("positive", "negative")) %>%
+    mutate(method = "nrc")
+  
+  afinn <- tab %>% 
+    inner_join(get_sentiments("afinn")) %>% 
+    mutate(sentiment = ifelse(score >0, "positive", "negative")) %>%
+    mutate(method = "afinn", score = NULL)
+  
+  dat <- rbind(bing, nrc, afinn) %>%
+    #mutate(sent = sentiment) %>%
+    mutate(sent = ifelse(sentiment == "positive", 1, -1)) %>%
+    group_by(id, method) %>%
+    summarise(sent = mean(sent)) %>% 
+    ungroup() %>%
+    spread(key = "method", "sent")
+
+  emotions <- tab %>% 
+    inner_join(get_sentiments("nrc")) %>%
+    rename(sent = sentiment) %>%
+    group_by(id) %>%
+    count(sent) %>%
+    spread("sent", "n") %>%
+    right_join(dat, by = "id")
+    
+  return(emotions)
+}
+
+comments_sent <- str_sentiment(x = comments_final$comment)
+
+
+comments_sent <- comments_final %>%
+  mutate(id = 1:n()) %>%
+  left_join(comments_sent)
+
+library(magrittr)
+comments1 <- comments_sent %>% 
+  filter(anger > 0) %>% 
+  filter(comment != "")
+
+# save(comments1, file = "comments1.Rdata")
+```
+
+
+# LDA
+
+```{r}
+load("comments1.Rdata")
+library(text2vec)
+library(LDAvis)
+
+it <- text2vec::itoken(iterable = comments1$comment, progressbar = FALSE)
+vocab <- create_vocabulary(it, ngram = c(2L, 3L)) %>% 
+  prune_vocabulary(term_count_min = 100, doc_proportion_max = 0.1)
+vectorizer <- vocab_vectorizer(vocab)
+#dtm <- create_dtm(it, vectorizer) # , type = "dgTMatrix"
+
+library(tidyr)
+#coommets_topics <- 
+```
+
+
+## word2vec
+
+```{r}
+#devtools::install_github("dselivanov/text2vec")
+library(text2vec)
+library(LDAvis)
+set.seed(2017)
+
+dtm <- create_dtm(it, vectorizer, type = "dgTMatrix") 
+
+lda_model <- text2vec::LDA$new(
+  n_topics = 40, 
+  doc_topic_prior = 0.1, 
+  topic_word_prior = 0.01
+)
+
+
+doc_topic_distr <- lda_model %>% 
+  text2vec::fit_transform(
+    x = dtm, n_iter = 1000, 
+    convergence_tol = 0.001, 
+    n_check_convergence = 25, 
+    progressbar = F
+  )
+
+load("lda_model")
+lda_model$plot()
+# save(lda_model, file = "lda_model")
+# relevant items
+
+ar_topics <- c(1,2,4,9,10,12,14,16,21,22,24,25,29,31)
+top_terms <- lda_model$get_top_words(n = 20, topic_number = ar_topics, lambda = .2)
+
+
+lda_model$topic_word_distribution[1:10, 1:10]
+dim(lda_model$topic_word_distribution)
+
+lda_model$components[1:10, 1:10]
+dim(lda_model$components)
+
+barplot(doc_topic_distr[2, ], xlab = "topic", 
+        ylab = "proportion", ylim = c(0, 1), 
+        names.arg = 1:ncol(doc_topic_distr))
+
+dim(doc_topic_distr)
+
+
+comments1$topic_ar <- doc_topic_distr[, ar_topics] %>%
+  as.data.frame() %>%
+  rowSums() 
+
+cleaned_corp <- comments1 %>%
+  filter(topic_ar > 0)
+
+# save(cleaned_corp, file = "cleaned_corp.Rdata")
+load("cleaned_corp.Rdata")
+#cor(doc_topic_distr[1:20, ar_topics])
+```
+
+# Buzzwords
+
+```{r}
+
+keywords <- c("cultural marxism",
+"white genocide",
+"sjw",
+"cuck",
+"dindu",
+"dindu nuffin",
+"george soros",
+"soros",
+"We must secure the existence of our people and a future for white children",
+"\\(\\(\\(.*?\\)\\)\\)",
+"anti white",
+"beta",
+"cuckservative",
+"cultural enrichment",
+"Hatefact",
+"Lügenpresse",
+"Mainstream media",
+"Mass immigration",
+"Political Correctness",
+"pc",
+"Postmodernism",
+"Race Realism",
+"Red pill",
+"remove kebab",
+"kebab",
+"cockroach",
+"Safe space",
+"Shekel",
+"Shoah",
+"oh vey",
+"Soy Boy",
+"snowflake",
+"Triggered",
+"virtue signal",
+"White guilt",
+"feminazi",
+"White Knight",
+"professional victim",
+"mangina",
+"Third Wave Feminism",
+"joo",
+"white nation")
+
+keywords <- paste(keywords, collapse = "|")
+
+filtered <- comments_sent %>%
+  filter(grepl(pattern = keywords, x = message))
+
+selected <- filtered[filtered$id %in% setdiff(filtered$id, cleaned_corp$id),]
+
+cleaned_corp %<>%
+ plyr::rbind.fill(selected)
+
+#%>%
+#  plyr::rbind.fill(cleaned_corp) %>%
+#  janitor::
+   
+table(cleaned_corp$origin)
+```
+
+# str_compare_docs
+
+```{r}
+library(stringr)
+library(text2vec)
+library(magrittr)
+
+str_compare_docs <- function(text1, text2, n_gram = c(1L, 1L), average = T, ...){
+  
+  it1 <- str_clean(text1)$comment %>% 
+    itoken(progressbar = F)
+  
+  it2 <- text2 %>% 
+    itoken(progressbar = F)
+  
+  it <- itoken(c(text1, text2), progressbar = F)
+  vocab <- create_vocabulary(it, ngram = n_gram) %>%
+    prune_vocabulary(
+      doc_proportion_max = 0.1, 
+      term_count_min = 5
+    )
+
+  vectorizer <- vocab_vectorizer(vocab)
+  
+  dtm1 <- create_dtm(it1, vectorizer)
+  dtm2 <- create_dtm(it2, vectorizer)
+  
+  d1_d2_jac_sim <- sim2(
+    dtm1, dtm2, 
+    #method = "jaccard",
+    method = "cosine", 
+    norm = "l2",
+    ...
+  ) 
+  
+  rowmeans <- d1_d2_jac_sim %>%
+    as.matrix() %>%
+    Matrix::rowMeans() %>%
+    as.data.frame() %>%
+    mutate(id = 1:n())
+  
+  colnames(rowmeans) <- c("cosine", "id")
+  
+  return(rowmeans)
+}
+
+  # if(average){
+  #   tab_colmeans <- d1_d2_jac_sim %>%
+  #     as.matrix() %>%
+  #     as.data.frame() %>% 
+  #     mutate(corp1 = 1:n()) %>%
+  #     gather("corp2", "value", -corp1) %>%
+  #     group_by(corp2) %>%
+  #     summarise(mvalue = mean(value)) %>%
+  #     ungroup() %>%
+  #     mutate(corp2 = as.numeric(corp2)) %>%
+  #     arrange(corp2)
+  #     #filter(mvalue > 0) %>%
+  #     #mutate(avg_cosin = normalized(avg_cosin))
+  # } else {
+  #   d1_d2_jac_sim %<>%
+  #     as.matrix() %>%
+  #     as.data.frame() 
+  #   return(d1_d2_jac_sim)
+  # }
+```
+
+
+# Visualization
+
+```{r}
+library(text2vec)
+set.seed(2017)
+#msnbc_all <- get(load("data/msnbc_comments.Rdata"))
+fox_all <- get(load("data/foxnews_comments.Rdata"))
+bb_all <- get(load("data/breitbart_comments.Rdata"))
+cnn_all <- get(load("data/cnn_comments.Rdata"))
+#djt_all <- get(load("data/djt_comments.Rdata"))
+
+nyt_all <- get(load("data/nyt_comments.Rdata"))
+#hann_all <- get(load("data/hannity_comments.Rdata"))
+#tucker_all <- get(load("data/tucker_comments.Rdata"))
+abc_all <- get(load("data/abc_comments.Rdata"))
+wapo_all <- get(load("data/wapo_comments.Rdata"))
+
+
+n <- 10000 #length(cleaned_corp$comment)
+altright <- cleaned_corp %>% sample_n(size = 10000)
+altright <- altright$comment
+
+bb <- bb_all %>% sample_n(size = n) 
+bb <- bb$message
+# msnbc <- msnbc_all %>% sample_n(size = n)
+# msnbc <- msnbc$message
+fox <- fox_all %>% sample_n(size = n)
+fox <- fox$message
+cnn <- cnn_all %>% sample_n(size = n)
+cnn <- cnn$message
+# djt <- djt_all %>% sample_n(size = n)
+# djt <- djt$message
+
+
+nyt <- nyt_all%>% sample_n(size = n) 
+nyt <- nyt$message
+# hann <- hann_all%>% sample_n(size = n) 
+# hann <- hann$message
+# tucker <- tucker_all%>% sample_n(size = n) 
+# tucker <- tucker$message
+abc <- abc_all%>% sample_n(size = n) 
+abc <- abc$message
+wapo <- wapo_all %>% sample_n(size = n) 
+wapo <- wapo$message
+
+
+### CNN
+gg_cnn <- str_compare_docs(cnn, altright) %>%
+  mutate(corp = "CNN") 
+
+# ###MSNBC
+# gg_msnbc <- str_compare_docs(msnbc, altright) %>%
+#   mutate(corp = "msnbc") 
+
+### Fox
+gg_fox <- str_compare_docs(fox, altright) %>%
+  mutate(corp = "Fox News") 
+
+### Breitbart
+gg_bb <- str_compare_docs(bb, altright) %>%
+  mutate(corp = "Breitbart News") 
+
+### trump 
+gg_nyt <- str_compare_docs(nyt, altright) %>%
+  mutate(corp = "New York Times") 
+# ### trump 
+# gg_hann <- str_compare_docs(hann, altright) %>%
+#   mutate(corp = "hann") 
+# ### trump 
+# gg_tucker <- str_compare_docs(tucker, altright) %>%
+#   mutate(corp = "tucker") 
+### trump 
+gg_abc <- str_compare_docs(abc, altright) %>%
+  mutate(corp = "ABC") 
+### trump 
+gg_wapo <- str_compare_docs(wapo, altright) %>%
+  mutate(corp = "Washington Post") 
+
+ 
+# rbind(gg_cnn, gg_msnbc, gg_fox, gg_bb, gg_trump) %>%
+#   #arrange(corp2) %>%
+#   #filter(cosine > 0) %>%
+#   #group_by(corp) %>%
+#   #mutate(mvalue = scale(mvalue)) %>%
+#   ggplot(aes(x = cosine, fill = corp, group=corp)) +
+#   geom_density(aes(y = ..density..), alpha = .5, color = NA) 
+
+
+gg1 <- rbind(gg_cnn, gg_fox, gg_bb, gg_nyt, gg_abc, gg_wapo) %>%
+  group_by(corp) %>%
+  mutate(med = median(cosine)) %>%
+  ungroup() %>%
+  arrange(med) %>%
+  #filter(cosine > 0) %>%
+  mutate(corp = fct_reorder(corp, desc(med))) %>%
+  ggplot(aes(corp, cosine, colour = corp)) +
+  geom_boxplot(fill = NA, outlier.color = NA) +
+  geom_jitter(alpha = .01) +
+  geom_violin(fill = NA) + 
+  ggthemes::scale_colour_gdocs() + 
+  coord_flip() +
+  theme_minimal() +
+  #theme_fivethirtyeight() +
+  theme(legend.position = "none", text = element_text(size = 20)) +
+  labs(x = "",  y = "Average Cosine Similarity") +
+  ggtitle("Similarity between FB Media Comments and Alt Right Corpus")
+  
+ggsave(gg1, file = "ab_cosine_similarity.png", width = 12, height = 8)
+```
+
+
+
+
+
+## topicmodels
+
+```{r}
+library(topicmodels)
+dtm <- create_dtm(it, vectorizer)
+comments_lda <- topicmodels::LDA(dtm, k = 20, control = list(seed = 2017))
+```
+
