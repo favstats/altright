@@ -1,0 +1,77 @@
+---
+title: "Extract URLs"
+output: html_notebook
+---
+
+```{r}
+pacman::p_load(tidyverse, magrittr, stringi, qdapRegex, purrr)
+
+mw <- read_file("mw.txt")
+redice <- read_file("redice.txt")
+
+```
+
+
+```{r}
+
+extract_video_ids <- function(video_list) {
+
+video_list %<>% 
+  stri_replace_all_fixed(" ", "") %>% 
+  stri_replace_all_charclass("\\p{WHITE_SPACE}", "")
+
+url <- rm_between(mw, "URL:", "Description", extract = TRUE)
+
+imp_vec <- as.vector(url[[1]]) %>% 
+  str_replace(pattern = "(.*v\\=)", "")
+
+return(imp_vec)
+}
+
+mw_ids <- extract_video_ids(mw)
+redice_ids <- extract_video_ids(redice)
+
+
+```
+
+# Trash
+
+```{r}
+x = "PRODUCT colgate good but not goodOKAY"
+library(stringr)
+str_extract(string = x, pattern = perl("(?<=PRODUCT).*(?=OKAY)"))
+(?<=PRODUCT) -- look behind the match for PRODUCT
+
+.* match everything except new lines.
+
+(?=OKAY) -- look ahead to match OKAY.
+
+url_pattern <- "URL:http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\\(\\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+"
+rgx = '(?<=\\?v=|&v=)[\\w]+'
+
+
+ww <- str_extract_all(ss, rgx)
+
+ids = unname(sapply(ss, get_id))
+
+
+
+str_extract(string = x, pattern = perl("(?<=URL:).*(?=Description)"))
+
+data
+
+
+a <- "anything goes here, STR1 GET_ME STR2, anything goes here"
+res <- str_match(mw, "URL:(.*?)Description:")
+ss <- str_extract_all(string = mw, pattern = regex("(?<=URL:).*(?=Description:)"))
+
+
+
+
+
+ rs<-c("copyright @ The Society of mo","I want you to meet me @ the coffeshop")
+ s<-gsub(".*=","",imp_vec)
+ s
+mw_test
+```
+

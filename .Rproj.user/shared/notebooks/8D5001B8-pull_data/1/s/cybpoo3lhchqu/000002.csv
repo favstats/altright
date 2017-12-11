@@ -1,0 +1,7 @@
+"0","```r
+# devtools::install_github(\"pablobarbera/Rfacebook/Rfacebook\") # from GitHub
+library(Rfacebook)
+my_key <- \"EAACEdEose0cBAG8dn3IhvtZCRwkidLZBJTaYUTLa3muagyAlKhr5AkNb0SvyqnUVC7laSjqFOnZBdqDzTwNMGrNHaojQ7ikMaZC7Lotad17tAUSDw39ry12WK84jBze7bHWyuiCkobofFgeUON2L2ZA81O1hnBBnI1Mtub6PgZB6TaWrLxZBwahjBcg8mJpeyZAQ7dOicD92IgZDZD\"
+me <- getUsers(\"me\", my_key, private_info=TRUE)
+me
+```"

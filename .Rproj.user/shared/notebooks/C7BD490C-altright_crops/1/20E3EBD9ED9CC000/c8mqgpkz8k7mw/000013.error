@@ -1,0 +1,1 @@
+{"frames":[{"character_number":0,"end_character_number":0,"end_line_number":0,"file":"","func":"get_post(page$id[ii])","line_number":0}],"message":"Error in get_post(page$id[ii]) : object 'post' not found\n"}
