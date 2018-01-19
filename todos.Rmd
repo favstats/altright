@@ -1,0 +1,14 @@
+---
+title: "My_Template"
+output: html_notebook
+---
+
+- Oxford Kram
+-- Flüge buchen
+-- Paper schreiben
+--- Neuen Korpus für Alt Right
+--- Sentiment Analysis
+
+- New York Times Gerät
+
+- Business gründen
