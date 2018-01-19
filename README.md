@@ -21,6 +21,10 @@ https://datasociety.net/pubs/oh/DataAndSociety_MediaManipulationAndDisinformatio
 
 https://wiki.digitalmethods.net/Dmi/AltRightOpenIntelligenceInitiative
 
+** Alt Right You Tubers **
+
+https://docs.google.com/document/d/1bi4q4W04NEYWFDRoL8VPJ-IqAvHxXkf-bdl-WG9IHWw/edit
+
 **A Network Analysis of White Nationalism: The Recruitment Pipeline from Alt-Lite to Alt-Right (Part 1)**
 
 https://medium.com/@notcolloquial/a-network-analysis-of-white-nationalism-the-recruitment-pipeline-from-alt-lite-to-alt-right-part-f9959ce1162b
@@ -47,6 +51,7 @@ Get the timeline of Alt Righters and then everyone who follows them. Then get th
 ## Data Sets
 
 ** R package for datasets**
+
 https://github.com/jimtyhurst/hate_speech_detection_for_twitter
 
 Zeerak Waseem and Dirk Hovy: Hateful Symbols or Hateful People? Predictive Features for Hate Speech Detection on Twitter. NAACL SRW, 2016. [Data](https://github.com/zeerakw/hatespeech)
@@ -60,7 +65,7 @@ Davidson, Thomas, et al. "Automated Hate Speech Detection and the Problem of Off
 Racism and Sexism labelled data
 https://github.com/ninkle/hate-speech-detection
 
- Ellery Wulczyn, Nithum Thain, Lucas Dixon: Ex Machina: Personal Attacks Seen at Scale, 2016. [Data](https://figshare.com/articles/Wikipedia_Detox_Data/4054689)
+Ellery Wulczyn, Nithum Thain, Lucas Dixon: Ex Machina: Personal Attacks Seen at Scale, 2016. [Data](https://figshare.com/articles/Wikipedia_Detox_Data/4054689)
  
 Björn Ross, Michael Rist, Guillermo Carbonell, Ben Cabrera, Nils Kurowsky, Michael Wojatzki: Measuring the Reliability of Hate Speech Annotations: The Case of the European Refugee Crisis. In Proceedings of NLP4CMC III: 3rd Workshop on Natural Language Processing for Computer-Mediated Communication, Bochum, September 2016, pp. 6-9. [Data](https://github.com/UCSM-DUE/IWG_hatespeech_public?files=1)
  
