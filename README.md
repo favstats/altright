@@ -46,15 +46,19 @@ Get the timeline of Alt Righters and then everyone who follows them. Then get th
 
 ## Data Sets
 
+** R package for datasets**
+https://github.com/jimtyhurst/hate_speech_detection_for_twitter
+
 Zeerak Waseem and Dirk Hovy: Hateful Symbols or Hateful People? Predictive Features for Hate Speech Detection on Twitter. NAACL SRW, 2016. [Data](https://github.com/zeerakw/hatespeech)
 
 Zeerak Waseem: Are You a Racist or Am I Seeing Things? Annotator Influence on Hate Speech Detection on Twitter. NLP and Computational Social Science, 2016. [Data](https://github.com/zeerakw/hatespeech)
 
 Davidson, Thomas, et al. "Automated Hate Speech Detection and the Problem of Offensive Language." arXiv preprint arXiv:1703.04009 (2017). [Data](https://github.com/t-davidson/hate-speech-and-offensive-language)
 
+--------------------------------------------------------------------------------------
 
-** R package for datasets**
-https://github.com/jimtyhurst/hate_speech_detection_for_twitter
+Racism and Sexism labelled data
+https://github.com/ninkle/hate-speech-detection
 
  Ellery Wulczyn, Nithum Thain, Lucas Dixon: Ex Machina: Personal Attacks Seen at Scale, 2016. [Data](https://figshare.com/articles/Wikipedia_Detox_Data/4054689)
  
