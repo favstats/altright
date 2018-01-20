@@ -21,6 +21,11 @@ client_key <- "Y0eW96yy-WRg90RZjVJS615o"
 
 tuber::yt_oauth(client_id, client_key)
 
+altright_yt <- readxl::read_excel("data/altright_youtube.xlsx")
+
+altright_yt %>% 
+  group_by(channelTitle) %>% 
+  slice(1)
 ```
 
 # Extract IDs
