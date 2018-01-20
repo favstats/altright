@@ -1,19 +1,23 @@
-Alt Right Project
+Tracking the Alt Right
 ================
 
-| Content                        | Link             |  Platform|
-|:-------------------------------|:-----------------|---------:|
-| Partly cloudy.                 | Brisbane         |        19|
-| Partly cloudy.                 | Brisbane Airport |        18|
-| Possible shower.               | Beaudesert       |        15|
-| Partly cloudy.                 | Chermside        |        17|
-| Shower or two. Possible storm. | Gatton           |        15|
-| Possible shower.               | Ipswich          |        15|
-| Partly cloudy.                 | Logan Central    |        18|
-| Mostly sunny.                  | Manly            |        20|
-| Partly cloudy.                 | Mount Gravatt    |        17|
-| Possible shower.               | Oxley            |        17|
-| Partly cloudy.                 | Redcliffe        |        19|
+| Content             | FacebookID       | YouTubeChannelID           | TwitterID          |
+|:--------------------|:-----------------|:---------------------------|:-------------------|
+| Milo Yiannopoulos   | 423006854503882  | UC0aVoboXBUx2-tVIWHc3W2Q   | NA                 |
+| Ann Coulter         | 695526053890545  | NA                         | 196168350          |
+| Mike Cernovich      | 427302110732180  | UC87YBeLMwXhgaw5tcCxsXgQ   | 358545917          |
+| Alex Jones          | 6499393458       | UCvsye7V9psc-APX6wV1twLg   | 109065990          |
+| Paul Joseph Watson  | 242174545810040  | UCittVh8imKanO\_5KohzDbpg  | 18643437           |
+| Lauren Southern     | 184795298567879  | UCla6APLHX6W3FeNLc8PYuvg   | 164070785          |
+| Roaming Millenial   | 1213352768743538 | UCLUrVTVTA3PnUFpYvpfMcpg   | 770619360062898176 |
+| Black Pigeon Speaks | 359762154043841  | UCmrLCXSDScliR7q8AxxjvXg   | 711535251835629568 |
+| Blaire White        | 1136054926414603 | UCDmCBKaKOtOrEqgsL4-3C8Q   | 4316769252         |
+| Infowars            | 80256732576      | NA                         | 14505245           |
+| The Rebel           | 145634995501895  | UCGy6uV7yqGWDeUWTZzT3ZEg   | 3018960919         |
+| Tommy Robinson      | 381971441938916  | NA                         | 374712154          |
+| Stefan Molyneux     | 510991678        | UCC3L8QaxqEGUiBC252GHy3w   | 313038011          |
+| Steven Crowder      | 15139936162      | UCIveFvW-ARp\_B\_RckhweNJw | 19091173           |
+| Brittany Pettibone  | 2230351787189034 | UCesrUK\_dMDBZAf7cnjQPdgQ  | 274316654          |
 
 To Do
 =====
@@ -58,7 +62,7 @@ Interesting Links:
 
 <https://wiki.digitalmethods.net/Dmi/AltRightOpenIntelligenceInitiative>
 
-\*\* Alt Right You Tubers \*\*
+**Alt Right You Tubers**
 
 <https://docs.google.com/document/d/1bi4q4W04NEYWFDRoL8VPJ-IqAvHxXkf-bdl-WG9IHWw/edit>
 
@@ -107,12 +111,3 @@ Racism and Sexism labelled data <https://github.com/ninkle/hate-speech-detection
 Ellery Wulczyn, Nithum Thain, Lucas Dixon: Ex Machina: Personal Attacks Seen at Scale, 2016. [Data](https://figshare.com/articles/Wikipedia_Detox_Data/4054689)
 
 Björn Ross, Michael Rist, Guillermo Carbonell, Ben Cabrera, Nils Kurowsky, Michael Wojatzki: Measuring the Reliability of Hate Speech Annotations: The Case of the European Refugee Crisis. In Proceedings of NLP4CMC III: 3rd Workshop on Natural Language Processing for Computer-Mediated Communication, Bochum, September 2016, pp. 6-9. [Data](https://github.com/UCSM-DUE/IWG_hatespeech_public?files=1)
-
-Including Plots
----------------
-
-You can also embed plots, for example:
-
-![](README_files/figure-markdown_github/pressure-1.png)
-
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.

@@ -1,5 +1,5 @@
 ---
-title: "Decrypting the Alt Right"
+title: "Tracking the Alt Right"
 subtitle: "Using Natural Language Processing to Identify Alt Right Commentary on Facebook"
 date: "10 December 2017"
 output: pdf_document

@@ -4,74 +4,243 @@ output: html_notebook
 ---
 
 ```{r}
-pacman::p_load(tidyverse, magrittr, stringi, qdapRegex, purrr)
+pacman::p_load(tidyverse, magrittr, stringi, qdapRegex, purrr, here, tuber, lubridate, SocialMediaLab)
 
-mw <- read_file("mw.txt")
-redice <- read_file("redice.txt")
+#mw <- read_file(here("corpi", "mw.txt"))
+#redice <- read_file(here("corpi", "redice.txt"))
+
+```
+# Authentication
+
+```{r}
+key <- "AIzaSyDmV5jHx7c8GeAmpTkv6To_ERdkZ_HNl70"
+
+client_id <- "580511698053-p8mu77kktkcvb503g9q737svu9gcq101.apps.googleusercontent.com"
+
+client_key <- "Y0eW96yy-WRg90RZjVJS615o"
+
+tuber::yt_oauth(client_id, client_key)
 
 ```
 
+# Extract IDs
 
 ```{r}
 
 extract_video_ids <- function(video_list) {
-
+video_list <- readr::read_file("text/mw.txt")
 video_list %<>% 
   stri_replace_all_fixed(" ", "") %>% 
   stri_replace_all_charclass("\\p{WHITE_SPACE}", "")
 
-url <- rm_between(mw, "URL:", "Description", extract = TRUE)
+url <- rm_between(video_list, "URL:", "Description", extract = TRUE)
 
+date <- lubridate::as_date(as_vector(rm_between(video_list, "Date:", "URL", extract = TRUE)))
+head(date)
 imp_vec <- as.vector(url[[1]]) %>% 
-  str_replace(pattern = "(.*v\\=)", "")
+  str_replace(pattern = "(.*v\\=)", "") 
 
-return(imp_vec)
+data <- data.frame(yt_code = imp_vec, date = date, stringsAsFactors = F)
+
+return(data)
 }
 
-mw_ids <- extract_video_ids(mw)
-redice_ids <- extract_video_ids(redice)
+get_video_ids <- function(textfile) {
+  readr::read_file(textfile) %>% 
+  extract_video_ids()
+}
 
 
 ```
 
-# Trash
+```{r}
+mw_ids  <- get_video_ids("text/mw.txt")
+
+```
+
+# GetAllComments
 
 ```{r}
-x = "PRODUCT colgate good but not goodOKAY"
-library(stringr)
-str_extract(string = x, pattern = perl("(?<=PRODUCT).*(?=OKAY)"))
-(?<=PRODUCT) -- look behind the match for PRODUCT
+get_all_comments2 <- function(video_id = NULL, ...) {
+  yt_check_token <- function() {
+    app_token <- getOption("google_token")
+    if (is.null(app_token)) stop("Please get a token using yt_oauth().\n")
+  }
 
-.* match everything except new lines.
+  tuber_GET <- function(path, query, ...) {
+    yt_check_token()
 
-(?=OKAY) -- look ahead to match OKAY.
+    req <- GET(
+      "https://www.googleapis.com", path = paste0("youtube/v3/", path),
+      query = query, config(token = getOption("google_token")), ...
+    )
 
-url_pattern <- "URL:http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\\(\\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+"
-rgx = '(?<=\\?v=|&v=)[\\w]+'
+    tuber_check <- function(req) {
+      if (req$status_code < 400) return(invisible())
+
+      stop("HTTP failure: ", req$status_code, "\n", call. = FALSE)
+    }
+
+    tuber_check(req)
+    res <- content(req)
+
+    res
+  }
+
+  querylist <- list(
+    videoId = video_id, part = "id,replies,snippet",
+    maxResults = 100
+  )
+  res <- tuber_GET("commentThreads", querylist, ...)
+  simple_res <- lapply(res$items, function(x) {
+    unlist(x$snippet$topLevelComment$snippet)
+  })
+  simpler_res <- ldply(simple_res, rbind)
+  simpler_res$parentId <- NA
+  n_replies <- sapply(res$items, function(x) {
+    unlist(x$snippet$totalReplyCount)
+  })
+  if (sum(n_replies) > 1) {
+    replies <- lapply(res$items[n_replies > 0], function(x) {
+      unlist(x$replies$comments)
+    })
+    simpler_rep <- ldply(replies, rbind)
+    names(simpler_rep) <- gsub("snippet.", "", names(simpler_rep))
+    simpler_rep <- subset(simpler_rep, select = -c(
+      kind,
+      etag, id
+    ))
+    agg_res <- plyr::rbind.fill(simpler_res, simpler_rep)
+  }
+  agg_res <- simpler_res
+  page_token <- res$nextPageToken
+  while (is.character(page_token)) {
+    querylist$pageToken <- page_token
+    a_res <- tuber_GET("commentThreads", querylist, ...)
+    simple_res <- lapply(a_res$items, function(x) {
+      unlist(x$snippet$topLevelComment$snippet)
+    })
+    simpler_res <- ldply(simple_res, rbind)
+    simpler_res$parentId <- NA
+    n_replies <- sapply(a_res$items, function(x) {
+      unlist(x$snippet$totalReplyCount)
+    })
+    if (sum(n_replies) > 1) {
+      replies <- lapply(a_res$items[n_replies > 0], function(x) {
+        unlist(x$replies$comments)
+      })
+      simpler_rep <- ldply(replies, rbind)
+      names(simpler_rep) <- gsub("snippet.", "", names(simpler_rep))
+      simpler_rep <- subset(simpler_rep, select = -c(
+        kind,
+        etag, id
+      ))
+      agg_res <- plyr::rbind.fill(simpler_res, simpler_rep, agg_res)
+      page_token <- a_res$nextPageToken
+    }
+    agg_res <- plyr::rbind.fill(simpler_res, agg_res)
+    page_token <- a_res$nextPageToken
+  }
+  agg_res %>%
+    as.data.frame()
+}
+
+```
 
 
-ww <- str_extract_all(ss, rgx)
+# Scraper Function
 
-ids = unname(sapply(ss, get_id))
+```{r}
+
+# ids <- c(amazingatheist_ids[1:2], "ss", amazingatheist_ids[3])
+readkey <- function() {
+    line <- readline(prompt = "Are you there? Press [enter]")
+}
+
+authentication <- function() {
+  beepr::beep(5)
+  readkey()
+  auth_token <- ".httr-oauth"
+  if (file.exists(auth_token)) file.remove(auth_token)
+
+  client_id <- "580511698053-p8mu77kktkcvb503g9q737svu9gcq101.apps.googleusercontent.com"
+
+  client_key <- "Y0eW96yy-WRg90RZjVJS615o"
+
+  tuber::yt_oauth(client_id, client_key)
+}
+
+extract_comments <- function(ids, n, youtuber) {
+  comments <- list()
+  cat("Starting loop. Sit back and get a tea. This might take a while...  ( ͡° ͜ʖ ͡°)\n")
+  for (jj in n:length(ids)) {
+#    svMisc::progress(jj)
+    outcome <- tryCatch({
+      get_all_comments2(ids[jj])
+    }, 
+    error = function(e){
+      e
+    })
+    if (is.data.frame(outcome)) { #checking if an error occured
+      comments[[jj]] <- outcome
+    } else if (str_detect(outcome$message, "401")) { #if Error Message include 401
+      cat("\n Loop stopped on iteration ", jj)
+      cat("\n", outcome$message)
+      message("\n YouTube Authentication needed!")
+      cat("\n Saving data for safety...")
+      save(comments, file = paste0("data/", youtuber, "_comments_",  n, "_", jj, ".Rdata"))   
+      cat("\t Done! \n")
+      authentication()
+      cat("\n Waiting for 10 seconds...")
+      Sys.sleep(10)                
+      cat("\t Done! \n Continuing...")
+      comments[[jj]] <- get_all_comments2(ids[jj])
+    } else if (str_detect(outcome$message, "400")) { #if Error Message include 400
+        beepr::beep(9)
+      cat("\n", outcome$message)
+      cat("\n Encountered problem at iteration ", jj)
+      cat("\n Saving data for safety...")
+      save(comments, file = paste0("data/", youtuber, "_comments_",  n, "_", jj, ".Rdata"))   
+      cat("\t Done!")
+      cat("\n Waiting for 20 seconds and..")
+      Sys.sleep(20)
+      cat("\t trying again\n")
+      comments[[jj]] <- get_all_comments2(ids[jj])
+      cat("\n Puuh... this worked. Deleting file.\n")
+      file.remove(paste0("data/", youtuber, "_comments_",  n, "_", jj, ".Rdata"))
+    } else if (str_detect(outcome$message, "403")) { #if Error Message include 403
+        beepr::beep(11)      
+      cat("\n", outcome$message)
+      cat("\n Encountered problem at iteration ", jj)
+      Sys.sleep(10)
+      cat("\n Skipping", jj, "\n")
+      next
+    } # TODO(favstats): failsafe what happens if another error happens?
+    cat(paste0("\t", jj)) 
+  }   # End of the for loop
+  cat("\n Binding rows. Might take while.. \t")
+  comments <- suppressWarnings(bind_rows(comments))
+  cat("Done!\n ")
+  cat("\n Saving data one last time...")
+  save(comments, file = paste0("data/", youtuber, "_comments_",  n, "_", jj, ".Rdata"))
+  cat("\t Done!\n")
+  if (jj == length(ids)) beepr::beep(8)
+  cat(paste("\n Congratulations! You just succesfully mined", nrow(comments), "comments from", jj, "YouTube Videos"))
+  return(comments)
+}
+
+```
 
 
+# Millenial Woes
 
-str_extract(string = x, pattern = perl("(?<=URL:).*(?=Description)"))
+## Scraping
 
-data
+```{r}
+mw_ids %<>% 
+ filter(date > as_date("2017-01-01") & date < as_date("2018-01-01"))
+## Try 1
+mw_comments <- extract_comments(mw_ids$yt_code, 1, "mw")
 
-
-a <- "anything goes here, STR1 GET_ME STR2, anything goes here"
-res <- str_match(mw, "URL:(.*?)Description:")
-ss <- str_extract_all(string = mw, pattern = regex("(?<=URL:).*(?=Description:)"))
-
-
-
-
-
- rs<-c("copyright @ The Society of mo","I want you to meet me @ the coffeshop")
- s<-gsub(".*=","",imp_vec)
- s
-mw_test
 ```
 
