@@ -38,6 +38,22 @@ Tracking the Alt Right
 | Virtue of the West   | NA               | UCG6FJf6O\_-QS0KoIK3n5fiA  | NA                 |
 | VDARE                | 385640741463156  | UCORGNJpLcsNSoIMyewxBZTw   | 27522964           |
 
+Media
+=====
+
+| Content         | FacebookID      | YouTubeChannelID          | TwitterID |
+|:----------------|:----------------|:--------------------------|:----------|
+| Fox News        | 15704546335     | UCXIJgqnII2ZOINSWNOGFThA  | NA        |
+| MSNBC           | 273864989376427 | UCaXkIU1QidjPwiAYu6GcHjg  | 196168350 |
+| Breitbart News  | 95475020353     | UCmgnsaQIK1IR808Ebde-ssA  | 358545917 |
+| CNN             | 5550296508      | UCupvZG-5ko\_eiXAupbDfxWw | 358545917 |
+| Tucker Carlson  | 368557930146199 | NA                        | 22703645  |
+| Sean Hannity    | 69813760388     | NA                        | 41634520  |
+| Washington Post | 6250307292      | UCHd62-u\_v4DvJ8TCFtpi4GA | 2467791   |
+| Donald J. Trump | 153080620724    | UCAql2DyGU2un1Ei2nMYsqOA  | 25073877  |
+| New York Times  | 5281959998      | UCqnbDFdCpuN8CMEg0VuEBqA  | 807095    |
+| ABC             | 86680728811     | UCBi2mrWuNuyYy4gbM6fU18Q  | 2768501   |
+
 To Do
 =====
 
@@ -115,7 +131,7 @@ Hate Speech Data
 Data Sets
 ---------
 
-\*\* R package for datasets\*\*
+**R package for datasets**
 
 <https://github.com/jimtyhurst/hate_speech_detection_for_twitter>
 
