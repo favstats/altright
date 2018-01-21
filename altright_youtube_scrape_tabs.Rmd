@@ -155,6 +155,7 @@ get_all_comments2 <- function(video_id = NULL, ...) {
 
 ```{r}
 
+# ids <- c(amazingatheist_ids[1:2], "ss", amazingatheist_ids[3])
 readkey <- function() {
     line <- readline(prompt = "Are you there? Press [enter]")
 }
@@ -232,62 +233,52 @@ extract_comments <- function(ids, n, youtuber) {
   return(comments)
 }
 
-
 ```
-
-
-# Milo
-
-## Scraping
 
 ```{r}
 
-milo_ids  <- get_video_ids("text/milo.txt")
+pacman::p_load(tidyverse, haven)
 
+load("data/id_data.Rdata")
 
-milo_ids %<>% 
- filter(date > as_date("2017-01-01") & date < as_date("2018-01-01")) %>% 
+id_data
+
+all_foxnews <- read_delim("data/all_foxnews.tab", "\t", escape_double = FALSE, trim_ws = TRUE)
+
+all_foxnews %>% 
+  select(videoId, publishedAt) %>% 
+  mutate(date = lubridate::as_date(publishedAt)) %>% 
+  mutate(yt_code = videoId) %>% 
+  select(date, yt_code) %>% 
+  filter(date > lubridate::as_date("2017-01-01") & date < lubridate::as_date("2018-01-01")) %>% 
   select(yt_code) %>%  
   as.vector()
-## Try 1
-milo_comments <- extract_comments(milo_ids$yt_code, 1, "milo")
 
+get_it_all_tabs <- function(content) {
+  
+ids <- read_delim(paste0("data/", content, ".tab"), "\t", escape_double = FALSE, trim_ws = TRUE)
 
-pjw_ids  <- get_video_ids("text/pjw.txt")
-```
-
-# Lauren Southern
-
-```{r}
-
-get_it_all <- function(content) {
-  ids  <- get_video_ids(paste0("text/", content, ".txt"))
   ids %<>% 
- filter(date > as_date("2017-01-01") & date < as_date("2018-01-01")) %>% 
+  select(videoId, publishedAt) %>% 
+  mutate(date = lubridate::as_date(publishedAt)) %>% 
+  mutate(yt_code = videoId) %>% 
+  select(date, yt_code) %>% 
+  filter(date > lubridate::as_date("2017-01-01") & date < lubridate::as_date("2018-01-01")) %>% 
   select(yt_code) %>%  
   as.vector()
   
 extract_comments(ids$yt_code, 1, content)
 }
 
-types <- c("cernovich", "lauren", "pjw", "milo", "roaming")
-different <- c("alexjones", "rebelmedia", "foxnews", "msnbc", "cnn", "wapo", "nyt")
+contenders <- c("all_msnbc", "all_nyt", "all_rebelmedia", "all_wapo", "all_cnn")
 
-load("data/id_data.Rdata")
-
-`%notin%` <- Negate(`%in%`)
-
-
-  
-
-id_data %>% 
-  select(short, YouTubeChannelID) %>% 
-  na.omit() %>% 
-  select(short) %>% 
-  filter(short %notin% types) %>% 
-  filter(short %notin% different) %>% 
-           as_vector() %>% 
-  purrr::map(get_it_all) 
+contenders %>% 
+  purrr::map(get_it_all_tabs)
 
 ```
 
+Add a new chunk by clicking the *Insert Chunk* button on the toolbar or by pressing *Ctrl+Alt+I*.
+
+When you save the notebook, an HTML file containing the code and output will be saved alongside it (click the *Preview* button or press *Ctrl+Shift+K* to preview the HTML file).
+
+The preview shows you a rendered HTML copy of the contents of the editor. Consequently, unlike *Knit*, *Preview* does not run any R code chunks. Instead, the output of the chunk when it was last run in the editor is displayed.
