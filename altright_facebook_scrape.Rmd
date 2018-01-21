@@ -322,7 +322,7 @@ db_niv3 <- db[ db$level == 2, ]
 ids <- db_niv3$id
 for (i in ids) {
   cat(i, "\n")
-  reply <- getCommentReplies(i, fb_oauth, n = 1000, likes = FALSE, comments = TRUE)
+  reply <- getCommentReplies(i, fb_oauth, n = 20, likes = FALSE, comments = TRUE)
   db <- plyr::rbind.fill(db, reply[["comments"]])
 }
 db$type[is.na(db$type)] <- "reply"
@@ -336,7 +336,7 @@ save(db, file = paste0("data/fb/fb_",names(altright_list)[jj], "_content.Rdata")
 data_list[[jj]] <- db
 data_list <- bind_rows(data_list)
 
-save(date_list, file = paste0("data/fb/fb_all_content.Rdata"))
+save(data_list, file = paste0("data/fb/fb_all_content.Rdata"))
 }
 
 table(bind_rows(data_list)$level)

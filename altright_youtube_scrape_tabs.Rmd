@@ -241,19 +241,6 @@ pacman::p_load(tidyverse, haven)
 
 load("data/id_data.Rdata")
 
-id_data
-
-all_foxnews <- read_delim("data/all_foxnews.tab", "\t", escape_double = FALSE, trim_ws = TRUE)
-
-all_foxnews %>% 
-  select(videoId, publishedAt) %>% 
-  mutate(date = lubridate::as_date(publishedAt)) %>% 
-  mutate(yt_code = videoId) %>% 
-  select(date, yt_code) %>% 
-  filter(date > lubridate::as_date("2017-01-01") & date < lubridate::as_date("2018-01-01")) %>% 
-  select(yt_code) %>%  
-  as.vector()
-
 get_it_all_tabs <- function(content) {
   
 ids <- read_delim(paste0("data/", content, ".tab"), "\t", escape_double = FALSE, trim_ws = TRUE)
