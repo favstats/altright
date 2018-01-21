@@ -1,0 +1,293 @@
+---
+title: "Extract URLs"
+output: html_notebook
+---
+
+```{r}
+pacman::p_load(tidyverse, magrittr, stringi, qdapRegex, purrr, here, tuber, lubridate, SocialMediaLab, beepr, httr)
+
+#mw <- read_file(here("corpi", "mw.txt"))
+#redice <- read_file(here("corpi", "redice.txt"))
+
+```
+# Authentication
+
+```{r}
+key <- "AIzaSyDmV5jHx7c8GeAmpTkv6To_ERdkZ_HNl70"
+
+client_id <- "580511698053-p8mu77kktkcvb503g9q737svu9gcq101.apps.googleusercontent.com"
+
+client_key <- "Y0eW96yy-WRg90RZjVJS615o"
+
+tuber::yt_oauth(client_id, client_key)
+
+# altright_yt <- readxl::read_excel("data/altright_youtube.xlsx")
+# 
+# altright_yt %>% 
+#   group_by(channelTitle) %>% 
+#   slice(1)
+```
+
+# Extract IDs
+
+```{r}
+
+extract_video_ids <- function(video_list) {
+
+video_list %<>% 
+  stri_enc_toutf8() %>% 
+  stri_replace_all_fixed(" ", "") %>% 
+  stri_replace_all_regex("\\p{WHITE_SPACE}", "")
+
+url <- rm_between(video_list, "URL:", "Description", extract = TRUE)
+
+date <- lubridate::as_date(as_vector(rm_between(video_list, "Date:", "URL", extract = TRUE)))
+head(date)
+imp_vec <- as.vector(url[[1]]) %>% 
+  str_replace(pattern = "(.*v\\=)", "") 
+
+data <- data.frame(yt_code = imp_vec, date = date, stringsAsFactors = F)
+
+return(data)
+}
+
+get_video_ids <- function(textfile) {
+  readr::read_file(textfile) %>% 
+  extract_video_ids()
+}
+
+
+```
+
+
+
+# GetAllComments
+
+```{r}
+get_all_comments2 <- function(video_id = NULL, ...) {
+  yt_check_token <- function() {
+    app_token <- getOption("google_token")
+    if (is.null(app_token)) stop("Please get a token using yt_oauth().\n")
+  }
+
+  tuber_GET <- function(path, query, ...) {
+    yt_check_token()
+
+    req <- GET(
+      "https://www.googleapis.com", path = paste0("youtube/v3/", path),
+      query = query, config(token = getOption("google_token")), ...
+    )
+
+    tuber_check <- function(req) {
+      if (req$status_code < 400) return(invisible())
+
+      stop("HTTP failure: ", req$status_code, "\n", call. = FALSE)
+    }
+
+    tuber_check(req)
+    res <- content(req)
+
+    res
+  }
+
+  querylist <- list(
+    videoId = video_id, part = "id,replies,snippet",
+    maxResults = 100
+  )
+  res <- tuber_GET("commentThreads", querylist, ...)
+  simple_res <- lapply(res$items, function(x) {
+    unlist(x$snippet$topLevelComment$snippet)
+  })
+  simpler_res <- plyr::ldply(simple_res, rbind)
+  simpler_res$parentId <- NA
+  n_replies <- sapply(res$items, function(x) {
+    unlist(x$snippet$totalReplyCount)
+  })
+  if (sum(n_replies) > 1) {
+    replies <- lapply(res$items[n_replies > 0], function(x) {
+      unlist(x$replies$comments)
+    })
+    simpler_rep <- plyr::ldply(replies, rbind)
+    names(simpler_rep) <- gsub("snippet.", "", names(simpler_rep))
+    simpler_rep <- subset(simpler_rep, select = -c(
+      kind,
+      etag, id
+    ))
+    agg_res <- plyr::rbind.fill(simpler_res, simpler_rep)
+  }
+  agg_res <- simpler_res
+  page_token <- res$nextPageToken
+  while (is.character(page_token)) {
+    querylist$pageToken <- page_token
+    a_res <- tuber_GET("commentThreads", querylist, ...)
+    simple_res <- lapply(a_res$items, function(x) {
+      unlist(x$snippet$topLevelComment$snippet)
+    })
+    simpler_res <- plyr::ldply(simple_res, rbind)
+    simpler_res$parentId <- NA
+    n_replies <- sapply(a_res$items, function(x) {
+      unlist(x$snippet$totalReplyCount)
+    })
+    if (sum(n_replies) > 1) {
+      replies <- lapply(a_res$items[n_replies > 0], function(x) {
+        unlist(x$replies$comments)
+      })
+      simpler_rep <- plyr::ldply(replies, rbind)
+      names(simpler_rep) <- gsub("snippet.", "", names(simpler_rep))
+      simpler_rep <- subset(simpler_rep, select = -c(
+        kind,
+        etag, id
+      ))
+      agg_res <- plyr::rbind.fill(simpler_res, simpler_rep, agg_res)
+      page_token <- a_res$nextPageToken
+    }
+    agg_res <- plyr::rbind.fill(simpler_res, agg_res)
+    page_token <- a_res$nextPageToken
+  }
+  agg_res %>%
+    as.data.frame()
+}
+
+```
+
+
+# Scraper Function
+
+```{r}
+
+readkey <- function() {
+    line <- readline(prompt = "Are you there? Press [enter]")
+}
+
+authentication <- function() {
+  beepr::beep(5)
+  readkey()
+  auth_token <- ".httr-oauth"
+  if (file.exists(auth_token)) file.remove(auth_token)
+
+  client_id <- "580511698053-p8mu77kktkcvb503g9q737svu9gcq101.apps.googleusercontent.com"
+
+  client_key <- "Y0eW96yy-WRg90RZjVJS615o"
+
+  tuber::yt_oauth(client_id, client_key)
+}
+
+extract_comments <- function(ids, n, youtuber) {
+  comments <- list()
+  cat("Starting loop. Sit back and get a tea. This might take a while...  ( ͡° ͜ʖ ͡°)\n")
+
+  for (jj in n:length(ids)) {
+#    svMisc::progress(jj)
+    outcome <- tryCatch({
+      get_all_comments2(ids[jj])
+    }, 
+    error = function(e){
+      e
+    })
+    if (is.data.frame(outcome)) { #checking if an error occured
+      comments[[jj]] <- outcome
+    } else if (str_detect(outcome$message, "401")) { #if Error Message include 401
+      cat("\n Loop stopped on iteration ", jj)
+      cat("\n", outcome$message)
+      message("\n YouTube Authentication needed!")
+      cat("\n Saving data for safety...")
+      save(comments, file = paste0("data/yt/yt_", youtuber, "_comments_",  n, "_", jj, ".Rdata"))   
+      cat("\t Done! \n")
+      authentication()
+      cat("\n Waiting for 10 seconds...")
+      Sys.sleep(10)                
+      cat("\t Done! \n Continuing...")
+      comments[[jj]] <- get_all_comments2(ids[jj])
+    } else if (str_detect(outcome$message, "400")) { #if Error Message include 400
+        beepr::beep(9)
+      cat("\n", outcome$message)
+      cat("\n Encountered problem at iteration ", jj)
+      cat("\n Saving data for safety...")
+      save(comments, file = paste0("data/yt/yt_", youtuber, "_comments_",  n, "_", jj, ".Rdata"))   
+      cat("\t Done!")
+      cat("\n Waiting for 20 seconds and..")
+      Sys.sleep(20)
+      cat("\t trying again\n")
+      comments[[jj]] <- get_all_comments2(ids[jj])
+      cat("\n Puuh... this worked. Deleting file.\n")
+      file.remove(paste0("data/yt/yt_", youtuber, "_comments_",  n, "_", jj, ".Rdata"))
+    } else if (str_detect(outcome$message, "403")) { #if Error Message include 403
+        beepr::beep(11)      
+      cat("\n", outcome$message)
+      cat("\n Encountered problem at iteration ", jj)
+      Sys.sleep(10)
+      cat("\n Skipping", jj, "\n")
+      next
+    } # TODO(favstats): failsafe what happens if another error happens?
+    cat(paste0("\t", jj)) 
+  }   # End of the for loop
+  cat("\n Binding rows. Might take while.. \t")
+  comments <- suppressWarnings(bind_rows(comments))
+  cat("Done!\n ")
+  cat("\n Saving data one last time...")
+  save(comments, file = paste0("data/yt/yt_", youtuber, "_comments_",  n, "_", jj, "_fn.Rdata"))
+  cat("\t Done!\n")
+  if (jj == length(ids)) beepr::beep(8)
+  cat(paste("\n Congratulations! You just succesfully mined", nrow(comments), "comments from", jj, "YouTube Videos"))
+  return(comments)
+}
+
+
+```
+
+
+# Milo
+
+## Scraping
+
+```{r}
+
+milo_ids  <- get_video_ids("text/milo.txt")
+
+
+milo_ids %<>% 
+ filter(date > as_date("2017-01-01") & date < as_date("2018-01-01")) %>% 
+  select(yt_code) %>%  
+  as.vector()
+## Try 1
+milo_comments <- extract_comments(milo_ids$yt_code, 1, "milo")
+
+
+pjw_ids  <- get_video_ids("text/pjw.txt")
+```
+
+# Lauren Southern
+
+```{r}
+
+get_it_all <- function(content) {
+  ids  <- get_video_ids(paste0("text/", content, ".txt"))
+  ids %<>% 
+ filter(date > as_date("2017-01-01") & date < as_date("2018-01-01")) %>% 
+  select(yt_code) %>%  
+  as.vector()
+  
+extract_comments(ids$yt_code, 1, content)
+}
+
+types <- c("cernovich", "lauren", "pjw", "milo", "roaming")
+different <- c("alexjones", "rebelmedia", "foxnews", "msnbc", "cnn", "wapo", "nyt")
+
+load("data/id_data.Rdata")
+
+`%notin%` <- Negate(`%in%`)
+
+
+  
+
+id_data %>% 
+  select(short, YouTubeChannelID) %>% 
+  na.omit() %>% 
+  select(short) %>% 
+  filter(short %notin% types) %>% 
+  filter(short %notin% different) %>% 
+           as_vector() %>% 
+  purrr::map(get_it_all) 
+
+```
+

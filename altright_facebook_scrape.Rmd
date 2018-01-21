@@ -1,0 +1,346 @@
+---
+title: "Alt-Right Corpus"
+output: html_notebook
+---
+
+```{r setup, include=FALSE}
+pacman::p_load(tidyverse, dplyr, ggplot2, stringr, scales, lubridate, tidytext, tidyr, ggthemes, flexdashboard, Rfacebook, here, magrittr, gdata, rlist, rjson)
+
+get_post <- function(id){
+  tryCatch({
+    post <- getPost(
+      id, 
+      fb_oauth, 
+      n = 1000, 
+      likes = T, 
+      comments = T, 
+      reactions = F
+    )[[3]]
+  }, error = function(e){
+    post <- NA
+  })
+
+  cat(id, "\n")
+  return(post)
+}
+
+load("data/fb/fb_pjw_posts.Rdata")
+
+gera <- head(page$id)
+get_post(gera)
+
+  post <- getPost(
+      page$id, 
+      fb_oauth, 
+      n = 1000, 
+      likes = T, 
+      comments = T, 
+      reactions = F
+    )[[3]]
+```
+
+
+```{r}
+na_omit_list <- function(y) { return(y[!sapply(y, function(x) all(is.na(x)))]) }
+
+load("data/id_data.Rdata")
+
+
+`%notin%` <- Negate(`%in%`)
+
+id_data %<>% 
+  filter(short %notin% c("milo", "anncoulter", "cernovich", "alexjones", "pjw", "lauren"))
+
+# PJW comments: Error in get_post(page$id[ii]) : object 'post' not found
+# lauren comments: Error in get_post(page$id[ii]) : object 'post' not found
+
+altright_list <- setNames(as.list(id_data$FacebookID), id_data$short) %>% na_omit_list()
+
+
+
+fb_oauth <- SocialMediaLab::AuthenticateWithFacebookAPI(
+  appID = "194703717744839", 
+  appSecret = "48aef26dfd544cab76cd9ea6ebf6d2af", 
+  extended_permissions = TRUE,
+  useCachedToken = T)
+
+my_key <- "EAACEdEose0cBACCGqFlkPs3MusFk1Eu0P5CSiMjBRmEZBJ4H4rJ8sZBJGFdGmu0X04BIAwHFn6xo2T2UiBnaD8CHnjHEfjPWdRsfBDhj9nU1T2NpxRIo5p4ZCJLRDbLHYYdMs5CAmvHloOmp8i4leadYqtbYRmrFWQmWZCQUyq9vWbODW65Rjc2zZA6yGAWbJLCLG7JaQ3wZDZD"
+
+
+data_list <- list()
+for (jj in seq_along(altright_list)) {
+  
+  id <- altright_list[[jj]]
+  
+  page <- getPage(
+    id, 
+    fb_oauth, 
+    n = 10000, 
+    since = '2017/01/01', 
+    until = '2018/01/01'
+  )
+  
+  save(page, file = paste0("data/fb/fb_", names(altright_list)[jj], "_posts.Rdata"))
+  
+  comments <- list()
+  for (ii in seq_along(page$id)) {
+    comments[[ii]] <- get_post(page$id[ii])
+    cat(ii)
+  }
+  comments <- bind_rows(comments)
+  #comments <- page$id %>% 
+  #  purrr::map_df(get_post)
+  
+  save(comments, file = paste0("data/fb/fb_",names(altright_list)[jj], "_comments.Rdata"))
+  
+  cat(jj, "\n")
+  data_list[[jj]] <- comments
+}
+
+comments <- bind_rows(data_list)
+
+
+
+```
+
+# CREATE THE FONCTION getCommentReplies
+
+```{r}
+# JSON replyDataToDF (return initial comment)
+replyDataToDF <- function(json){
+  df <- data.frame(
+    from_id = json$from$id,
+    from_name = json$from$name,
+    message = ifelse(!is.null(json$message),json$message, NA),
+    created_time = json$created_time,
+    id = json$id,
+    stringsAsFactors=F)
+  return(df)
+}
+
+# getCommentReplies
+getCommentReplies <- function(reply, fb_oauth, n=1000000, comments=TRUE, likes=FALSE, n.likes=n,
+                     n.comments=n){
+  
+  url <- paste0("https://graph.facebook.com/", reply,
+                "?fields=from,message,created_time") #return initial comments
+  
+  if (comments==TRUE){
+    url <- paste0(url, ",comments.summary(true).",
+                  "fields(from,id,message,created_time,like_count)") #return reply
+    if (n.comments>=500){
+      url <- paste0(url, ".limit(500)")
+    }
+    if (n.comments<500){
+      url <- paste0(url, ".limit(", n.comments, ")")
+    }
+  }
+  if (comments==FALSE){
+    url <- paste0(url, ",comments.summary(true)")
+  }
+  if (likes==TRUE){
+    url <- paste0(url, ",likes.summary(true).",
+                  "fields(id,name)")
+    if (n.likes>=2000){
+      url <- paste0(url, ".limit(2000)")
+    }
+    if (n.likes<2000){
+      url <- paste0(url, ".limit(", n.likes, ")")
+    }
+  }
+  if (likes==FALSE){
+    url <- paste0(url, ",likes.summary(true)")
+  }
+  
+  # making query
+  content <- callAPI(url=url, token=fb_oauth)
+  
+  # error traps: retry 3 times if error
+  error <- 0
+  while (length(content$error_code)>0){
+    cat("Error!\n")
+    Sys.sleep(0.5)
+    error <- error + 1
+    content <- callAPI(url=url, token=fb_oauth)		
+    if (error==3){ stop(content$error_msg) }
+  }
+  if (length(content)==0){ 
+    stop("Reply could not be found")
+  }
+  
+  # putting it together
+  out <- list()
+#  out[["reply"]] <- replyDataToDF(content)
+  if (likes && n.likes > 0) out[["likes"]] <- likesDataToDF(content$likes$data)
+  if (likes && n.likes > 0) n.l <- ifelse(!is.null(out$likes), dim(out$likes)[1], 0)
+  if (n.likes == 0) n.l <- 0
+  if (!likes) n.l <- Inf
+  if (comments && n.likes > 0) out[["comments"]] <- commentsDataToDF(content$comments$data)
+  if (comments && n.likes > 0) n.c <- ifelse(!is.null(out$comments), dim(out$comments)[1], 0)
+  if (n.comments == 0) n.c <- 0
+  if (!comments) n.c <- Inf
+  
+  # paging if we n.comments OR n.likes haven't been downloaded
+  if (n.likes > n.l || n.comments > n.c){
+    # saving URLs for next batch of likes and comments
+    if (likes) url.likes <- content$likes$paging$`next`
+    if (!likes) url.likes <- NULL
+    if (comments) url.comments <- content$comments$paging$`next`
+    if (!comments) url.comments <- NULL
+    
+    if (!is.null(url.likes) && likes && n.likes > n.l){
+      # retrieving next batch of likes
+      url <- content$likes$paging$`next`
+      content <- callAPI(url=url.likes, token=fb_oauth)
+      out[["likes"]] <- rbind(out[["likes"]],
+                              likesDataToDF(content$data))
+      n.l <- dim(out$likes)[1]
+      # next likes, in batches of 500
+      while (n.l < n.likes & length(content$data)>0 &
+             !is.null(url <- content$paging$`next`)){
+        url <- content$paging$`next`
+        content <- callAPI(url=url, token=fb_oauth)
+        out[["likes"]] <- rbind(out[["likes"]],
+                                likesDataToDF(content$data))
+        n.l <- dim(out$likes)[1]
+      }
+    }
+    if (!is.null(url.comments) && comments && n.comments > n.c){
+      # retriving next batch of comments
+      content <- callAPI(url=url.comments, token=fb_oauth)
+      out[["comments"]] <- rbind(out[["comments"]],
+                                 commentsDataToDF(content$data))
+      n.c <- dim(out$comments)[1]
+      # next comments, in batches of 500
+      while (n.c < n.comments & length(content$data)>0 &
+             !is.null(content$paging$`next`)){
+        url <- content$paging$`next`
+        content <- callAPI(url=url, token=fb_oauth)
+        out[["comments"]] <- rbind(out[["comments"]],
+                                   commentsDataToDF(content$data))
+        n.c <- dim(out$comments)[1]
+      }
+    }
+  }
+  
+  return(out)
+}
+
+# JSON unlistWithNA
+unlistWithNA <- function(lst, field){
+  if (length(field)==1){
+    notnulls <- unlist(lapply(lst, function(x) !is.null(x[[field]])))
+    vect <- rep(NA, length(lst))
+    vect[notnulls] <- unlist(lapply(lst, function(x) x[[field]]))
+  }
+  if (length(field)==2){
+    notnulls <- unlist(lapply(lst, function(x) !is.null(x[[field[1]]][[field[2]]])))
+    vect <- rep(NA, length(lst))
+    vect[notnulls] <- unlist(lapply(lst, function(x) x[[field[1]]][[field[2]]]))
+  }
+  if (field[1]=="shares"){
+    notnulls <- unlist(lapply(lst, function(x) !is.null(x[[field[1]]][[field[2]]])))
+    vect <- rep(0, length(lst))
+    vect[notnulls] <- unlist(lapply(lst, function(x) x[[field[1]]][[field[2]]]))
+  }
+  if (length(field)==3){
+    notnulls <- unlist(lapply(lst, function(x) 
+      tryCatch(!is.null(x[[field[1]]][[field[2]]][[field[3]]]), 
+               error=function(e) FALSE)))
+    vect <- rep(NA, length(lst))
+    vect[notnulls] <- unlist(lapply(lst[notnulls], function(x) x[[field[1]]][[field[2]]][[field[3]]]))
+  }
+  if (length(field)==4 & field[1]=="to"){
+    notnulls <- unlist(lapply(lst, function(x) 
+      tryCatch(!is.null(x[[field[1]]][[field[2]]][[as.numeric(field[3])]][[field[4]]]), 
+               error=function(e) FALSE)))
+    vect <- rep(NA, length(lst))
+    vect[notnulls] <- unlist(lapply(lst[notnulls], function(x) x[[field[1]]][[field[2]]][[as.numeric(field[3])]][[field[4]]]))
+  }
+  if (field[1] %in% c("comments", "likes") & !is.na(field[2])){
+    notnulls <- unlist(lapply(lst, function(x) !is.null(x[[field[1]]][[field[2]]][[field[3]]])))
+    vect <- rep(0, length(lst))
+    vect[notnulls] <- unlist(lapply(lst, function(x) x[[field[1]]][[field[2]]][[field[3]]]))
+  }
+  return(vect)
+}
+
+# JSON commentsDataToDF #
+
+commentsDataToDF <- function(json){
+  if (!is.null(json)){
+    df <- data.frame(
+      from_id = unlistWithNA(json, c('from', 'id')),
+      from_name = unlistWithNA(json, c('from', 'name')),
+      message = unlistWithNA(json, 'message'),
+      created_time = unlistWithNA(json, 'created_time'),
+      likes_count = unlistWithNA(json, 'like_count'),
+      id = unlistWithNA(json, 'id'),
+      stringsAsFactors=F)
+  }
+  if (is.null(json)){
+    df <- NULL
+  }
+  return(df)
+}
+```
+
+
+```{r}
+
+data_list <- list()
+for (jj in seq_along(altright_list)) {
+  id <- altright_list[[jj]]
+
+cat("\n Extract Posts (Level 1) \n")
+  
+  db <- getPage(
+    id, 
+    fb_oauth, 
+    n = 10000, 
+    since = '2017/01/01', 
+    until = '2018/01/01'
+  )
+  
+db$level <- 1
+
+cat("\n Extract Comments (Level 2) \n")
+db_niv2 <- db[ db$level == 1, ]
+ids <- db_niv2$id
+for (i in ids) {
+  cat(i, "\n")
+  post <- get_post(db$id[i])
+  db <- plyr::rbind.fill(db, post[["comments"]])
+}
+db$type[is.na(db$type)] <- "comment"
+db$level[is.na(db$level)] <- 2 # inscrire 2 (commentaire de niveau 2)
+
+
+
+cat("\n Extract Replies (Level 3) \n")
+db_niv3 <- db[ db$level == 2, ]
+ids <- db_niv3$id
+for (i in ids) {
+  cat(i, "\n")
+  reply <- getCommentReplies(i, fb_oauth, n = 20, likes = FALSE, comments = TRUE)
+  db <- plyr::rbind.fill(db, reply[["comments"]])
+}
+db$type[is.na(db$type)] <- "reply"
+db$level[is.na(db$level)] <- 3
+
+cat(names(altright_list)[jj])
+cat(jj, "\n")
+  
+save(db, file = paste0("data/fb/fb_",names(altright_list)[jj], "_content.Rdata"))
+
+data_list[[jj]] <- db
+data_list <- bind_rows(data_list)
+
+save(data_list, file = paste0("data/fb/fb_all_content.Rdata"))
+}
+
+table(bind_rows(data_list)$level)
+data_list
+
+```
+
