@@ -13,9 +13,9 @@ Tracking the Alt Right
 | Black Pigeon Speaks  | 359762154043841  | UCmrLCXSDScliR7q8AxxjvXg   | 711535251835629568 |
 | Blaire White         | 1136054926414603 | UCDmCBKaKOtOrEqgsL4-3C8Q   | 4316769252         |
 | Infowars             | 80256732576      | NA                         | 14505245           |
-| The Rebel            | 145634995501895  | UCGy6uV7yqGWDeUWTZzT3ZEg   | 3018960919         |
+| The Rebel            | 811793512220923  | UCGy6uV7yqGWDeUWTZzT3ZEg   | 3018960919         |
 | Tommy Robinson       | 381971441938916  | NA                         | 374712154          |
-| Stefan Molyneux      | 510991678        | UCC3L8QaxqEGUiBC252GHy3w   | 313038011          |
+| Stefan Molyneux      | 18322869182      | UCC3L8QaxqEGUiBC252GHy3w   | 313038011          |
 | Steven Crowder       | 15139936162      | UCIveFvW-ARp\_B\_RckhweNJw | 19091173           |
 | Brittany Pettibone   | 2230351787189034 | UCesrUK\_dMDBZAf7cnjQPdgQ  | 274316654          |
 | Richard Spencer      | NA               | NA                         | 402181258          |

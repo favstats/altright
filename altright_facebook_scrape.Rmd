@@ -3,9 +3,142 @@ title: "Alt-Right Corpus"
 output: html_notebook
 ---
 
-```{r setup, include=FALSE}
-pacman::p_load(tidyverse, dplyr, ggplot2, stringr, scales, lubridate, tidytext, tidyr, ggthemes, flexdashboard, Rfacebook, here, magrittr, gdata, rlist, rjson)
 
+## packages 
+
+```{r}
+pacman::p_load(tidyverse, dplyr, ggplot2, stringr, scales, lubridate, tidytext, tidyr, ggthemes, Rfacebook, here, magrittr, gdata, rlist, rjson)
+```
+
+## page/user user
+
+```{r}
+load("data/id_data.Rdata")
+```
+
+
+## post ids
+
+```{r}
+#load("data/fb/fb_pjw_posts.Rdata")
+```
+
+## Auth
+
+```{r}
+fb_oauth <- SocialMediaLab::AuthenticateWithFacebookAPI(
+  appID = "194703717744839", 
+  appSecret = "48aef26dfd544cab76cd9ea6ebf6d2af", 
+  extended_permissions = TRUE,
+  useCachedToken = T)
+```
+
+
+## get comments
+
+helper function to extract comments
+
+```{r}
+get_comments <- function(post_id){
+  comments <- tryCatch({
+    Rfacebook::getPost(
+      post = post_id, 
+      token = fb_oauth,
+      n = 20000,
+      likes = T, 
+      comments = T
+      #reactions = F
+    )$comments
+  }, error = function(e){
+    return(NA)
+  })
+  return(comments)
+}
+
+# post_ids <- page$id
+# get_comments(post_ids = post_ids[1:10])
+```
+
+## get_facebook
+
+```{r}
+na.omit.list <- function(y) { return(y[!sapply(y, function(x) all(is.na(x)))]) }
+
+get_facebook <- function(page_id, name = ""){
+
+  posts <- getPage(
+    page = page_id, 
+    token = fb_oauth, 
+    n = 10, 
+    since = '2017/01/01', 
+    until = '2018/01/01'
+  )
+  
+  cat("\n")
+  
+  data_list <- list()
+  for(k in seq_along(posts$id)) {
+   
+    comments <- get_comments(post_id = posts$id[k])
+    
+    if(is.data.frame(comments)){
+      comments <- comments %>% 
+        mutate(page = posts$from_name[k])
+    }
+    
+    data_list[[k]] <- comments
+    
+    cat("Comments on post #:", k, "\n")
+  }
+  
+  comments <- data_list %>% na.omit.list() %>% bind_rows()
+  user_data <- list(posts = posts, comments = comments)
+  save(user_data, file = paste0("data/fb/fb_", name, ".Rdata"))
+  #return(user_data)
+}
+
+# application
+# get_facebook(page_id = id_data$FacebookID[10], name = id_data$short[10])
+```
+
+## Main download
+
+
+### Altright
+```{r}
+id_task <- id_data %>%
+  filter(!is.na(FacebookID)) %>%
+  slice(1:34) # cut media
+
+for(jj in 1:nrow(id_task)){
+  get_facebook(
+    page_id = id_task$FacebookID[jj], 
+    name = id_task$short[jj]
+  )
+}
+```
+
+
+### Media 
+
+```{r}
+id_media <- id_data %>%
+  filter(!is.na(FacebookID)) %>%
+  slice(34:40) # cut media
+
+for(jj in 1:nrow(id_media)){
+  get_facebook(
+    page_id = id_media$FacebookID[jj], 
+    name = id_media$short[jj]
+  )
+}
+```
+
+
+
+## Old
+
+```{r setup, include=FALSE}
 get_post <- function(id){
   tryCatch({
     post <- getPost(
@@ -24,58 +157,20 @@ get_post <- function(id){
   return(post)
 }
 
-
-load("data/fb/old/fb_pjw_posts.Rdata")
+load("data/fb/fb_pjw_posts.Rdata")
 
 gera <- head(page$id)
 get_post(gera)
 
-library(Rfacebook)
-
-post <- Rfacebook::getPost(
-  page$id[1], 
-  token = fb_oauth,
-  n = 20000, 
-  #likes = T, 
-  comments = T
-  #reactions = F
-)
+  post <- getPost(
+      page$id, 
+      fb_oauth, 
+      n = 1000, 
+      likes = T, 
+      comments = T, 
+      reactions = F
+    )[[3]]
 ```
-
-
-## new loop
-
-```{r}
-post_ids <- page$id
-data_list <- list()
-
-for (jj in seq_along(post_ids[1:10])) {
-  
-  id <- post_ids[jj]
-  
-  tryCatch({
-    dat <- Rfacebook::getPost(
-      post = id, 
-      token = fb_oauth,
-      n = 20000,
-      #likes = T, 
-      comments = T
-      #reactions = F
-    )
-    dat <- dat$comments
-  }, error = function(e){
-    dat <- NA
-  })
-  
-  data_list[[jj]] <- dat
-  cat(jj)
-}
-#since = '2017/01/01', 
-#until = '2018/01/01'
-comments <- bind_rows(data_list)
-```
-
-
 
 
 ```{r}
@@ -92,7 +187,7 @@ id_data %<>%
 # PJW comments: Error in get_post(page$id[ii]) : object 'post' not found
 # lauren comments: Error in get_post(page$id[ii]) : object 'post' not found
 
-#altright_list <- setNames(as.list(id_data$FacebookID), id_data$short) %>% na_omit_list()
+altright_list <- setNames(as.list(id_data$FacebookID), id_data$short) %>% na_omit_list()
 
 
 
