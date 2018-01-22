@@ -236,27 +236,8 @@ extract_comments <- function(ids, n, youtuber) {
 ```
 
 
-# Milo
+# Scraping
 
-## Scraping
-
-```{r}
-
-milo_ids  <- get_video_ids("text/milo.txt")
-
-
-milo_ids %<>% 
- filter(date > as_date("2017-01-01") & date < as_date("2018-01-01")) %>% 
-  select(yt_code) %>%  
-  as.vector()
-## Try 1
-milo_comments <- extract_comments(milo_ids$yt_code, 1, "milo")
-
-
-pjw_ids  <- get_video_ids("text/pjw.txt")
-```
-
-# Lauren Southern
 
 ```{r}
 
@@ -270,7 +251,7 @@ get_it_all <- function(content) {
 extract_comments(ids$yt_code, 1, content)
 }
 
-types <- c("cernovich", "lauren", "pjw", "milo", "roaming")
+types <- c("cernovich", "lauren", "pjw", "milo", "roaming", "bps", "blaire_white", "molymeme", "crowder", "pettibone", "europa", "ramzpaul", "roosh", "returnofkings", "styxenhammer", "mw", "redicetv", "countercurrent", "altright", "americanrenaissance", "arktosmedia", "bakedalaska", "NPIRadix")
 different <- c("alexjones", "rebelmedia", "foxnews", "msnbc", "cnn", "wapo", "nyt")
 
 load("data/id_data.Rdata")
@@ -287,6 +268,7 @@ id_data %>%
   filter(short %notin% types) %>% 
   filter(short %notin% different) %>% 
            as_vector() %>% 
+         as.character() %>% 
   purrr::map(get_it_all) 
 
 ```

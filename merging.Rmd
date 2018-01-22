@@ -1,0 +1,105 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+# packages
+
+```{r}
+pacman::p_load(tidyverse, here)
+```
+
+
+# All
+
+```{r}
+datasets <- dir(here("data", "yt"))[-1:-2]
+
+newdata <- list()
+for (jj in datasets) {
+  cat(jj, ": \n")
+  einzel <- get(load(here("data", "yt", jj)))
+  newdata[[jj]] <- suppressWarnings(bind_rows(einzel))
+}
+
+yt_all_comments_fn <- suppressWarnings(bind_rows(newdata))
+
+save(yt_all_comments_fn, file = here("data", "yt", "yt_all_comments_fn.Rdata"))
+```
+
+```{r}
+load("C:/Users/Fabio/Documents/git_proj/altright_data/cernovich_comments.Rdata")
+library(magrittr)
+comments %>% 
+  mutate(time = lubridate::as_date(created_time)) %>% 
+  ggplot(aes(time, likes_count)) +
+  geom_line()
+range(comments$time)
+
+
+```
+
+# New Scrape merging
+
+```{r}
+datasets <- dir(here::here("data", "fb"))[c(-1,-27:-29)]
+
+load(here::here("data", "fb", "fb_alexjones.Rdata"))
+
+colnames(user_data$posts)
+colnames(user_data$comments)
+
+user_data$posts$page <- user_data$comments$page[1]
+
+init_list <- get(load(here::here("data", "fb", "fb_alexjones.Rdata")))
+init_posts <- init_list$posts
+init_comments <- init_list$comments
+for (jj in datasets) {
+   init_posts <- plyr::rbind.fill(init_posts, get(load(here("data", "fb", jj)$posts)))
+   init_comments <- plyr::rbind.fill(init_comments, get(load(here("data", "fb", jj)$comments)))
+}
+fb_all1 <- plyr::rbind.fill(init_posts, init_comments)
+
+save(fb_all1, file = here("data", "fb", "fb_all1.Rdata"))
+
+```
+
+# Initital Scrape merging
+
+```{r}
+dat_files <- dir(here::here("data", "fb", "initial_scrape"))[-1:-2]
+post_files <- dat_files[!grepl("comments", dat_files)]
+comment_files <- dat_files[grepl("comments", dat_files)]
+
+
+load(here("data", "fb", "initial_scrape", "abc.Rdata"))
+load(here("data", "fb", "initial_scrape", "abc_comments.Rdata"))
+
+
+colnames(page)
+colnames(comments)
+
+page$page <-  page$from_name[1]
+comments$page <-  page$from_name[1]
+
+
+init_posts <- page
+init_comments <- comments
+
+for (jj in seq_along(post_files)) {
+   init_posts <- plyr::rbind.fill(init_posts, get(load(here("data", "fb", "initial_scrape", post_files[jj]))))
+   init_comments <- plyr::rbind.fill(init_comments, get(load(here("data", "fb", "initial_scrape", comment_files[jj]))))
+}
+
+fb_all2 <- plyr::rbind.fill(init_posts, init_comments)
+
+save(fb_all2, file = here("data", "fb", "fb_all2.Rdata"))
+
+```
+# Merge it all
+
+```{r}
+fb_all <- plyr::rbind.fill(fb_all1, fb_all2)
+
+save(fb_all, file = here("data", "fb", "fb_all.Rdata"))
+```
+
