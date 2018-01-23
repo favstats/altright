@@ -41,7 +41,7 @@ range(comments$time)
 # New Scrape merging
 
 ```{r}
-datasets <- dir(here::here("data", "fb"))[c(-1,-27:-29)]
+datasets <- dir(here::here("data", "fb"))[c(-1,-28:-30)]
 
 load(here::here("data", "fb", "fb_alexjones.Rdata"))
 
@@ -54,8 +54,9 @@ init_list <- get(load(here::here("data", "fb", "fb_alexjones.Rdata")))
 init_posts <- init_list$posts
 init_comments <- init_list$comments
 for (jj in datasets) {
-   init_posts <- plyr::rbind.fill(init_posts, get(load(here("data", "fb", jj)$posts)))
-   init_comments <- plyr::rbind.fill(init_comments, get(load(here("data", "fb", jj)$comments)))
+   cat(jj, "\n")
+   init_posts <- plyr::rbind.fill(init_posts, get(load(here("data", "fb", jj)))$posts)
+   init_comments <- plyr::rbind.fill(init_comments, get(load(here("data", "fb", jj)))$comments)
 }
 fb_all1 <- plyr::rbind.fill(init_posts, init_comments)
 
@@ -86,7 +87,9 @@ init_posts <- page
 init_comments <- comments
 
 for (jj in seq_along(post_files)) {
+  cat(post_files[jj], jj, "\n")
    init_posts <- plyr::rbind.fill(init_posts, get(load(here("data", "fb", "initial_scrape", post_files[jj]))))
+  cat(comment_files[jj], jj, "\n")
    init_comments <- plyr::rbind.fill(init_comments, get(load(here("data", "fb", "initial_scrape", comment_files[jj]))))
 }
 
@@ -100,6 +103,57 @@ save(fb_all2, file = here("data", "fb", "fb_all2.Rdata"))
 ```{r}
 fb_all <- plyr::rbind.fill(fb_all1, fb_all2)
 
+fb_all %<>% 
+  mutate(page = ifelse(is.na(page), from_name, page))
+
 save(fb_all, file = here("data", "fb", "fb_all.Rdata"))
+```
+
+
+
+## YouTube Merger
+# packages
+
+```{r}
+pacman::p_load(tidyverse, here, svMisc, stringr, beepr)
+# dir(here::here("data", "rebelmedia"))
+# here::here()
+#  yt_rebelmedia_comments_1_2148_fn <- plyr::rbind.fill(
+#  get(load(here::here("data", "rebelmedia", "yt_all_rebelmedia_comments_1_767.Rdata"))),
+#  get(load(here::here("data", "rebelmedia", "yt_all_rebelmedia_comments_768_1417_fn.Rdata"))),
+#  get(load(here::here("data", "rebelmedia", "yt_all_rebelmedia_comments_1418_2148_fn.Rdata")))
+# )
+#  
+# save(yt_rebelmedia_comments_1_2148_fn, file = "data/yt/yt_rebelmedia_comments_1_2148_fn.Rdata")
+```
+
+
+# All
+
+```{r}
+datasets <- dir(here::here("data", "yt"))[-1:-2]
+
+names <- str_replace_all(datasets, "yt_", "") %>%
+  str_replace_all("_comments.*?$", "")
+
+names[20] <- "nyt"
+cbind(datasets, names)
+
+bind_it_all <- function(datasets, names){ 
+newdata <- list()
+for (jj in seq_along(datasets)) {
+  cat(datasets[jj], ":", jj, "\n")
+  einzel <- get(load(here::here("data", "yt", datasets[jj])))
+  if(is.data.frame(einzel)) einzel$channel <- paste0(names[jj])
+  newdata[[jj]] <- suppressWarnings(bind_rows(einzel))
+}
+
+yt_all_comments_fn <- suppressWarnings(bind_rows(newdata))
+
+save(yt_all_comments_fn, file = here::here("data", "yt", "yt_all_comments_fn.Rdata"))
+}
+
+bind_it_all(datasets, names)
+
 ```
 
