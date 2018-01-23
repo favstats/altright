@@ -1,6 +1,10 @@
 Tracking the Alt Right
 ================
 
+
+
+![**GOAL**](http://i0.kym-cdn.com/photos/images/original/001/101/860/ea3.jpg)
+
 | Content              | FacebookID       | YouTubeChannelID           | TwitterID          |
 |:---------------------|:-----------------|:---------------------------|:-------------------|
 | Milo Yiannopoulos    | 423006854503882  | UC0aVoboXBUx2-tVIWHc3W2Q   | NA                 |
