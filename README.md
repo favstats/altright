@@ -1,8 +1,13 @@
+Tracking the Alt Right
+================
+
 We scraped over 10 Million comments and tweets from various Social Media accounts linked to the Alt Right and Alt Light. This project is meant to be presented at the [Combating Online Extremism: State, Private Sector, and Civil Society Responses - Workshop](http://www.voxpol.eu/events/combating-online-extremism-state-private-sector-civil-society-responses-call-papers/). We hope to make the data publically available as soon as we can.
+
+**Our Goal:**
 
 ![**GOAL**](http://i0.kym-cdn.com/photos/images/original/001/101/860/ea3.jpg)
 
-Tracking the Alt Right
+Alt Right and Alt Light Figures
 ================
 
 | Content              | FacebookID       | YouTubeChannelID           | TwitterID          |
@@ -42,7 +47,7 @@ Tracking the Alt Right
 | Virtue of the West   | NA               | UCG6FJf6O\_-QS0KoIK3n5fiA  | NA                 |
 | VDARE                | 385640741463156  | UCORGNJpLcsNSoIMyewxBZTw   | 27522964           |
 
-Media
+Media and interesting References
 =====
 
 | Content         | FacebookID      | YouTubeChannelID          | TwitterID |
