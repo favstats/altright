@@ -1,9 +1,9 @@
-Tracking the Alt Right
-================
-
-
+We scraped over 10 Million comments and tweets from various Social Media accounts linked to the Alt Right and Alt Light. This project is meant to be presented at the [Combating Online Extremism: State, Private Sector, and Civil Society Responses - Workshop](http://www.voxpol.eu/events/combating-online-extremism-state-private-sector-civil-society-responses-call-papers/). We hope to make the data publically available as soon as we can.
 
 ![**GOAL**](http://i0.kym-cdn.com/photos/images/original/001/101/860/ea3.jpg)
+
+Tracking the Alt Right
+================
 
 | Content              | FacebookID       | YouTubeChannelID           | TwitterID          |
 |:---------------------|:-----------------|:---------------------------|:-------------------|
