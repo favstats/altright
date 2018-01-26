@@ -1,0 +1,256 @@
+---
+title: "twitter"
+author: "Simon Roth"
+date: "26 Januar 2018"
+output: html_notebook
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+```{r}
+pacman::p_load(tidyverse, wdman, jsonlite, rvest, xml2, RSelenium)
+
+dir("data")
+an_ids <- jsonlite::fromJSON("data/anncoulter_ids.json")
+```
+
+
+```{r}
+# library(twitteR)
+# consumer_key <- "itt4vjXXihsdZAIEK48rK1XOR"
+# consumer_secret <- "gIHdZX9ecZoP5i0k6zkPBZb2WuMvPYHYFQUPqCO4KXMO1EULWE"
+# #options(httr_oauth_cache=T)
+# twitteR::setup_twitter_oauth(consumer_key, consumer_secret)
+
+
+userName <- "AnnCoulter"
+
+id <- an_ids[length(an_ids)]
+
+# twitteR::showStatus(id)
+# lookup_statuses(an_ids[1:10])
+
+anncoulter_tweets <- rtweet::lookup_tweets(an_ids)
+#save(anncoulter_tweets, file = "data/anncoulter_tweets.Rdata")
+glimpse(anncoulter_tweets)
+
+anncoulter_tweets$created_at %>%
+  range
+
+url_str <- "https://twitter.com/anncoulter/status/834217566126108673?lang=en"
+
+html_file <- xml2::read_html(url_str) 
+```
+
+
+
+
+# Rselenium
+
+```{r}
+library(RSelenium)
+rD <- rsDriver(verbose = FALSE)
+rD
+
+remDr <- rD$client
+```
+
+
+
+#  Helper
+
+```{r}
+get_replies <- function(html) {
+  
+  if_notnull <- function(x) ifelse(identical(x, character(0)) | is.null(x), NA, x)
+  
+  html_list <- html %>% 
+    html_nodes("#stream-items-id") 
+  
+    storage <- data.frame()
+  
+  for(jj in seq_along(html_list)){
+  
+    names <- html_list[jj] %>%
+      html_nodes(".js-nav .u-textTruncate b") %>%
+      html_text() 
+    if(is.null(names)) names <- NA
+  
+    text <- html_list[jj] %>%
+      html_nodes(".tweet-text") %>%
+      html_text() 
+    if(is.null(text)) text <- NA
+    
+    dates <- html_list[jj] %>%
+      html_nodes(".js-short-timestamp") %>%
+      html_text() 
+    if(is.null(dates)) dates <- NA
+  
+    favorites <- html_list[jj] %>%
+      html_nodes(".js-actionFavorite .ProfileTweet-actionCountForPresentation") %>%
+      html_text() %>%
+      as.numeric() %>%
+      ifelse(is.na(.), 0, .)
+    if(is.null(favorites)) favorites <- NA
+      
+    retweets <- html_list[jj] %>%
+      html_nodes(".js-actionRetweet .ProfileTweet-actionCountForPresentation") %>%
+      html_text() %>%
+      as.numeric() %>%
+      ifelse(is.na(.), 0, .)
+    if(is.null(retweets)) retweets <- NA
+    
+    comments <-  html_list[jj] %>%
+      html_nodes(".js-actionReply .ProfileTweet-actionCountForPresentation") %>%
+      html_text() %>%
+      as.numeric() %>%
+      ifelse(is.na(.), 0, .)
+    if(is.null(comments)) comments <- NA
+  
+    replies <- data.frame(names, dates, text, favorites, retweets, comments, stringsAsFactors = F)
+    storage <- rbind(storage, replies)
+
+  }
+  
+  return(storage)
+}
+```
+
+
+# Main Function
+
+```{r}
+library(rvest)
+
+get_replies_df <- function(handle, ids) {
+  u <- paste0("https://twitter.com/", handle, "/status/", ids, "?lang=en")
+  
+  replies <- list()
+  for(jj in seq_along(u)) {
+   
+    remDr$navigate(u[jj])
+    
+    tryCatch({
+      replies[[jj]] <- remDr$getPageSource()[[1]] %>% 
+      xml2::read_html() %>%
+      get_replies()
+    }, error = function(e){
+      replies[[jj]] <- NA
+      cat("sorry not found.")
+    })
+    
+    #cat(jj, "\t")
+  }
+  
+  replies <- do.call("rbind", replies)
+  if(!is.null(replies)) replies$handle <- handle
+  return(replies)
+}
+
+handle <- "anncoulter"
+ids <- an_ids
+test <- get_replies_df("anncoulter", ids[1:10])
+#u <- paste0("https://twitter.com/", handle, "/status/",  ids[8], "?lang=en")
+```
+
+
+
+```{r}
+dat <- data.frame(handler = rep("anncoulter", 2), tweet_id =  ids[1:2])
+
+final <- list()
+for (jj in 1:nrow(dat)) {
+  final[[jj]] <- get_replies_df(dat$handler[jj], dat$tweet_id[jj])
+  cat(jj, "\t")
+}
+
+final_dt <- bind_rows(final) %>%
+  ## extract unique elements
+  filter(!duplicated(text))
+```
+
+
+
+
+
+# Scroll Stuff
+
+```{r}
+html <- webElem$getPageSource()[[1]] %>% read_html()
+
+replies1 <- get_replies(html)
+
+# html <- remDr$getPageSource()[[1]] %>% read_html()
+# 
+# replies2 <- get_replies(html)
+```
+
+
+```{r}
+# selServ <- selenium(verbose = TRUE)
+# selServ$process
+# selServ$log()
+# #selServ$stop()
+```
+
+```{r}
+# pjsDrv <- phantomjs(verbose = FALSE, check = FALSE)
+# pjsDrv$process
+# pjsDrv$output()
+# pjsDrv$stop()
+```
+
+```{r}
+# remDr$navigate(url_str)
+# remDr$screenshot(useViewer = T, display = T)
+#webElem <- remDr$findElement("css", "body")
+#webElem$sendKeysToElement(list(key = "end"))
+# webElem$screenshot(useViewer = T, display = T)
+# for(i in 1:5){
+#   webElem$sendKeysToElement(list(key = "down_arrow"))
+#   Sys.sleep(2)
+# }
+#remDr$executeScript("window.scrollBy(0,250);")
+# webElem <- remDr$findElement("xpath", '//*[contains(concat( " ", @class, " " ), concat( " ", "Icon--logo", " " ))]')
+# remDr$mouseMoveToLocation(webElement = webElem)
+# 
+# script <- "window.scrollTo(0,2000)"
+# remDr$executeScript(script, args = list("lala"))
+```
+
+
+
+
+
+# old 
+
+```{r}
+
+# ##fetch tweets from @userName timeline
+# tweets <- userTimeline(userName, n = 100)
+# 
+# ## converting tweets list to DataFrame  
+# tweets <- twListToDF(tweets)  
+
+## building queryString to fetch retweets 
+queryString = paste0("to:", userName)
+
+## retrieving tweet ID for which reply is to be fetched 
+#Id = tweets[31,"id"]  
+
+## fetching all the reply to userName
+rply <- searchTwitter(queryString, sinceID = id, n = 100) 
+rply <- twListToDF(rply)
+
+## eliminate all the reply other then reply to required tweet Id  
+rply = rply[!rply$replyToSID > id,]
+rply = rply[!rply$replyToSID < id,]
+rply = rply[complete.cases(rply[,"replyToSID"]),]
+
+## now rply DataFrame contains all the required replies.
+```
+
