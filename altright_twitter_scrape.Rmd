@@ -18,6 +18,33 @@ dir("data")
 an_ids <- jsonlite::fromJSON("data/anncoulter_ids.json")
 ```
 
+# reading twitter ids
+
+```{r}
+#cnn_ids <- fromJSON(here("data", "tw", "cnn_month.json"))
+ 
+tweet_ids <- dir(here("data", "tw"))
+here::here("data", "tw")
+
+tweet_ids_list <- list()
+for (jj in seq_along(tweet_ids)) {
+  tweet_ids_list[[jj]] <- jsonlite::fromJSON(here("data", "tw", tweet_ids[jj]))
+}
+
+enframed_tweets <- enframe(tweet_ids_list)
+
+handlers <- c("ABC", "RealAlexJones", "AnnCoulter", "MsBlaireWhite", "navyhato", "BreitbartNews", "Cernovich", "CNN", "FoxNews", "infowars", "Lauren_Southern", "MSNBC", "PrisonPlanet", "TheRebelTV", "RoamingMil","TRobinsonNewEra", "washingtonpost")
+
+ff <- list()
+for (jj in seq_along(handlers)) {
+  ff[[jj]] <- cbind(enframed_tweets$value[[jj]], handlers[jj])
+}
+
+handler_ids <- rlist::list.rbind(ff) %>% 
+   as.data.frame()
+
+colnames(handler_ids) <- c("tweet_id", "handler")
+```
 
 ```{r}
 # library(twitteR)
@@ -142,25 +169,26 @@ get_replies_df <- function(handle, ids) {
       replies[[jj]] <- NA
       cat("sorry not found.")
     })
-    
+
     #cat(jj, "\t")
   }
   
   replies <- do.call("rbind", replies)
   if(!is.null(replies)) replies$handle <- handle
+     # save(replies, file = "data/replies.Rdata")
   return(replies)
 }
 
-handle <- "anncoulter"
-ids <- an_ids
-test <- get_replies_df("anncoulter", ids[1:10])
+handle <- handler_ids$handler
+ids <- handler_ids$ids
+#test <- get_replies_df(handle, ids)
 #u <- paste0("https://twitter.com/", handle, "/status/",  ids[8], "?lang=en")
 ```
 
 
 
 ```{r}
-dat <- data.frame(handler = rep("anncoulter", 2), tweet_id =  ids[1:2])
+dat <- handler_ids
 
 final <- list()
 for (jj in 1:nrow(dat)) {
@@ -171,6 +199,8 @@ for (jj in 1:nrow(dat)) {
 final_dt <- bind_rows(final) %>%
   ## extract unique elements
   filter(!duplicated(text))
+
+save(final_dt, file = "data/replies.Rdata")
 ```
 
 
