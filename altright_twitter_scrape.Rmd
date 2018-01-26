@@ -76,7 +76,7 @@ userName <- handler_ids$handler
 # twitteR::showStatus(id)
 # lookup_statuses(an_ids[1:10])
 
-tw_everytweet <- rtweet::lookup_tweets(handler_ids$tweet_id[1:500])
+tw_everytweet <- rtweet::lookup_tweets(handler_ids$tweet_id)
 save(tw_everytweet, file = "data/tw_everytweet.Rdata")
 glimpse(every_tweet)
 
@@ -205,9 +205,14 @@ get_replies_df <- function(handle, ids) {
 ```{r}
 dat <- handler_ids
 
+start <- 1
 final <- list()
-for (jj in 1:nrow(dat)) {
-  final[[jj]] <- get_replies_df(dat$handler[jj], dat$tweet_id[jj])
+for (jj in start:nrow(dat)) {
+  final[[jj]] <- get_replies_df(dat$handler[jj], dat$tweet_id[jj])#
+  if (file.exists(paste0("data/replies_list", "_", start, "_", jj - 1, ".Rdata"))) {
+    file.remove(paste0("data/replies_list", "_", start, "_", jj - 1, ".Rdata"))
+  }
+  save(final, file = paste0("data/replies_list", "_", start, "_", jj, ".Rdata"))
   cat(jj, "\t")
 }
 
