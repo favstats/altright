@@ -199,7 +199,7 @@ for (jj in 1:nrow(dat)) {
 final_dt <- bind_rows(final) %>%
   ## extract unique elements
   filter(!duplicated(text))
-
+beepr::beep(8)
 save(final_dt, file = "data/replies.Rdata")
 ```
 
