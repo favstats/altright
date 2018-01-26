@@ -13,53 +13,41 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ```{r}
 pacman::p_load(tidyverse, wdman, jsonlite, rvest, xml2, RSelenium, here)
-
-dir("data")
-an_ids <- jsonlite::fromJSON("data/anncoulter_ids.json")
 ```
 
 # reading twitter ids
 
 ```{r}
-# ABC_ids <- fromJSON(here("data", "tw", "tw_abc_ids.json"))
-#  length(ABC_ids)
-tweet_ids <- dir(here("data", "tw"))[-1]
-#here::here("data", "tw")
-
-# tweet_ids_list <- list()
+# 
+# tweet_ids <- dir(here("data", "tw"))[-1:-2]
+# 
+# 
+# handlers <- c("RealAlexJones", "AnnCoulter", "ArktosMedia", "MsBlaireWhite", "navyhato", "BreitbartNews", "Cernovich", "CNN", "NewRightAmerica", "scrowder", "IdentityEvropa", "FoxNews", "Gavin_McInnes" , "infowars", "Lauren_Southern",  "StefanMolyneux", "MSNBC", "MillennialWoes", "nytimes", "AVoiceforMen", "BrittPettibone", "PrisonPlanet", "ramzpaul",  "TheRebelTV", "redicetv", "ReturnOfKings", "RichardBSpencer", "RoamingMil","TRobinsonNewEra", "Styx666Official","vdare", "washingtonpost")
+# 
+# cbind(tweet_ids, handlers)
+# 
+# tweet_init <- fromJSON(here("data", "tw", "tw_abc_ids.json")) %>% 
+#   data.frame(handler = "ABC")
 # for (jj in seq_along(tweet_ids)) {
-#   tweet_ids_list[[jj]] <- jsonlite::fromJSON(here("data", "tw", tweet_ids[jj]))
+#    tweet_init <- plyr::rbind.fill(tweet_init, 
+#                                   jsonlite::fromJSON(
+#                                     here(
+#                                     "data", "tw", tweet_ids[jj]
+#                                     )
+#                                   ) %>% 
+#                                   data.frame(handler = handlers[jj]))
+#    cat(jj, "\n")
 # }
+# handler_ids <- tweet_init
+# 
+# colnames(handler_ids) <- c("tweet_id", "handler")
+# 
+# save(handler_ids, file = here("data", "tw", "handler_ids.Rdata"))
+# 
 
-handlers <- c("RealAlexJones", "AnnCoulter", "MsBlaireWhite", "navyhato", "BreitbartNews", "Cernovich", "CNN", "FoxNews", "infowars", "Lauren_Southern", "MSNBC", "PrisonPlanet", "TheRebelTV", "RoamingMil","TRobinsonNewEra", "washingtonpost")
 
-tweet_init <- fromJSON(here("data", "tw", "tw_abc_ids.json")) %>% 
-  data.frame(handler = "ABC")
-for (jj in seq_along(tweet_ids)) {
-   tweet_init <- plyr::rbind.fill(tweet_init, 
-                                  jsonlite::fromJSON(
-                                    here(
-                                    "data", "tw", tweet_ids[jj]
-                                    )
-                                  ) %>% 
-                                  data.frame(handler = handlers[jj]))
-   cat(jj, "\n")
-}
-handler_ids <- tweet_init
-
-colnames(handler_ids) <- c("tweet_id", "handler")
+load(here("data", "tw", "handler_ids.Rdata"))
 table(handler_ids$handler)
-# enframed_tweets <- enframe(tweet_ids_list)
-# ff <- list()
-# for (jj in seq_along(handlers)) {
-#   ff[[jj]] <- cbind(enframed_tweets$value[[jj]], handlers[jj])
-# }
-
-# handler_ids <- rlist::list.rbind(ff) %>% 
-#    as.data.frame()
-
-# handler_ids %>% 
-#   filter(handler == "BreitbartNews")
 ```
 
 ```{r}
@@ -96,8 +84,12 @@ table(handler_ids$handler)
 
 ```{r}
 library(RSelenium)
-rD <- rsDriver(verbose = FALSE, port = 5556L)
+port <- sample(4000L:5000L, 1)
+rD <- rsDriver(verbose = FALSE, port = port)
+rD
+
 remDr <- rD$client
+#remDr$close()
 ```
 
 
@@ -212,7 +204,7 @@ get_replies_df <- function(handle, ids) {
 
         webElem <- remDr$findElement("css", css_element)
         remDr$executeScript(script, args = list(webElem))
-        #Sys.sleep(1)
+        Sys.sleep(1.5)
         
         ntw_after <- ntweets()
 
@@ -252,10 +244,11 @@ get_replies_df <- function(handle, ids) {
 third loop
 
 ```{r}
-dat <- handler_ids[10:20, ]
+dat <- handler_ids
 
 #handle <- dat$handler[8]
 #ids <- dat$tweet_id[8]
+
 
 start <- 1
 final <- list()
@@ -270,97 +263,16 @@ for (jj in start:nrow(dat)) {
     if(file_exists) file.remove(paste0("data/replies_list", "_", start, "_", jj - 1, ".Rdata"))
     final[[jj]] <- rd
     save(final, file = paste0("data/replies_list", "_", start, "_", jj, ".Rdata"))
+
   }
 
-  cat(jj, "\t")
+  cat("Tweet Number:", jj, "By:", handler[jj])
 }
-
 
 final_dt <- bind_rows(final) %>%
   ## extract unique elements
   filter(!duplicated(text))
 beepr::beep(8)
 save(final_dt, file = "data/replies.Rdata")
-```
-
-
-
-
-
-# Scroll Stuff
-
-```{r}
-html <- webElem$getPageSource()[[1]] %>% read_html()
-
-replies1 <- get_replies(html)
-
-# html <- remDr$getPageSource()[[1]] %>% read_html()
-# 
-# replies2 <- get_replies(html)
-```
-
-
-```{r}
-# selServ <- selenium(verbose = TRUE)
-# selServ$process
-# selServ$log()
-# #selServ$stop()
-```
-
-```{r}
-# pjsDrv <- phantomjs(verbose = FALSE, check = FALSE)
-# pjsDrv$process
-# pjsDrv$output()
-# pjsDrv$stop()
-```
-
-```{r}
-# remDr$navigate(url_str)
-# remDr$screenshot(useViewer = T, display = T)
-#webElem <- remDr$findElement("css", "body")
-#webElem$sendKeysToElement(list(key = "end"))
-# webElem$screenshot(useViewer = T, display = T)
-# for(i in 1:5){
-#   webElem$sendKeysToElement(list(key = "down_arrow"))
-#   Sys.sleep(2)
-# }
-#remDr$executeScript("window.scrollBy(0,250);")
-# webElem <- remDr$findElement("xpath", '//*[contains(concat( " ", @class, " " ), concat( " ", "Icon--logo", " " ))]')
-# remDr$mouseMoveToLocation(webElement = webElem)
-# 
-# script <- "window.scrollTo(0,2000)"
-# remDr$executeScript(script, args = list("lala"))
-```
-
-
-
-
-
-# old 
-
-```{r}
-
-# ##fetch tweets from @userName timeline
-# tweets <- userTimeline(userName, n = 100)
-# 
-# ## converting tweets list to DataFrame  
-# tweets <- twListToDF(tweets)  
-
-## building queryString to fetch retweets 
-queryString = paste0("to:", userName)
-
-## retrieving tweet ID for which reply is to be fetched 
-#Id = tweets[31,"id"]  
-
-## fetching all the reply to userName
-rply <- searchTwitter(queryString, sinceID = id, n = 100) 
-rply <- twListToDF(rply)
-
-## eliminate all the reply other then reply to required tweet Id  
-rply = rply[!rply$replyToSID > id,]
-rply = rply[!rply$replyToSID < id,]
-rply = rply[complete.cases(rply[,"replyToSID"]),]
-
-## now rply DataFrame contains all the required replies.
 ```
 
