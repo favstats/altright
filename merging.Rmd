@@ -136,7 +136,7 @@ datasets <- dir(here::here("data", "yt"))[-1:-2]
 names <- str_replace_all(datasets, "yt_", "") %>%
   str_replace_all("_comments.*?$", "")
 
-names[20] <- "nyt"
+names[19] <- "nyt"
 cbind(datasets, names)
 
 bind_it_all <- function(datasets, names){ 
