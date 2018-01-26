@@ -21,56 +21,71 @@ an_ids <- jsonlite::fromJSON("data/anncoulter_ids.json")
 # reading twitter ids
 
 ```{r}
-#cnn_ids <- fromJSON(here("data", "tw", "cnn_month.json"))
- 
-tweet_ids <- dir(here("data", "tw"))
+# ABC_ids <- fromJSON(here("data", "tw", "tw_abc_ids.json"))
+#  length(ABC_ids)
+tweet_ids <- dir(here("data", "tw"))[-1]
 here::here("data", "tw")
 
-tweet_ids_list <- list()
+# tweet_ids_list <- list()
+# for (jj in seq_along(tweet_ids)) {
+#   tweet_ids_list[[jj]] <- jsonlite::fromJSON(here("data", "tw", tweet_ids[jj]))
+# }
+
+handlers <- c("RealAlexJones", "AnnCoulter", "MsBlaireWhite", "navyhato", "BreitbartNews", "Cernovich", "CNN", "FoxNews", "infowars", "Lauren_Southern", "MSNBC", "PrisonPlanet", "TheRebelTV", "RoamingMil","TRobinsonNewEra", "washingtonpost")
+
+tweet_init <- fromJSON(here("data", "tw", "tw_abc_ids.json")) %>% 
+  data.frame(handler = "ABC")
 for (jj in seq_along(tweet_ids)) {
-  tweet_ids_list[[jj]] <- jsonlite::fromJSON(here("data", "tw", tweet_ids[jj]))
+   tweet_init <- plyr::rbind.fill(tweet_init, 
+                                  jsonlite::fromJSON(here(
+                                    "data", "tw", tweet_ids[jj]
+                                    )
+                                  ) %>% 
+                                  data.frame(handler = handlers[jj]))
+   cat(jj, "\n")
 }
-
-enframed_tweets <- enframe(tweet_ids_list)
-
-handlers <- c("ABC", "RealAlexJones", "AnnCoulter", "MsBlaireWhite", "navyhato", "BreitbartNews", "Cernovich", "CNN", "FoxNews", "infowars", "Lauren_Southern", "MSNBC", "PrisonPlanet", "TheRebelTV", "RoamingMil","TRobinsonNewEra", "washingtonpost")
-
-ff <- list()
-for (jj in seq_along(handlers)) {
-  ff[[jj]] <- cbind(enframed_tweets$value[[jj]], handlers[jj])
-}
-
-handler_ids <- rlist::list.rbind(ff) %>% 
-   as.data.frame()
+handler_ids <- tweet_init
 
 colnames(handler_ids) <- c("tweet_id", "handler")
+table(handler_ids$handler)
+# enframed_tweets <- enframe(tweet_ids_list)
+# ff <- list()
+# for (jj in seq_along(handlers)) {
+#   ff[[jj]] <- cbind(enframed_tweets$value[[jj]], handlers[jj])
+# }
+
+# handler_ids <- rlist::list.rbind(ff) %>% 
+#    as.data.frame()
+
+# handler_ids %>% 
+#   filter(handler == "BreitbartNews")
 ```
 
 ```{r}
-# library(twitteR)
-# consumer_key <- "itt4vjXXihsdZAIEK48rK1XOR"
-# consumer_secret <- "gIHdZX9ecZoP5i0k6zkPBZb2WuMvPYHYFQUPqCO4KXMO1EULWE"
-# #options(httr_oauth_cache=T)
-# twitteR::setup_twitter_oauth(consumer_key, consumer_secret)
+ library(twitteR)
+ consumer_key <- "itt4vjXXihsdZAIEK48rK1XOR"
+ consumer_secret <- "gIHdZX9ecZoP5i0k6zkPBZb2WuMvPYHYFQUPqCO4KXMO1EULWE"
+ options(httr_oauth_cache=T)
+ twitteR::setup_twitter_oauth(consumer_key, consumer_secret)
 
 
-userName <- "AnnCoulter"
-
-id <- an_ids[length(an_ids)]
+userName <- handler_ids$handler
+# 
+# id <- an_ids[length(an_ids)]
 
 # twitteR::showStatus(id)
 # lookup_statuses(an_ids[1:10])
 
-anncoulter_tweets <- rtweet::lookup_tweets(an_ids)
-#save(anncoulter_tweets, file = "data/anncoulter_tweets.Rdata")
-glimpse(anncoulter_tweets)
+tw_everytweet <- rtweet::lookup_tweets(handler_ids$tweet_id[1:500])
+save(tw_everytweet, file = "data/tw_everytweet.Rdata")
+glimpse(every_tweet)
 
-anncoulter_tweets$created_at %>%
-  range
+# anncoulter_tweets$created_at %>%
+#   range
 
-url_str <- "https://twitter.com/anncoulter/status/834217566126108673?lang=en"
-
-html_file <- xml2::read_html(url_str) 
+# url_str <- "https://twitter.com/anncoulter/status/834217566126108673?lang=en"
+# 
+# html_file <- xml2::read_html(url_str) 
 ```
 
 
@@ -80,7 +95,7 @@ html_file <- xml2::read_html(url_str)
 
 ```{r}
 library(RSelenium)
-rD <- rsDriver(verbose = FALSE)
+rD <- rsDriver(verbose = FALSE, port = 5555L)
 rD
 
 remDr <- rD$client
@@ -179,8 +194,8 @@ get_replies_df <- function(handle, ids) {
   return(replies)
 }
 
-handle <- handler_ids$handler
-ids <- handler_ids$ids
+# handle <- handler_ids$handler
+# ids <- handler_ids$ids
 #test <- get_replies_df(handle, ids)
 #u <- paste0("https://twitter.com/", handle, "/status/",  ids[8], "?lang=en")
 ```
