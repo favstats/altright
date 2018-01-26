@@ -96,9 +96,7 @@ table(handler_ids$handler)
 
 ```{r}
 library(RSelenium)
-rD <- rsDriver(verbose = FALSE, port = 5555L)
-rD
-
+rD <- rsDriver(verbose = FALSE, port = 5556L)
 remDr <- rD$client
 ```
 
@@ -106,15 +104,17 @@ remDr <- rD$client
 
 #  Helper
 
+first loop
+
 ```{r}
 get_replies <- function(html) {
   
   if_notnull <- function(x) ifelse(identical(x, character(0)) | is.null(x), NA, x)
   
   html_list <- html %>% 
-    html_nodes("#stream-items-id") 
+    html_nodes(".permalink-descendant-tweet , .js-initial-focus") ##stream-items-id
   
-    storage <- data.frame()
+  storage <- data.frame()
   
   for(jj in seq_along(html_list)){
   
@@ -154,9 +154,13 @@ get_replies <- function(html) {
       ifelse(is.na(.), 0, .)
     if(is.null(comments)) comments <- NA
   
-    replies <- data.frame(names, dates, text, favorites, retweets, comments, stringsAsFactors = F)
+    replies <- data.frame(
+      names, dates, text, 
+      favorites, retweets, comments, 
+      stringsAsFactors = F
+    )
+    
     storage <- rbind(storage, replies)
-
   }
   
   return(storage)
@@ -166,17 +170,66 @@ get_replies <- function(html) {
 
 # Main Function
 
+second loop
+
+* scroller](https://stackoverflow.com/questions/45204934/check-if-its-possible-to-scroll-down-with-rselenium)
+
+
 ```{r}
 library(rvest)
 
+ntweets <- function(){
+  ntweets <- remDr$getPageSource()[[1]] %>% 
+    read_html() %>%
+    html_nodes(".js-nav .u-textTruncate b") %>%
+    html_text() %>% 
+    length()
+}
+
+
 get_replies_df <- function(handle, ids) {
-  u <- paste0("https://twitter.com/", handle, "/status/", ids, "?lang=en")
+
+  ### scroller script
+  css_element <- "#permalink-overlay-dialog > div.PermalinkOverlay-content > div > div > div.permalink-footer" # target element
+  script <- "arguments[0].scrollIntoView(true);" # scroller function
   
+  ### prep
+  u <- paste0("https://twitter.com/", handle, "/status/", ids, "?lang=en")
   replies <- list()
+  
   for(jj in seq_along(u)) {
    
+    # call twitter url
     remDr$navigate(u[jj])
     
+    ### scroller
+    k <- 50
+    ntw_before <- ntweets()
+    
+    while(k > 0){
+      tryCatch({
+        # scroll
+
+        webElem <- remDr$findElement("css", css_element)
+        remDr$executeScript(script, args = list(webElem))
+        #Sys.sleep(1)
+        
+        ntw_after <- ntweets()
+
+        
+        if(ntw_before == ntw_after) {
+          k <- 0
+        } else {
+          k <- k - 1
+          ntw_before <- ntw_after
+        }
+
+        cat("\n", k, " scrolls remain\n")
+      }, error = function(e){
+        k <- 0
+      })
+    }
+
     tryCatch({
       replies[[jj]] <- remDr$getPageSource()[[1]] %>% 
       xml2::read_html() %>%
@@ -194,28 +247,34 @@ get_replies_df <- function(handle, ids) {
      # save(replies, file = "data/replies.Rdata")
   return(replies)
 }
-
-# handle <- handler_ids$handler
-# ids <- handler_ids$ids
-#test <- get_replies_df(handle, ids)
-#u <- paste0("https://twitter.com/", handle, "/status/",  ids[8], "?lang=en")
 ```
 
-
+third loop
 
 ```{r}
-dat <- handler_ids
+dat <- handler_ids[10:20, ]
+
+#handle <- dat$handler[8]
+#ids <- dat$tweet_id[8]
 
 start <- 1
 final <- list()
+
 for (jj in start:nrow(dat)) {
-  final[[jj]] <- get_replies_df(dat$handler[jj], dat$tweet_id[jj])#
-  if (file.exists(paste0("data/replies_list", "_", start, "_", jj - 1, ".Rdata"))) {
-    file.remove(paste0("data/replies_list", "_", start, "_", jj - 1, ".Rdata"))
+  rd <- get_replies_df(dat$handler[jj], dat$tweet_id[jj])
+  
+  file_exists <- file.exists(paste0("data/replies_list", "_", start, "_", jj - 1, ".Rdata"))
+  is_available <- (!is.data.frame(rd) | !is.null(rd))
+  
+  if (is_available) {
+    if(file_exists) file.remove(paste0("data/replies_list", "_", start, "_", jj - 1, ".Rdata"))
+    final[[jj]] <- rd
+    save(final, file = paste0("data/replies_list", "_", start, "_", jj, ".Rdata"))
   }
-  save(final, file = paste0("data/replies_list", "_", start, "_", jj, ".Rdata"))
+
   cat(jj, "\t")
 }
+
 
 final_dt <- bind_rows(final) %>%
   ## extract unique elements
