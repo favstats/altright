@@ -254,14 +254,18 @@ ids <- read_delim(paste0("data/", content, ".tab"), "\t", escape_double = FALSE,
   select(yt_code) %>%  
   as.vector()
   
-extract_comments(ids$yt_code, 1, content)
+extractomments(ids$yt_code, 5771, content)
 }
 
-contenders <- c("all_msnbc", "all_nyt", "all_rebelmedia", "all_wapo", "all_cnn")
+contenders <- c("all_foxnews")
 
 contenders %>% 
   purrr::map(get_it_all_tabs)
 
+load(here::here("data", "fb", "fb_alexjones_content.Rdata"))
+
+db
+inter
 ```
 
 Add a new chunk by clicking the *Insert Chunk* button on the toolbar or by pressing *Ctrl+Alt+I*.

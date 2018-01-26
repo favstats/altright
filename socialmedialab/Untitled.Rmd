@@ -1,0 +1,168 @@
+---
+title: "Twitter Media Lab"
+output: html_notebook
+---
+
+# Load in Packages
+
+```{r}
+#install.packages("pacman")
+#pacman::p_install_gh("systats/binoculaR")
+pacman::p_load(tidyverse, magrittr, haven, ggthemes, sjPlot, sjmisc, sjstats, binoculaR, janitor, here, SocialMediaLab, hrbrthemes, ggraph)
+
+range01 <- function(x){(x - min(x, na.rm = T)) / (max(x, na.rm = T) - min(x, na.rm = T))}
+
+```
+
+
+```{r}
+
+# REPLACE WITH YOUR API KEY
+myapikey <- "Rxly3JKWfdM5osWQenXrxzSQX"
+# REPLACE WITH YOUR API SECRET
+myapisecret <- "u1NPPaUKdMW11dqwhWVwMQIYwmd42YL8fHTM7YhOHiex7YIku5"
+# REPLACE WITH YOUR ACCESS TOKEN
+myaccesstoken <- "513351911-HnGVTozLlxCQJh4u0kntUajynJDVBHQP1qNFe588"
+# REPLACE WITH YOUR ACCESS TOKEN SECRET
+myaccesstokensecret <- "mfNN2NVnd9d0WNmS4tZCz85r6swsCZp2H23JdgHMJdXh1"
+
+```
+
+
+# Load in Data
+, , , 
+```{r}
+myTwitterData <- Authenticate("twitter", 
+                              apiKey=consumer_key,
+                              apiSecret=consumer_secret, 
+                              accessToken=access_token,
+                              accessTokenSecret=access_secret) %>%
+  Collect(searchTerm="#prayforsouthafrica| #stopwhitegenocide |#whitegenocide| #17states| #unitetheright| #novaeuropa| #tokyo| #buildthewall| #trumpmemes| #trump| #rightwing| #maga| #makeamericagreatagain| #politics| #patriot| #guns",
+          numTweets=20000,
+          writeToFile=FALSE,
+          verbose=TRUE)
+Collect(ego = TRUE,
+username = myUsernames)
+
+myTwitterData$text <- iconv(myTwitterData$text, to = 'utf-8')
+
+```
+
+
+# Filter Data
+
+```{r}
+g_twitter_actor <- myTwitterData %>% Create("actor", writeToFile = TRUE)
+
+g_twitter_actor
+```
+
+
+# Recoding
+
+```{r}
+myTwitterData <- Authenticate("twitter", 
+                              apiKey=myapikey,
+                              apiSecret=myapisecret, 
+                              accessToken=myaccesstoken,
+                              accessTokenSecret=myaccesstokensecret) %>%
+  Collect(ego = TRUE,
+username = c("RichardBSpencer", "realDonaldTrump", "mikeenochsback", "MillennialWoes", "thealthype", "JFGariepy"))
+```
+
+
+# Analysis
+
+```{r}
+
+#install.packages("rtweet")
+library(rtweet)
+
+
+# REPLACE WITH YOUR API KEY
+myapikey <- "Rxly3JKWfdM5osWQenXrxzSQX"
+# REPLACE WITH YOUR API SECRET
+myapisecret <- "u1NPPaUKdMW11dqwhWVwMQIYwmd42YL8fHTM7YhOHiex7YIku5"
+# REPLACE WITH YOUR ACCESS TOKEN
+myaccesstoken <- "513351911-HnGVTozLlxCQJh4u0kntUajynJDVBHQP1qNFe588"
+# REPLACE WITH YOUR ACCESS TOKEN SECRET
+myaccesstokensecret <- "mfNN2NVnd9d0WNmS4tZCz85r6swsCZp2H23JdgHMJdXh1"
+# Change the next four lines based on your own consumer_key, consume_secret, access_token, and access_secret. 
+consumer_key <- "itt4vjXXihsdZAIEK48rK1XOR"
+consumer_secret <- "gIHdZX9ecZoP5i0k6zkPBZb2WuMvPYHYFQUPqCO4KXMO1EULWE"
+access_token <- "	513351911-HnGVTozLlxCQJh4u0kntUajynJDVBHQP1qNFe588"
+access_secret <- "	mfNN2NVnd9d0WNmS4tZCz85r6swsCZp2H23JdgHMJdXh1"
+#options(httr_oauth_cache=T)
+twitteR::setup_twitter_oauth(consumer_key, consumer_secret, access_token, access_secret)
+tw = twitteR::searchTwitter('#realDonaldTrump + #HillaryClinton', n = 1e4, since = '2016-11-08', retryOnRateLimit = 1e3)
+d = twitteR::twListToDF(tw)
+
+
+tmls <- rtweet::get_timelines(username, n = 3200)
+
+rt <- search_tweets(
+  "#rstats", n = 18000, include_rts = FALSE
+)
+```
+
+
+```{r}
+library(httr)
+
+# 1. Find OAuth settings for twitter:
+#    https://dev.twitter.com/docs/auth/oauth
+oauth_endpoints("twitter")
+
+# 2. Register an application at https://apps.twitter.com/
+#    Make sure to set callback url to "http://127.0.0.1:1410/"
+#
+#    Replace key and secret below
+myapp <- oauth_app("twitter",
+  key = "TYrWFPkFAkn4G5BbkWINYw",
+  secret = "qjOkmKYU9kWfUFWmekJuu5tztE9aEfLbt26WlhZL8"
+)
+
+# 3. Get OAuth credentials
+twitter_token <- oauth1.0_token(oauth_endpoints("twitter"), myapp)
+
+# 4. Use API
+req <- GET("https://api.twitter.com/1.1/statuses/home_timeline.json",
+  config(token = twitter_token))
+stop_for_status(req)
+content(req)
+```
+
+```{r}
+library(rtweet)
+library(igraph)
+library(hrbrthemes)
+library(ggraph)
+library(tidyverse)
+rstats <- search_tweets("#antiwhite", n=20000)
+
+# same as previous recipe
+filter(rstats, retweet_count > 0) %>% 
+  select(screen_name, mentions_screen_name) %>%
+  unnest(mentions_screen_name) %>% 
+  filter(!is.na(mentions_screen_name)) %>% 
+  graph_from_data_frame() -> rt_g
+
+
+V(rt_g)$node_label <- unname(ifelse(degree(rt_g)[V(rt_g)] > 20, names(V(rt_g)), "")) 
+V(rt_g)$node_size <- unname(ifelse(degree(rt_g)[V(rt_g)] > 20, degree(rt_g), 0)) 
+
+ggraph(rt_g, layout = 'linear', circular = TRUE) + 
+  geom_edge_arc(edge_width=0.125, aes(alpha=..index..)) +
+  geom_node_label(aes(label=node_label, size=node_size),
+                  label.size=0, fill="#ffffff66", segment.colour="springgreen",
+                  color="slateblue", repel=TRUE, family=font_rc, fontface="bold") +
+  coord_fixed() +
+  scale_size_area(trans="sqrt") +
+  labs(title="Retweet Relationships", subtitle="Most retweeted screen names labeled. Darkers edges == more retweets. Node size == larger degree") +
+  theme_graph(base_family=font_rc) +
+  theme(legend.position="none")
+
+
+ggsave(file = here("images","network5.png"))
+```
+

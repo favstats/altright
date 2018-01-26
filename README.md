@@ -1,6 +1,15 @@
 Tracking the Alt Right
 ================
 
+We scraped over 10 Million comments and tweets from various Social Media accounts linked to the Alt Right and Alt Light. This project is meant to be presented at the [Combating Online Extremism: State, Private Sector, and Civil Society Responses - Workshop](http://www.voxpol.eu/events/combating-online-extremism-state-private-sector-civil-society-responses-call-papers/). We hope to make the data publically available as soon as we can.
+
+**Our Goal:**
+
+![**GOAL**](http://i0.kym-cdn.com/photos/images/original/001/101/860/ea3.jpg)
+
+Alt Right and Alt Light Figures
+================
+
 | Content              | FacebookID       | YouTubeChannelID           | TwitterID          |
 |:---------------------|:-----------------|:---------------------------|:-------------------|
 | Milo Yiannopoulos    | 423006854503882  | UC0aVoboXBUx2-tVIWHc3W2Q   | NA                 |
@@ -13,9 +22,9 @@ Tracking the Alt Right
 | Black Pigeon Speaks  | 359762154043841  | UCmrLCXSDScliR7q8AxxjvXg   | 711535251835629568 |
 | Blaire White         | 1136054926414603 | UCDmCBKaKOtOrEqgsL4-3C8Q   | 4316769252         |
 | Infowars             | 80256732576      | NA                         | 14505245           |
-| The Rebel            | 145634995501895  | UCGy6uV7yqGWDeUWTZzT3ZEg   | 3018960919         |
+| The Rebel            | 811793512220923  | UCGy6uV7yqGWDeUWTZzT3ZEg   | 3018960919         |
 | Tommy Robinson       | 381971441938916  | NA                         | 374712154          |
-| Stefan Molyneux      | 510991678        | UCC3L8QaxqEGUiBC252GHy3w   | 313038011          |
+| Stefan Molyneux      | 18322869182      | UCC3L8QaxqEGUiBC252GHy3w   | 313038011          |
 | Steven Crowder       | 15139936162      | UCIveFvW-ARp\_B\_RckhweNJw | 19091173           |
 | Brittany Pettibone   | 2230351787189034 | UCesrUK\_dMDBZAf7cnjQPdgQ  | 274316654          |
 | Richard Spencer      | NA               | NA                         | 402181258          |
@@ -38,7 +47,7 @@ Tracking the Alt Right
 | Virtue of the West   | NA               | UCG6FJf6O\_-QS0KoIK3n5fiA  | NA                 |
 | VDARE                | 385640741463156  | UCORGNJpLcsNSoIMyewxBZTw   | 27522964           |
 
-Media
+Media and interesting References
 =====
 
 | Content         | FacebookID      | YouTubeChannelID          | TwitterID |

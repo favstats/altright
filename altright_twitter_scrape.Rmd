@@ -12,38 +12,81 @@ knitr::opts_chunk$set(echo = TRUE)
 ## R Markdown
 
 ```{r}
-pacman::p_load(tidyverse, wdman, jsonlite, rvest, xml2, RSelenium)
+pacman::p_load(tidyverse, wdman, jsonlite, rvest, xml2, RSelenium, here)
 
 dir("data")
 an_ids <- jsonlite::fromJSON("data/anncoulter_ids.json")
 ```
 
+# reading twitter ids
 
 ```{r}
-# library(twitteR)
-# consumer_key <- "itt4vjXXihsdZAIEK48rK1XOR"
-# consumer_secret <- "gIHdZX9ecZoP5i0k6zkPBZb2WuMvPYHYFQUPqCO4KXMO1EULWE"
-# #options(httr_oauth_cache=T)
-# twitteR::setup_twitter_oauth(consumer_key, consumer_secret)
+# ABC_ids <- fromJSON(here("data", "tw", "tw_abc_ids.json"))
+#  length(ABC_ids)
+tweet_ids <- dir(here("data", "tw"))[-1]
+#here::here("data", "tw")
 
+# tweet_ids_list <- list()
+# for (jj in seq_along(tweet_ids)) {
+#   tweet_ids_list[[jj]] <- jsonlite::fromJSON(here("data", "tw", tweet_ids[jj]))
+# }
 
-userName <- "AnnCoulter"
+handlers <- c("RealAlexJones", "AnnCoulter", "MsBlaireWhite", "navyhato", "BreitbartNews", "Cernovich", "CNN", "FoxNews", "infowars", "Lauren_Southern", "MSNBC", "PrisonPlanet", "TheRebelTV", "RoamingMil","TRobinsonNewEra", "washingtonpost")
 
-id <- an_ids[length(an_ids)]
+tweet_init <- fromJSON(here("data", "tw", "tw_abc_ids.json")) %>% 
+  data.frame(handler = "ABC")
+for (jj in seq_along(tweet_ids)) {
+   tweet_init <- plyr::rbind.fill(tweet_init, 
+                                  jsonlite::fromJSON(
+                                    here(
+                                    "data", "tw", tweet_ids[jj]
+                                    )
+                                  ) %>% 
+                                  data.frame(handler = handlers[jj]))
+   cat(jj, "\n")
+}
+handler_ids <- tweet_init
 
-# twitteR::showStatus(id)
-# lookup_statuses(an_ids[1:10])
+colnames(handler_ids) <- c("tweet_id", "handler")
+table(handler_ids$handler)
+# enframed_tweets <- enframe(tweet_ids_list)
+# ff <- list()
+# for (jj in seq_along(handlers)) {
+#   ff[[jj]] <- cbind(enframed_tweets$value[[jj]], handlers[jj])
+# }
 
-anncoulter_tweets <- rtweet::lookup_tweets(an_ids)
-#save(anncoulter_tweets, file = "data/anncoulter_tweets.Rdata")
-glimpse(anncoulter_tweets)
+# handler_ids <- rlist::list.rbind(ff) %>% 
+#    as.data.frame()
 
-anncoulter_tweets$created_at %>%
-  range
+# handler_ids %>% 
+#   filter(handler == "BreitbartNews")
+```
 
-url_str <- "https://twitter.com/anncoulter/status/834217566126108673?lang=en"
+```{r}
+#  library(twitteR)
+#  consumer_key <- "itt4vjXXihsdZAIEK48rK1XOR"
+#  consumer_secret <- "gIHdZX9ecZoP5i0k6zkPBZb2WuMvPYHYFQUPqCO4KXMO1EULWE"
+#  options(httr_oauth_cache=T)
+#  twitteR::setup_twitter_oauth(consumer_key, consumer_secret)
+# 
+# 
+# userName <- handler_ids$handler
+# # 
+# # id <- an_ids[length(an_ids)]
+# 
+# # twitteR::showStatus(id)
+# # lookup_statuses(an_ids[1:10])
+# 
+# tw_everytweet <- rtweet::lookup_tweets(handler_ids$tweet_id)
+# save(tw_everytweet, file = "data/tw_everytweet.Rdata")
+# glimpse(every_tweet)
 
-html_file <- xml2::read_html(url_str) 
+# anncoulter_tweets$created_at %>%
+#   range
+
+# url_str <- "https://twitter.com/anncoulter/status/834217566126108673?lang=en"
+# 
+# html_file <- xml2::read_html(url_str) 
 ```
 
 
@@ -53,7 +96,7 @@ html_file <- xml2::read_html(url_str)
 
 ```{r}
 library(RSelenium)
-rD <- rsDriver(verbose = FALSE)
+rD <- rsDriver(verbose = FALSE, port = 5555L)
 rD
 
 remDr <- rD$client
@@ -142,35 +185,43 @@ get_replies_df <- function(handle, ids) {
       replies[[jj]] <- NA
       cat("sorry not found.")
     })
-    
+
     #cat(jj, "\t")
   }
   
   replies <- do.call("rbind", replies)
   if(!is.null(replies)) replies$handle <- handle
+     # save(replies, file = "data/replies.Rdata")
   return(replies)
 }
 
-handle <- "anncoulter"
-ids <- an_ids
-test <- get_replies_df("anncoulter", ids[1:10])
+# handle <- handler_ids$handler
+# ids <- handler_ids$ids
+#test <- get_replies_df(handle, ids)
 #u <- paste0("https://twitter.com/", handle, "/status/",  ids[8], "?lang=en")
 ```
 
 
 
 ```{r}
-dat <- data.frame(handler = rep("anncoulter", 2), tweet_id =  ids[1:2])
+dat <- handler_ids
 
+start <- 1
 final <- list()
-for (jj in 1:nrow(dat)) {
-  final[[jj]] <- get_replies_df(dat$handler[jj], dat$tweet_id[jj])
+for (jj in start:nrow(dat)) {
+  final[[jj]] <- get_replies_df(dat$handler[jj], dat$tweet_id[jj])#
+  if (file.exists(paste0("data/replies_list", "_", start, "_", jj - 1, ".Rdata"))) {
+    file.remove(paste0("data/replies_list", "_", start, "_", jj - 1, ".Rdata"))
+  }
+  save(final, file = paste0("data/replies_list", "_", start, "_", jj, ".Rdata"))
   cat(jj, "\t")
 }
 
 final_dt <- bind_rows(final) %>%
   ## extract unique elements
   filter(!duplicated(text))
+beepr::beep(8)
+save(final_dt, file = "data/replies.Rdata")
 ```
 
 
