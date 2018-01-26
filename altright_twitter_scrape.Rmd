@@ -96,10 +96,12 @@ table(handler_ids$handler)
 
 ```{r}
 library(RSelenium)
-rD <- rsDriver(verbose = FALSE, port = 5555L)
+port <- sample(4000L:5000L, 1)
+rD <- rsDriver(verbose = FALSE, port = port)
 rD
 
 remDr <- rD$client
+#remDr$close()
 ```
 
 
@@ -204,14 +206,17 @@ get_replies_df <- function(handle, ids) {
 
 
 ```{r}
-dat <- handler_ids
+dat <- handler_ids[10:16,]
 
 start <- 1
 final <- list()
 for (jj in start:nrow(dat)) {
   final[[jj]] <- get_replies_df(dat$handler[jj], dat$tweet_id[jj])#
-  if (file.exists(paste0("data/replies_list", "_", start, "_", jj - 1, ".Rdata"))) {
-    file.remove(paste0("data/replies_list", "_", start, "_", jj - 1, ".Rdata"))
+  if (file.exists(
+    paste0(
+      "data/replies_list", "_", start, "_", jj - 1, ".Rdata"))) {
+    file.remove(paste0(
+      "data/replies_list", "_", start, "_", jj - 1, ".Rdata"))
   }
   save(final, file = paste0("data/replies_list", "_", start, "_", jj, ".Rdata"))
   cat(jj, "\t")
