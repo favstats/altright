@@ -1,67 +1,54 @@
 Tracking the Alt Right
 ================
 
-We scraped over 10 Million comments and tweets from various Social Media accounts linked to the Alt Right and Alt Light. This project is meant to be presented at the [Combating Online Extremism: State, Private Sector, and Civil Society Responses - Workshop](http://www.voxpol.eu/events/combating-online-extremism-state-private-sector-civil-society-responses-call-papers/). We hope to make the data publically available as soon as we can.
+| Content              | FacebookID       | YouTubeChannelID           | TwitterID          | short               |
+|:---------------------|:-----------------|:---------------------------|:-------------------|:--------------------|
+| Milo Yiannopoulos    | 423006854503882  | UC0aVoboXBUx2-tVIWHc3W2Q   | NA                 | milo                |
+| Ann Coulter          | 695526053890545  | NA                         | 196168350          | anncoulter          |
+| Mike Cernovich       | 427302110732180  | UC87YBeLMwXhgaw5tcCxsXgQ   | 358545917          | cernovich           |
+| Alex Jones           | 6499393458       | UCvsye7V9psc-APX6wV1twLg   | 109065990          | alexjones           |
+| Paul Joseph Watson   | 242174545810040  | UCittVh8imKanO\_5KohzDbpg  | 18643437           | pjw                 |
+| Lauren Southern      | 184795298567879  | UCla6APLHX6W3FeNLc8PYuvg   | 164070785          | lauren              |
+| Roaming Millenial    | 1213352768743538 | UCLUrVTVTA3PnUFpYvpfMcpg   | 770619360062898176 | roaming             |
+| Black Pigeon Speaks  | 359762154043841  | UCmrLCXSDScliR7q8AxxjvXg   | 711535251835629568 | bps                 |
+| Blaire White         | 1136054926414603 | UCDmCBKaKOtOrEqgsL4-3C8Q   | 4316769252         | blaire\_white       |
+| Infowars             | 80256732576      | NA                         | 14505245           | infowars            |
+| The Rebel            | 145634995501895  | UCGy6uV7yqGWDeUWTZzT3ZEg   | 3018960919         | rebelmedia          |
+| Tommy Robinson       | 381971441938916  | NA                         | 374712154          | robinson            |
+| Stefan Molyneux      | 510991678        | UCC3L8QaxqEGUiBC252GHy3w   | 313038011          | molymeme            |
+| Steven Crowder       | 15139936162      | UCIveFvW-ARp\_B\_RckhweNJw | 19091173           | crowder             |
+| Brittany Pettibone   | 2230351787189034 | UCesrUK\_dMDBZAf7cnjQPdgQ  | 274316654          | pettibone           |
+| Richard Spencer      | NA               | NA                         | 402181258          | richardspencer      |
+| Identity Europa      | NA               | UC8ZmnNg0kKjX2C0NeXsukXg   | 3012158891         | europa              |
+| ramzpaul             | 126504804050960  | UCIibK0GTXCaQCAamJAepm1g   | 53979469           | ramzpaul            |
+| Roosh V              | 124855377625814  | UC16j6EppP0K85CzYMduNCqw   | 14458643           | roosh               |
+| Return of Kings      | 421272291254506  | UCLcv-sLaU9FkbPLskS3r\_2g  | 872606893          | returnofkings       |
+| Styxhexenhammer666   | 692456770903313  | UC0rZoXAD5lxgBHMsjrGwWWQ   | 807812802761158656 | styxenhammer        |
+| Millenial Woes       | 564267373648165  | UCLfhh63n0fWn0gXXKQ5NWvw   | 2463171746         | mw                  |
+| Gavin McInnes        | 169717980436359  | NA                         | 147580943          | gavin               |
+| Red Ice TV           | 167364073430     | UCFUC7NaTxZanB\_FVOJN92eg  | 52352820           | redicetv            |
+| Counter Current      | NA               | UC94FYUJYBqq4CHPhfJUCxDw   | 154891961          | countercurrent      |
+| AltRight.com         | 246015219162358  | UCSTy-H5lSiCcozas32sfJlQ   | NA                 | altright            |
+| American Renaissance | NA               | UCMLbmp5tcLxzahMLTmeM4lg   | NA                 | americanrenaissance |
+| Arktos Media         | 159665444061114  | UC0h-sR-xyYLX7sSO46ovo2A   | 230450929          | arktosmedia         |
+| Baked Alaska         | 387120264796947  | UCAgBUlIpzlJaE0693J3s97w   | NA                 | bakedalaska         |
+| NPI / Radix          | 232397640189311  | UC\_NPMpK-gZVIKqvDRljgbBA  | NA                 | NPIRadix            |
+| Paul Elam            | NA               | UCkhakammPmSa4EvMPhEVN-g   | 229383772          | pauleam             |
+| Tara McCarty         | 100014041179050  | UC9vwJXx7DR-3zSub4mwQNFg   | 3412642223         | tara                |
+| Virtue of the West   | NA               | UCG6FJf6O\_-QS0KoIK3n5fiA  | NA                 | virtueofthewest     |
+| VDARE                | 385640741463156  | UCORGNJpLcsNSoIMyewxBZTw   | 27522964           | vdare               |
 
-**Our Goal:**
-
-![**GOAL**](http://i0.kym-cdn.com/photos/images/original/001/101/860/ea3.jpg)
-
-Alt Right and Alt Light Figures
-================
-
-| Content              | FacebookID       | YouTubeChannelID           | TwitterID          |
-|:---------------------|:-----------------|:---------------------------|:-------------------|
-| Milo Yiannopoulos    | 423006854503882  | UC0aVoboXBUx2-tVIWHc3W2Q   | NA                 |
-| Ann Coulter          | 695526053890545  | NA                         | 196168350          |
-| Mike Cernovich       | 427302110732180  | UC87YBeLMwXhgaw5tcCxsXgQ   | 358545917          |
-| Alex Jones           | 6499393458       | UCvsye7V9psc-APX6wV1twLg   | 109065990          |
-| Paul Joseph Watson   | 242174545810040  | UCittVh8imKanO\_5KohzDbpg  | 18643437           |
-| Lauren Southern      | 184795298567879  | UCla6APLHX6W3FeNLc8PYuvg   | 164070785          |
-| Roaming Millenial    | 1213352768743538 | UCLUrVTVTA3PnUFpYvpfMcpg   | 770619360062898176 |
-| Black Pigeon Speaks  | 359762154043841  | UCmrLCXSDScliR7q8AxxjvXg   | 711535251835629568 |
-| Blaire White         | 1136054926414603 | UCDmCBKaKOtOrEqgsL4-3C8Q   | 4316769252         |
-| Infowars             | 80256732576      | NA                         | 14505245           |
-| The Rebel            | 811793512220923  | UCGy6uV7yqGWDeUWTZzT3ZEg   | 3018960919         |
-| Tommy Robinson       | 381971441938916  | NA                         | 374712154          |
-| Stefan Molyneux      | 18322869182      | UCC3L8QaxqEGUiBC252GHy3w   | 313038011          |
-| Steven Crowder       | 15139936162      | UCIveFvW-ARp\_B\_RckhweNJw | 19091173           |
-| Brittany Pettibone   | 2230351787189034 | UCesrUK\_dMDBZAf7cnjQPdgQ  | 274316654          |
-| Richard Spencer      | NA               | NA                         | 402181258          |
-| Identity Europa      | NA               | UC8ZmnNg0kKjX2C0NeXsukXg   | 3012158891         |
-| ramzpaul             | 126504804050960  | UCIibK0GTXCaQCAamJAepm1g   | 53979469           |
-| Roosh V              | 124855377625814  | UC16j6EppP0K85CzYMduNCqw   | 14458643           |
-| Return of Kings      | 421272291254506  | UCLcv-sLaU9FkbPLskS3r\_2g  | 872606893          |
-| Styxhexenhammer666   | 692456770903313  | UC0rZoXAD5lxgBHMsjrGwWWQ   | 807812802761158656 |
-| Millenial Woes       | 564267373648165  | UCLfhh63n0fWn0gXXKQ5NWvw   | 2463171746         |
-| Gavin McInnes        | 169717980436359  | NA                         | 147580943          |
-| Red Ice TV           | 167364073430     | UCFUC7NaTxZanB\_FVOJN92eg  | 52352820           |
-| Counter Current      | NA               | UC94FYUJYBqq4CHPhfJUCxDw   | 154891961          |
-| AltRight.com         | 246015219162358  | UCSTy-H5lSiCcozas32sfJlQ   | NA                 |
-| American Renaissance | NA               | UCMLbmp5tcLxzahMLTmeM4lg   | NA                 |
-| Arktos Media         | 159665444061114  | UC0h-sR-xyYLX7sSO46ovo2A   | 230450929          |
-| Baked Alaska         | 387120264796947  | UCAgBUlIpzlJaE0693J3s97w   | NA                 |
-| NPI / Radix          | 232397640189311  | UC\_NPMpK-gZVIKqvDRljgbBA  | NA                 |
-| Paul Elam            | NA               | UCkhakammPmSa4EvMPhEVN     | 229383772          |
-| Tara McCarty         | 100014041179050  | UC9vwJXx7DR-3zSub4mwQNFg   | 3412642223         |
-| Virtue of the West   | NA               | UCG6FJf6O\_-QS0KoIK3n5fiA  | NA                 |
-| VDARE                | 385640741463156  | UCORGNJpLcsNSoIMyewxBZTw   | 27522964           |
-
-Media and interesting References
+Media
 =====
 
-| Content         | FacebookID      | YouTubeChannelID          | TwitterID |
-|:----------------|:----------------|:--------------------------|:----------|
-| Fox News        | 15704546335     | UCXIJgqnII2ZOINSWNOGFThA  | NA        |
-| MSNBC           | 273864989376427 | UCaXkIU1QidjPwiAYu6GcHjg  | 196168350 |
-| Breitbart News  | 95475020353     | UCmgnsaQIK1IR808Ebde-ssA  | 358545917 |
-| CNN             | 5550296508      | UCupvZG-5ko\_eiXAupbDfxWw | 358545917 |
-| Tucker Carlson  | 368557930146199 | NA                        | 22703645  |
-| Sean Hannity    | 69813760388     | NA                        | 41634520  |
-| Washington Post | 6250307292      | UCHd62-u\_v4DvJ8TCFtpi4GA | 2467791   |
-| Donald J. Trump | 153080620724    | UCAql2DyGU2un1Ei2nMYsqOA  | 25073877  |
-| New York Times  | 5281959998      | UCqnbDFdCpuN8CMEg0VuEBqA  | 807095    |
-| ABC             | 86680728811     | UCBi2mrWuNuyYy4gbM6fU18Q  | 2768501   |
+| Content         | FacebookID      | YouTubeChannelID          | TwitterID | short     |
+|:----------------|:----------------|:--------------------------|:----------|:----------|
+| Fox News        | 15704546335     | UCXIJgqnII2ZOINSWNOGFThA  | NA        | foxnews   |
+| MSNBC           | 273864989376427 | UCaXkIU1QidjPwiAYu6GcHjg  | 196168350 | msnbc     |
+| Breitbart News  | 95475020353     | UCmgnsaQIK1IR808Ebde-ssA  | 358545917 | breitbart |
+| CNN             | 5550296508      | UCupvZG-5ko\_eiXAupbDfxWw | 358545917 | cnn       |
+| Washington Post | 6250307292      | UCHd62-u\_v4DvJ8TCFtpi4GA | 2467791   | wapo      |
+| New York Times  | 5281959998      | UCqnbDFdCpuN8CMEg0VuEBqA  | 807095    | nyt       |
 
 To Do
 =====
