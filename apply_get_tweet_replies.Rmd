@@ -1,0 +1,35 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+# Run Twitter Scrape 
+
+```{r}
+pacman::p_load(tidyverse, wdman, jsonlite, rvest, xml2, RSelenium, here, crayon, here)
+source("helper_functions.R")
+getwd()
+options(scipen = 999)
+
+load(here("data", "tw", "handler_ids.Rdata"))
+
+handler_ids <- handler_ids %>%
+  filter(!duplicated(tweet_id))
+
+dat <- handler_ids
+```
+# Main Function
+
+```{r}
+library(RSelenium)
+port <- sample(4000L:5000L, 1)
+rD <- rsDriver(verbose = FALSE, port = port)
+rD
+
+remDr <- rD$client
+#remDr$close()
+
+final_list <- get_tweet_replies(dat, 200001, 210000)
+final_dt <- bind_rows(final_list)
+```
+

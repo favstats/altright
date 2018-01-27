@@ -1,2 +1,0 @@
-"0","rm(list=ls())"
-"0","pacman::p_load(tidyverse, dplyr, ggplot2, stringr, scales, lubridate, tidytext, tidyr, ggthemes, textstem, Rfacebook)"
