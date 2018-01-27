@@ -29,7 +29,12 @@ rD
 remDr <- rD$client
 #remDr$close()
 
-final_list <- get_tweet_replies(dat, 200001, 210000)
+start <- 1
+finish <- 50000
+
+final_list <- get_tweet_replies(dat, start, finish)
 final_dt <- bind_rows(final_list)
+beepr::beep(8)
+save(final_dt, file = paste0("data/tw_data_",start, "_", finish, ".Rdata"))
 ```
 

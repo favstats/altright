@@ -180,11 +180,6 @@ $(document).ready(function () {
 <!-- rnb-source-begin eyJkYXRhIjoiYGBgclxucGFjbWFuOjpwX2xvYWQodGlkeXZlcnNlLCBoZXJlKVxuYGBgIn0= -->
 <pre class="r"><code>pacman::p_load(tidyverse, here)</code></pre>
 <!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiV2FybmluZyBtZXNzYWdlOlxuSW4gcmVhZExpbmVzKGNvbikgOlxuICBpbmNvbXBsZXRlIGZpbmFsIGxpbmUgZm91bmQgb24gJ0M6L1VzZXJzL0ZhYmlvL0RvY3VtZW50cy9SL3dpbi1saWJyYXJ5LzMuNC9ybWFya2Rvd24vcm1hcmtkb3duL3RlbXBsYXRlcy9teV90ZW1wbGF0ZS90ZW1wbGF0ZS55YW1sJ1xuIn0= -->
-<pre><code>Warning message:
-In readLines(con) :
-  incomplete final line found on 'C:/Users/Fabio/Documents/R/win-library/3.4/rmarkdown/rmarkdown/templates/my_template/template.yaml'</code></pre>
-<!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 </div>
@@ -192,70 +187,34 @@ In readLines(con) :
 <h1>All</h1>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZGF0YXNldHNcblxuYGBgIn0= -->
-<pre class="r"><code>datasets
-</code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZGF0YXNldHMgPC0gZGlyKGhlcmUoXCJkYXRhXCIsIFwieXRcIikpWy0xOi0yXVxuXG5uZXdkYXRhIDwtIGxpc3QoKVxuZm9yIChqaiBpbiBkYXRhc2V0cykge1xuICBjYXQoamosIFwiOiBcXG5cIilcbiAgZWluemVsIDwtIGdldChsb2FkKGhlcmUoXCJkYXRhXCIsIFwieXRcIiwgamopKSlcbiAgbmV3ZGF0YVtbampdXSA8LSBzdXBwcmVzc1dhcm5pbmdzKGJpbmRfcm93cyhlaW56ZWwpKVxufVxuXG55dF9hbGxfY29tbWVudHNfZm4gPC0gc3VwcHJlc3NXYXJuaW5ncyhiaW5kX3Jvd3MobmV3ZGF0YSkpXG5cbnNhdmUoeXRfYWxsX2NvbW1lbnRzX2ZuLCBmaWxlID0gaGVyZShcImRhdGFcIiwgXCJ5dFwiLCBcInl0X2FsbF9jb21tZW50c19mbi5SZGF0YVwiKSlcbmBgYCJ9 -->
+<pre class="r"><code>datasets &lt;- dir(here(&quot;data&quot;, &quot;yt&quot;))[-1:-2]
+
+newdata &lt;- list()
+for (jj in datasets) {
+  cat(jj, &quot;: \n&quot;)
+  einzel &lt;- get(load(here(&quot;data&quot;, &quot;yt&quot;, jj)))
+  newdata[[jj]] &lt;- suppressWarnings(bind_rows(einzel))
+}
+
+yt_all_comments_fn &lt;- suppressWarnings(bind_rows(newdata))
+
+save(yt_all_comments_fn, file = here(&quot;data&quot;, &quot;yt&quot;, &quot;yt_all_comments_fn.Rdata&quot;))</code></pre>
 <!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiIFsxXSBcInl0X2FsZXhqb25lc19jb21tZW50c18xXzY1MjNfZm4uUmRhdGFcIiAgICAgICAgXG4gWzJdIFwieXRfYWxsX3dhcG9fY29tbWVudHNfMV8zNDMzX2ZuLlJkYXRhXCIgICAgICAgICBcbiBbM10gXCJ5dF9hbHRyaWdodF9jb21tZW50c18xXzk0X2ZuLlJkYXRhXCIgICAgICAgICAgIFxuIFs0XSBcInl0X2FtZXJpY2FucmVuYWlzc2FuY2VfY29tbWVudHNfMV80Nl9mbi5SZGF0YVwiXG4gWzVdIFwieXRfYXJrdG9zbWVkaWFfY29tbWVudHNfMV8wLlJkYXRhXCIgICAgICAgICAgICBcbiBbNl0gXCJ5dF9iYWtlZGFsYXNrYV9jb21tZW50c18xXzk1X2ZuLlJkYXRhXCIgICAgICAgIFxuIFs3XSBcInl0X2JsYWlyZV93aGl0ZV9jb21tZW50c18xXzQ0X2ZuLlJkYXRhXCIgICAgICAgXG4gWzhdIFwieXRfYnBzX2NvbW1lbnRzXzFfMTI3X2ZuLlJkYXRhXCIgICAgICAgICAgICAgICBcbiBbOV0gXCJ5dF9icmVpdGJhcnRfY29tbWVudHNfMV8yNzRfZm4uUmRhdGFcIiAgICAgICAgIFxuWzEwXSBcInl0X2Nlcm5vdmljaF9jb21tZW50c18xXzE5OV9mbi5SZGF0YVwiICAgICAgICAgXG5bMTFdIFwieXRfY25uX2NvbW1lbnRzXzFfNzA4Ml9mbi5SZGF0YVwiICAgICAgICAgICAgICBcblsxMl0gXCJ5dF9jb3VudGVyY3VycmVudF9jb21tZW50c18xXzAuUmRhdGFcIiAgICAgICAgIFxuWzEzXSBcInl0X2Nyb3dkZXJfY29tbWVudHNfMV8yMzNfZm4uUmRhdGFcIiAgICAgICAgICAgXG5bMTRdIFwieXRfZXVyb3BhX2NvbW1lbnRzXzFfNF9mbi5SZGF0YVwiICAgICAgICAgICAgICBcblsxNV0gXCJ5dF9mb3huZXdzX2NvbW1lbnRzXzExODk3XzE3MzUxX2ZuLlJkYXRhXCIgICAgIFxuWzE2XSBcInl0X2xhdXJlbl9jb21tZW50c18xXzc5X2ZuLlJkYXRhXCIgICAgICAgICAgICAgXG5bMTddIFwieXRfbWlsb19jb21tZW50c18xXzIzN19mbi5SZGF0YVwiICAgICAgICAgICAgICBcblsxOF0gXCJ5dF9tb2x5bWVtZV9jb21tZW50c18xXzQ1OV9mbi5SZGF0YVwiICAgICAgICAgIFxuWzE5XSBcInl0X21zbmJjX2NvbW1lbnRzXzFfMjc5N19mbi5SZGF0YVwiICAgICAgICAgICAgXG5bMjBdIFwieXRfbXdfY29tbWVudHNfMV8yODVfZm4uUmRhdGFcIiAgICAgICAgICAgICAgICBcblsyMV0gXCJ5dF9OUElSYWRpeF9jb21tZW50c18xXzVfZm4uUmRhdGFcIiAgICAgICAgICAgIFxuWzIyXSBcInl0X255dF9jb21tZW50c18xXzg1Ml9mbi5SZGF0YVwiICAgICAgICAgICAgICAgXG5bMjNdIFwieXRfcGF1bGVsYW1fY29tbWVudHNfMV8yOV9mbi5SZGF0YVwiICAgICAgICAgICBcblsyNF0gXCJ5dF9wZXR0aWJvbmVfY29tbWVudHNfMV85Nl9mbi5SZGF0YVwiICAgICAgICAgIFxuWzI1XSBcInl0X3Bqd19jb21tZW50c18xXzExMV9mbi5SZGF0YVwiICAgICAgICAgICAgICAgXG5bMjZdIFwieXRfcmFtenBhdWxfY29tbWVudHNfMV8xNDJfZm4uUmRhdGFcIiAgICAgICAgICBcblsyN10gXCJ5dF9yZWRpY2V0dl9jb21tZW50c18xXzI2N19mbi5SZGF0YVwiICAgICAgICAgIFxuWzI4XSBcInl0X3JldHVybm9ma2luZ3NfY29tbWVudHNfMV8xX2ZuLlJkYXRhXCIgICAgICAgXG5bMjldIFwieXRfcm9hbWluZ19jb21tZW50c18xXzk2X2ZuLlJkYXRhXCIgICAgICAgICAgICBcblszMF0gXCJ5dF9yb29zaF9jb21tZW50c18xXzI5X2ZuLlJkYXRhXCIgICAgICAgICAgICAgIFxuWzMxXSBcInl0X3N0eXhlbmhhbW1lcl9jb21tZW50c18xXzEyMzdfZm4uUmRhdGFcIiAgICAgXG5bMzJdIFwieXRfdGFyYV9jb21tZW50c18xXzRfZm4uUmRhdGFcIiAgICAgICAgICAgICAgICBcblszM10gXCJ5dF92ZGFyZV9jb21tZW50c18xXzFfZm4uUmRhdGFcIiAgICAgICAgICAgICAgIFxuWzM0XSBcInl0X3ZpcnR1ZW9mdGhld2VzdF9jb21tZW50c18xXzZfZm4uUmRhdGFcIiAgICAgXG4ifQ== -->
-<pre><code> [1] &quot;yt_alexjones_comments_1_6523_fn.Rdata&quot;        
- [2] &quot;yt_all_wapo_comments_1_3433_fn.Rdata&quot;         
- [3] &quot;yt_altright_comments_1_94_fn.Rdata&quot;           
- [4] &quot;yt_americanrenaissance_comments_1_46_fn.Rdata&quot;
- [5] &quot;yt_arktosmedia_comments_1_0.Rdata&quot;            
- [6] &quot;yt_bakedalaska_comments_1_95_fn.Rdata&quot;        
- [7] &quot;yt_blaire_white_comments_1_44_fn.Rdata&quot;       
- [8] &quot;yt_bps_comments_1_127_fn.Rdata&quot;               
- [9] &quot;yt_breitbart_comments_1_274_fn.Rdata&quot;         
-[10] &quot;yt_cernovich_comments_1_199_fn.Rdata&quot;         
-[11] &quot;yt_cnn_comments_1_7082_fn.Rdata&quot;              
-[12] &quot;yt_countercurrent_comments_1_0.Rdata&quot;         
-[13] &quot;yt_crowder_comments_1_233_fn.Rdata&quot;           
-[14] &quot;yt_europa_comments_1_4_fn.Rdata&quot;              
-[15] &quot;yt_foxnews_comments_11897_17351_fn.Rdata&quot;     
-[16] &quot;yt_lauren_comments_1_79_fn.Rdata&quot;             
-[17] &quot;yt_milo_comments_1_237_fn.Rdata&quot;              
-[18] &quot;yt_molymeme_comments_1_459_fn.Rdata&quot;          
-[19] &quot;yt_msnbc_comments_1_2797_fn.Rdata&quot;            
-[20] &quot;yt_mw_comments_1_285_fn.Rdata&quot;                
-[21] &quot;yt_NPIRadix_comments_1_5_fn.Rdata&quot;            
-[22] &quot;yt_nyt_comments_1_852_fn.Rdata&quot;               
-[23] &quot;yt_paulelam_comments_1_29_fn.Rdata&quot;           
-[24] &quot;yt_pettibone_comments_1_96_fn.Rdata&quot;          
-[25] &quot;yt_pjw_comments_1_111_fn.Rdata&quot;               
-[26] &quot;yt_ramzpaul_comments_1_142_fn.Rdata&quot;          
-[27] &quot;yt_redicetv_comments_1_267_fn.Rdata&quot;          
-[28] &quot;yt_returnofkings_comments_1_1_fn.Rdata&quot;       
-[29] &quot;yt_roaming_comments_1_96_fn.Rdata&quot;            
-[30] &quot;yt_roosh_comments_1_29_fn.Rdata&quot;              
-[31] &quot;yt_styxenhammer_comments_1_1237_fn.Rdata&quot;     
-[32] &quot;yt_tara_comments_1_4_fn.Rdata&quot;                
-[33] &quot;yt_vdare_comments_1_1_fn.Rdata&quot;               
-[34] &quot;yt_virtueofthewest_comments_1_6_fn.Rdata&quot;     </code></pre>
-<!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubG9hZChcIkM6L1VzZXJzL0ZhYmlvL0RvY3VtZW50cy9naXRfcHJvai9hbHRyaWdodF9kYXRhL2Nlcm5vdmljaF9jb21tZW50cy5SZGF0YVwiKVxubGlicmFyeShtYWdyaXR0cilcbmNvbW1lbnRzICU+JSBcbiAgbXV0YXRlKHRpbWUgPSBsdWJyaWRhdGU6OmFzX2RhdGUoY3JlYXRlZF90aW1lKSkgJT4lIFxuICBnZ3Bsb3QoYWVzKHRpbWUsIGxpa2VzX2NvdW50KSkgK1xuICBnZW9tX2xpbmUoKVxuYGBgIn0= -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubG9hZChcIkM6L1VzZXJzL0ZhYmlvL0RvY3VtZW50cy9naXRfcHJvai9hbHRyaWdodF9kYXRhL2Nlcm5vdmljaF9jb21tZW50cy5SZGF0YVwiKVxubGlicmFyeShtYWdyaXR0cilcbmNvbW1lbnRzICU+JSBcbiAgbXV0YXRlKHRpbWUgPSBsdWJyaWRhdGU6OmFzX2RhdGUoY3JlYXRlZF90aW1lKSkgJT4lIFxuICBnZ3Bsb3QoYWVzKHRpbWUsIGxpa2VzX2NvdW50KSkgK1xuICBnZW9tX2xpbmUoKVxucmFuZ2UoY29tbWVudHMkdGltZSlcblxuXG5gYGAifQ== -->
 <pre class="r"><code>load(&quot;C:/Users/Fabio/Documents/git_proj/altright_data/cernovich_comments.Rdata&quot;)
 library(magrittr)
 comments %&gt;% 
   mutate(time = lubridate::as_date(created_time)) %&gt;% 
   ggplot(aes(time, likes_count)) +
-  geom_line()</code></pre>
+  geom_line()
+range(comments$time)
+</code></pre>
 <!-- rnb-source-end -->
-<!-- rnb-plot-begin eyJjb25kaXRpb25zIjpbXSwiaGVpZ2h0Ijo0MzIuNjMyOSwic2l6ZV9iZWhhdmlvciI6MCwid2lkdGgiOjcwMH0= -->
-<p><img src="data:image/png;base64,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" /></p>
-<!-- rnb-plot-end -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxucmFuZ2UoY29tbWVudHMkdGltZSlcbmBgYCJ9 -->
-<pre class="r"><code>range(comments$time)</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoibm8gbm9uLW1pc3NpbmcgYXJndW1lbnRzIHRvIG1pbjsgcmV0dXJuaW5nIEluZm5vIG5vbi1taXNzaW5nIGFyZ3VtZW50cyB0byBtYXg7IHJldHVybmluZyAtSW5mXG4ifQ== -->
-<pre><code>no non-missing arguments to min; returning Infno non-missing arguments to max; returning -Inf</code></pre>
-<!-- rnb-output-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiWzFdICBJbmYgLUluZlxuIn0= -->
-<pre><code>[1]  Inf -Inf</code></pre>
-<!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 </div>
@@ -263,25 +222,16 @@ comments %&gt;%
 <h1>New Scrape merging</h1>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZGF0YXNldHMgPC0gZGlyKGhlcmU6OmhlcmUoXCJkYXRhXCIsIFwiZmJcIikpW2MoLTEsLTI4Oi0zMCldXG5sb2FkKGhlcmU6OmhlcmUoXCJkYXRhXCIsIFwiZmJcIiwgXCJmYl9hbGV4am9uZXMuUmRhdGFcIikpXG5jb2xuYW1lcyh1c2VyX2RhdGEkcG9zdHMpXG5gYGAifQ== -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZGF0YXNldHMgPC0gZGlyKGhlcmU6OmhlcmUoXCJkYXRhXCIsIFwiZmJcIikpW2MoLTEsLTI4Oi0zMCldXG5cbmxvYWQoaGVyZTo6aGVyZShcImRhdGFcIiwgXCJmYlwiLCBcImZiX2FsZXhqb25lcy5SZGF0YVwiKSlcblxuY29sbmFtZXModXNlcl9kYXRhJHBvc3RzKVxuY29sbmFtZXModXNlcl9kYXRhJGNvbW1lbnRzKVxuXG51c2VyX2RhdGEkcG9zdHMkcGFnZSA8LSB1c2VyX2RhdGEkY29tbWVudHMkcGFnZVsxXVxuXG5pbml0X2xpc3QgPC0gZ2V0KGxvYWQoaGVyZTo6aGVyZShcImRhdGFcIiwgXCJmYlwiLCBcImZiX2FsZXhqb25lcy5SZGF0YVwiKSkpXG5pbml0X3Bvc3RzIDwtIGluaXRfbGlzdCRwb3N0c1xuaW5pdF9jb21tZW50cyA8LSBpbml0X2xpc3QkY29tbWVudHNcbmZvciAoamogaW4gZGF0YXNldHMpIHtcbiAgIGNhdChqaiwgXCJcXG5cIilcbiAgIGluaXRfcG9zdHMgPC0gcGx5cjo6cmJpbmQuZmlsbChpbml0X3Bvc3RzLCBnZXQobG9hZChoZXJlKFwiZGF0YVwiLCBcImZiXCIsIGpqKSkpJHBvc3RzKVxuICAgaW5pdF9jb21tZW50cyA8LSBwbHlyOjpyYmluZC5maWxsKGluaXRfY29tbWVudHMsIGdldChsb2FkKGhlcmUoXCJkYXRhXCIsIFwiZmJcIiwgamopKSkkY29tbWVudHMpXG59XG5mYl9hbGwxIDwtIHBseXI6OnJiaW5kLmZpbGwoaW5pdF9wb3N0cywgaW5pdF9jb21tZW50cylcblxuc2F2ZShmYl9hbGwxLCBmaWxlID0gaGVyZShcImRhdGFcIiwgXCJmYlwiLCBcImZiX2FsbDEuUmRhdGFcIikpXG5cbmBgYCJ9 -->
 <pre class="r"><code>datasets &lt;- dir(here::here(&quot;data&quot;, &quot;fb&quot;))[c(-1,-28:-30)]
+
 load(here::here(&quot;data&quot;, &quot;fb&quot;, &quot;fb_alexjones.Rdata&quot;))
-colnames(user_data$posts)</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiIFsxXSBcImZyb21faWRcIiAgICAgICAgXCJmcm9tX25hbWVcIiAgICAgIFwibWVzc2FnZVwiICAgICAgICBcImNyZWF0ZWRfdGltZVwiICBcbiBbNV0gXCJ0eXBlXCIgICAgICAgICAgIFwibGlua1wiICAgICAgICAgICBcImlkXCIgICAgICAgICAgICAgXCJzdG9yeVwiICAgICAgICAgXG4gWzldIFwibGlrZXNfY291bnRcIiAgICBcImNvbW1lbnRzX2NvdW50XCIgXCJzaGFyZXNfY291bnRcIiAgXG4ifQ== -->
-<pre><code> [1] &quot;from_id&quot;        &quot;from_name&quot;      &quot;message&quot;        &quot;created_time&quot;  
- [5] &quot;type&quot;           &quot;link&quot;           &quot;id&quot;             &quot;story&quot;         
- [9] &quot;likes_count&quot;    &quot;comments_count&quot; &quot;shares_count&quot;  </code></pre>
-<!-- rnb-output-end -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuY29sbmFtZXModXNlcl9kYXRhJGNvbW1lbnRzKVxuYGBgIn0= -->
-<pre class="r"><code>colnames(user_data$comments)</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiWzFdIFwiZnJvbV9pZFwiICAgICAgICBcImZyb21fbmFtZVwiICAgICAgXCJtZXNzYWdlXCIgICAgICAgIFwiY3JlYXRlZF90aW1lXCIgIFxuWzVdIFwibGlrZXNfY291bnRcIiAgICBcImNvbW1lbnRzX2NvdW50XCIgXCJpZFwiICAgICAgICAgICAgIFwicGFnZVwiICAgICAgICAgIFxuIn0= -->
-<pre><code>[1] &quot;from_id&quot;        &quot;from_name&quot;      &quot;message&quot;        &quot;created_time&quot;  
-[5] &quot;likes_count&quot;    &quot;comments_count&quot; &quot;id&quot;             &quot;page&quot;          </code></pre>
-<!-- rnb-output-end -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxudXNlcl9kYXRhJHBvc3RzJHBhZ2UgPC0gdXNlcl9kYXRhJGNvbW1lbnRzJHBhZ2VbMV1cbmluaXRfbGlzdCA8LSBnZXQobG9hZChoZXJlOjpoZXJlKFwiZGF0YVwiLCBcImZiXCIsIFwiZmJfYWxleGpvbmVzLlJkYXRhXCIpKSlcbmluaXRfcG9zdHMgPC0gaW5pdF9saXN0JHBvc3RzXG5pbml0X2NvbW1lbnRzIDwtIGluaXRfbGlzdCRjb21tZW50c1xuZm9yIChqaiBpbiBkYXRhc2V0cykge1xuICAgY2F0KGpqLCBcIlxcblwiKVxuICAgaW5pdF9wb3N0cyA8LSBwbHlyOjpyYmluZC5maWxsKGluaXRfcG9zdHMsIGdldChsb2FkKGhlcmUoXCJkYXRhXCIsIFwiZmJcIiwgamopKSkkcG9zdHMpXG4gICBpbml0X2NvbW1lbnRzIDwtIHBseXI6OnJiaW5kLmZpbGwoaW5pdF9jb21tZW50cywgZ2V0KGxvYWQoaGVyZShcImRhdGFcIiwgXCJmYlwiLCBqaikpKSRjb21tZW50cylcbn1cbmBgYCJ9 -->
-<pre class="r"><code>user_data$posts$page &lt;- user_data$comments$page[1]
+
+colnames(user_data$posts)
+colnames(user_data$comments)
+
+user_data$posts$page &lt;- user_data$comments$page[1]
+
 init_list &lt;- get(load(here::here(&quot;data&quot;, &quot;fb&quot;, &quot;fb_alexjones.Rdata&quot;)))
 init_posts &lt;- init_list$posts
 init_comments &lt;- init_list$comments
@@ -289,39 +239,11 @@ for (jj in datasets) {
    cat(jj, &quot;\n&quot;)
    init_posts &lt;- plyr::rbind.fill(init_posts, get(load(here(&quot;data&quot;, &quot;fb&quot;, jj)))$posts)
    init_comments &lt;- plyr::rbind.fill(init_comments, get(load(here(&quot;data&quot;, &quot;fb&quot;, jj)))$comments)
-}</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiZmJfYWx0cmlnaHQuUmRhdGEgXG5mYl9hcmt0b3NtZWRpYS5SZGF0YSBcbmZiX2Jha2VkYWxhc2thLlJkYXRhIFxuZmJfYmxhaXJlX3doaXRlLlJkYXRhIFxuZmJfYnBzLlJkYXRhIFxuZmJfYnJlaXRiYXJ0LlJkYXRhIFxuZmJfY3Jvd2Rlci5SZGF0YSBcbmZiX2ZveG5ld3MuUmRhdGEgXG5mYl9nYXZpbi5SZGF0YSBcbmZiX2luZm93YXJzLlJkYXRhIFxuZmJfbGF1cmVuLlJkYXRhIFxuZmJfbW9seW1lbWUuUmRhdGEgXG5mYl9tc25iYy5SZGF0YSBcbmZiX213LlJkYXRhIFxuZmJfTlBJUmFkaXguUmRhdGEgXG5mYl9wZXR0aWJvbmUuUmRhdGEgXG5mYl9yYW16cGF1bC5SZGF0YSBcbmZiX3JlYmVsbWVkaWEuUmRhdGEgXG5mYl9yZWRpY2V0di5SZGF0YSBcbmZiX3JldHVybm9ma2luZ3MuUmRhdGEgXG5mYl9yb2FtaW5nLlJkYXRhIFxuZmJfcm9iaW5zb24uUmRhdGEgXG5mYl9yb29zaC5SZGF0YSBcbmZiX3N0eXhlbmhhbW1lci5SZGF0YSBcbmZiX3RhcmEuUmRhdGEgXG5mYl92ZGFyZS5SZGF0YSBcbiJ9 -->
-<pre><code>fb_altright.Rdata 
-fb_arktosmedia.Rdata 
-fb_bakedalaska.Rdata 
-fb_blaire_white.Rdata 
-fb_bps.Rdata 
-fb_breitbart.Rdata 
-fb_crowder.Rdata 
-fb_foxnews.Rdata 
-fb_gavin.Rdata 
-fb_infowars.Rdata 
-fb_lauren.Rdata 
-fb_molymeme.Rdata 
-fb_msnbc.Rdata 
-fb_mw.Rdata 
-fb_NPIRadix.Rdata 
-fb_pettibone.Rdata 
-fb_ramzpaul.Rdata 
-fb_rebelmedia.Rdata 
-fb_redicetv.Rdata 
-fb_returnofkings.Rdata 
-fb_roaming.Rdata 
-fb_robinson.Rdata 
-fb_roosh.Rdata 
-fb_styxenhammer.Rdata 
-fb_tara.Rdata 
-fb_vdare.Rdata </code></pre>
-<!-- rnb-output-end -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZmJfYWxsMSA8LSBwbHlyOjpyYmluZC5maWxsKGluaXRfcG9zdHMsIGluaXRfY29tbWVudHMpXG5zYXZlKGZiX2FsbDEsIGZpbGUgPSBoZXJlKFwiZGF0YVwiLCBcImZiXCIsIFwiZmJfYWxsMS5SZGF0YVwiKSlcbmBgYCJ9 -->
-<pre class="r"><code>fb_all1 &lt;- plyr::rbind.fill(init_posts, init_comments)
-save(fb_all1, file = here(&quot;data&quot;, &quot;fb&quot;, &quot;fb_all1.Rdata&quot;))</code></pre>
+}
+fb_all1 &lt;- plyr::rbind.fill(init_posts, init_comments)
+
+save(fb_all1, file = here(&quot;data&quot;, &quot;fb&quot;, &quot;fb_all1.Rdata&quot;))
+</code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
@@ -330,59 +252,37 @@ save(fb_all1, file = here(&quot;data&quot;, &quot;fb&quot;, &quot;fb_all1.Rdata&
 <h1>Initital Scrape merging</h1>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZGF0X2ZpbGVzIDwtIGRpcihoZXJlOjpoZXJlKFwiZGF0YVwiLCBcImZiXCIsIFwiaW5pdGlhbF9zY3JhcGVcIikpWy0xOi0yXVxucG9zdF9maWxlcyA8LSBkYXRfZmlsZXNbIWdyZXBsKFwiY29tbWVudHNcIiwgZGF0X2ZpbGVzKV1cbmNvbW1lbnRfZmlsZXMgPC0gZGF0X2ZpbGVzW2dyZXBsKFwiY29tbWVudHNcIiwgZGF0X2ZpbGVzKV1cbmxvYWQoaGVyZShcImRhdGFcIiwgXCJmYlwiLCBcImluaXRpYWxfc2NyYXBlXCIsIFwiYWJjLlJkYXRhXCIpKVxubG9hZChoZXJlKFwiZGF0YVwiLCBcImZiXCIsIFwiaW5pdGlhbF9zY3JhcGVcIiwgXCJhYmNfY29tbWVudHMuUmRhdGFcIikpXG5jb2xuYW1lcyhwYWdlKVxuYGBgIn0= -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZGF0X2ZpbGVzIDwtIGRpcihoZXJlOjpoZXJlKFwiZGF0YVwiLCBcImZiXCIsIFwiaW5pdGlhbF9zY3JhcGVcIikpWy0xOi0yXVxucG9zdF9maWxlcyA8LSBkYXRfZmlsZXNbIWdyZXBsKFwiY29tbWVudHNcIiwgZGF0X2ZpbGVzKV1cbmNvbW1lbnRfZmlsZXMgPC0gZGF0X2ZpbGVzW2dyZXBsKFwiY29tbWVudHNcIiwgZGF0X2ZpbGVzKV1cblxuXG5sb2FkKGhlcmUoXCJkYXRhXCIsIFwiZmJcIiwgXCJpbml0aWFsX3NjcmFwZVwiLCBcImFiYy5SZGF0YVwiKSlcbmxvYWQoaGVyZShcImRhdGFcIiwgXCJmYlwiLCBcImluaXRpYWxfc2NyYXBlXCIsIFwiYWJjX2NvbW1lbnRzLlJkYXRhXCIpKVxuXG5cbmNvbG5hbWVzKHBhZ2UpXG5jb2xuYW1lcyhjb21tZW50cylcblxucGFnZSRwYWdlIDwtICBwYWdlJGZyb21fbmFtZVsxXVxuY29tbWVudHMkcGFnZSA8LSAgcGFnZSRmcm9tX25hbWVbMV1cblxuXG5pbml0X3Bvc3RzIDwtIHBhZ2VcbmluaXRfY29tbWVudHMgPC0gY29tbWVudHNcblxuZm9yIChqaiBpbiBzZXFfYWxvbmcocG9zdF9maWxlcykpIHtcbiAgY2F0KHBvc3RfZmlsZXNbampdLCBqaiwgXCJcXG5cIilcbiAgIGluaXRfcG9zdHMgPC0gcGx5cjo6cmJpbmQuZmlsbChpbml0X3Bvc3RzLCBnZXQobG9hZChoZXJlKFwiZGF0YVwiLCBcImZiXCIsIFwiaW5pdGlhbF9zY3JhcGVcIiwgcG9zdF9maWxlc1tqal0pKSkpXG4gIGNhdChjb21tZW50X2ZpbGVzW2pqXSwgamosIFwiXFxuXCIpXG4gICBpbml0X2NvbW1lbnRzIDwtIHBseXI6OnJiaW5kLmZpbGwoaW5pdF9jb21tZW50cywgZ2V0KGxvYWQoaGVyZShcImRhdGFcIiwgXCJmYlwiLCBcImluaXRpYWxfc2NyYXBlXCIsIGNvbW1lbnRfZmlsZXNbampdKSkpKVxufVxuXG5mYl9hbGwyIDwtIHBseXI6OnJiaW5kLmZpbGwoaW5pdF9wb3N0cywgaW5pdF9jb21tZW50cylcblxuc2F2ZShmYl9hbGwyLCBmaWxlID0gaGVyZShcImRhdGFcIiwgXCJmYlwiLCBcImZiX2FsbDIuUmRhdGFcIikpXG5cbmBgYCJ9 -->
 <pre class="r"><code>dat_files &lt;- dir(here::here(&quot;data&quot;, &quot;fb&quot;, &quot;initial_scrape&quot;))[-1:-2]
 post_files &lt;- dat_files[!grepl(&quot;comments&quot;, dat_files)]
 comment_files &lt;- dat_files[grepl(&quot;comments&quot;, dat_files)]
+
+
 load(here(&quot;data&quot;, &quot;fb&quot;, &quot;initial_scrape&quot;, &quot;abc.Rdata&quot;))
 load(here(&quot;data&quot;, &quot;fb&quot;, &quot;initial_scrape&quot;, &quot;abc_comments.Rdata&quot;))
-colnames(page)</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiIFsxXSBcImZyb21faWRcIiAgICAgICAgXCJmcm9tX25hbWVcIiAgICAgIFwibWVzc2FnZVwiICAgICAgICBcImNyZWF0ZWRfdGltZVwiICBcbiBbNV0gXCJ0eXBlXCIgICAgICAgICAgIFwibGlua1wiICAgICAgICAgICBcImlkXCIgICAgICAgICAgICAgXCJzdG9yeVwiICAgICAgICAgXG4gWzldIFwibGlrZXNfY291bnRcIiAgICBcImNvbW1lbnRzX2NvdW50XCIgXCJzaGFyZXNfY291bnRcIiAgXG4ifQ== -->
-<pre><code> [1] &quot;from_id&quot;        &quot;from_name&quot;      &quot;message&quot;        &quot;created_time&quot;  
- [5] &quot;type&quot;           &quot;link&quot;           &quot;id&quot;             &quot;story&quot;         
- [9] &quot;likes_count&quot;    &quot;comments_count&quot; &quot;shares_count&quot;  </code></pre>
-<!-- rnb-output-end -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuY29sbmFtZXMoY29tbWVudHMpXG5gYGAifQ== -->
-<pre class="r"><code>colnames(comments)</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiWzFdIFwiZnJvbV9pZFwiICAgICAgICBcImZyb21fbmFtZVwiICAgICAgXCJtZXNzYWdlXCIgICAgICAgIFwiY3JlYXRlZF90aW1lXCIgIFxuWzVdIFwibGlrZXNfY291bnRcIiAgICBcImNvbW1lbnRzX2NvdW50XCIgXCJpZFwiICAgICAgICAgICAgXG4ifQ== -->
-<pre><code>[1] &quot;from_id&quot;        &quot;from_name&quot;      &quot;message&quot;        &quot;created_time&quot;  
-[5] &quot;likes_count&quot;    &quot;comments_count&quot; &quot;id&quot;            </code></pre>
-<!-- rnb-output-end -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxucGFnZSRwYWdlIDwtICBwYWdlJGZyb21fbmFtZVsxXVxuY29tbWVudHMkcGFnZSA8LSAgcGFnZSRmcm9tX25hbWVbMV1cbmluaXRfcG9zdHMgPC0gcGFnZVxuaW5pdF9jb21tZW50cyA8LSBjb21tZW50c1xuZm9yIChqaiBpbiBzZXFfYWxvbmcocG9zdF9maWxlcykpIHtcbiAgY2F0KHBvc3RfZmlsZXNbampdLCBqaiwgXCJcXG5cIilcbiAgIGluaXRfcG9zdHMgPC0gcGx5cjo6cmJpbmQuZmlsbChpbml0X3Bvc3RzLCBnZXQobG9hZChoZXJlKFwiZGF0YVwiLCBcImZiXCIsIFwiaW5pdGlhbF9zY3JhcGVcIiwgcG9zdF9maWxlc1tqal0pKSkpXG4gIGNhdChjb21tZW50X2ZpbGVzW2pqXSwgamosIFwiXFxuXCIpXG4gICBpbml0X2NvbW1lbnRzIDwtIHBseXI6OnJiaW5kLmZpbGwoaW5pdF9jb21tZW50cywgZ2V0KGxvYWQoaGVyZShcImRhdGFcIiwgXCJmYlwiLCBcImluaXRpYWxfc2NyYXBlXCIsIGNvbW1lbnRfZmlsZXNbampdKSkpKVxufVxuYGBgIn0= -->
-<pre class="r"><code>page$page &lt;-  page$from_name[1]
+
+
+colnames(page)
+colnames(comments)
+
+page$page &lt;-  page$from_name[1]
 comments$page &lt;-  page$from_name[1]
+
+
 init_posts &lt;- page
 init_comments &lt;- comments
+
 for (jj in seq_along(post_files)) {
   cat(post_files[jj], jj, &quot;\n&quot;)
    init_posts &lt;- plyr::rbind.fill(init_posts, get(load(here(&quot;data&quot;, &quot;fb&quot;, &quot;initial_scrape&quot;, post_files[jj]))))
   cat(comment_files[jj], jj, &quot;\n&quot;)
    init_comments &lt;- plyr::rbind.fill(init_comments, get(load(here(&quot;data&quot;, &quot;fb&quot;, &quot;initial_scrape&quot;, comment_files[jj]))))
-}</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiY2Vybm92aWNoLlJkYXRhIDEgXG5jZXJub3ZpY2hfY29tbWVudHMuUmRhdGEgMSBcbmNubi5SZGF0YSAyIFxuY25uX2NvbW1lbnRzLlJkYXRhIDIgXG5jb3VsdGVyLlJkYXRhIDMgXG5jb3VsdGVyX2NvbW1lbnRzLlJkYXRhIDMgXG5pbmZvd2Fycy5SZGF0YSA0IFxuaW5mb3dhcnNfY29tbWVudHMuUmRhdGEgNCBcbm1pbG8uUmRhdGEgNSBcbm1pbG9fY29tbWVudHMuUmRhdGEgNSBcbm55dC5SZGF0YSA2IFxubnl0X2NvbW1lbnRzLlJkYXRhIDYgXG5QSlcuUmRhdGEgNyBcblBKV19jb21tZW50cy5SZGF0YSA3IFxud2Fwby5SZGF0YSA4IFxud2Fwb19jb21tZW50cy5SZGF0YSA4IFxuIn0= -->
-<pre><code>cernovich.Rdata 1 
-cernovich_comments.Rdata 1 
-cnn.Rdata 2 
-cnn_comments.Rdata 2 
-coulter.Rdata 3 
-coulter_comments.Rdata 3 
-infowars.Rdata 4 
-infowars_comments.Rdata 4 
-milo.Rdata 5 
-milo_comments.Rdata 5 
-nyt.Rdata 6 
-nyt_comments.Rdata 6 
-PJW.Rdata 7 
-PJW_comments.Rdata 7 
-wapo.Rdata 8 
-wapo_comments.Rdata 8 </code></pre>
-<!-- rnb-output-end -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZmJfYWxsMiA8LSBwbHlyOjpyYmluZC5maWxsKGluaXRfcG9zdHMsIGluaXRfY29tbWVudHMpXG5zYXZlKGZiX2FsbDIsIGZpbGUgPSBoZXJlKFwiZGF0YVwiLCBcImZiXCIsIFwiZmJfYWxsMi5SZGF0YVwiKSlcbmBgYCJ9 -->
-<pre class="r"><code>fb_all2 &lt;- plyr::rbind.fill(init_posts, init_comments)
-save(fb_all2, file = here(&quot;data&quot;, &quot;fb&quot;, &quot;fb_all2.Rdata&quot;))</code></pre>
+}
+
+fb_all2 &lt;- plyr::rbind.fill(init_posts, init_comments)
+
+save(fb_all2, file = here(&quot;data&quot;, &quot;fb&quot;, &quot;fb_all2.Rdata&quot;))
+</code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
@@ -391,41 +291,14 @@ save(fb_all2, file = here(&quot;data&quot;, &quot;fb&quot;, &quot;fb_all2.Rdata&
 <h1>Merge it all</h1>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxudGFibGUoZmJfYWxsJHBhZ2UpXG5cbmBgYCJ9 -->
-<pre class="r"><code>table(fb_all$page)
-</code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZmJfYWxsIDwtIHBseXI6OnJiaW5kLmZpbGwoZmJfYWxsMSwgZmJfYWxsMilcblxuZmJfYWxsICU8PiUgXG4gIG11dGF0ZShwYWdlID0gaWZlbHNlKGlzLm5hKHBhZ2UpLCBmcm9tX25hbWUsIHBhZ2UpKVxuXG5zYXZlKGZiX2FsbCwgZmlsZSA9IGhlcmUoXCJkYXRhXCIsIFwiZmJcIiwgXCJmYl9hbGwuUmRhdGFcIikpXG5gYGAifQ== -->
+<pre class="r"><code>fb_all &lt;- plyr::rbind.fill(fb_all1, fb_all2)
+
+fb_all %&lt;&gt;% 
+  mutate(page = ifelse(is.na(page), from_name, page))
+
+save(fb_all, file = here(&quot;data&quot;, &quot;fb&quot;, &quot;fb_all.Rdata&quot;))</code></pre>
 <!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiXG4gICAgICAgICAgICAgICAgICAgICBBQkMgTmV3cyAgICAgICAgICAgICAgICAgICAgQWxleCBKb25lcyBcbiAgICAgICAgICAgICAgICAgICAgICAgNDI5OTg4ICAgICAgICAgICAgICAgICAgICAgICAgMjAwNDk2IFxuICAgICAgICAgICAgICAgICBBbHRSaWdodC5jb20gICAgICAgICAgICAgICAgICAgICAgICBBcmt0b3MgXG4gICAgICAgICAgICAgICAgICAgICAgICAgMzE1MiAgICAgICAgICAgICAgICAgICAgICAgICAgIDEwMiBcbiAgICAgICAgICAgICAgICAgQmFrZWQgQWxhc2thICAgICAgICAgICBCbGFjayBQaWdlb24gU3BlYWtzIFxuICAgICAgICAgICAgICAgICAgICAgICAgIDE5MjIgICAgICAgICAgICAgICAgICAgICAgICAgIDYyNTYgXG4gICAgICAgICAgICAgICAgIEJsYWlyZSBXaGl0ZSAgICAgICAgICAgICAgICAgICAgIEJyZWl0YmFydCBcbiAgICAgICAgICAgICAgICAgICAgICAgIDIzOTg3ICAgICAgICAgICAgICAgICAgICAgICAgMTI0MzA3IFxuICAgICAgICAgICBCcml0dGFueSBQZXR0aWJvbmUgICAgICAgICAgICAgICAgICAgICAgRm94IE5ld3MgXG4gICAgICAgICAgICAgICAgICAgICAgICAgIDM2NyAgICAgICAgICAgICAgICAgICAgICAgICAzNDgwNSBcbiAgICAgICAgICAgICBGcmVlZG9tYWluIFJhZGlvICAgICAgICAgICAgICAgICBHYXZpbiBNY0lubmVzIFxuICAgICAgICAgICAgICAgICAgICAgICAgIDY0MzUgICAgICAgICAgICAgICAgICAgICAgICAgICAxODcgXG4gICAgICAgICAgICAgICAgICAgICBJbmZvV2FycyAgICAgICAgICAgICAgIExhdXJlbiBTb3V0aGVybiBcbiAgICAgICAgICAgICAgICAgICAgICAgICAxMTc4ICAgICAgICAgICAgICAgICAgICAgICAgICAzODY3IFxuICAgICAgICAgICAgICBNaWxsZW5uaWFsIFdvZXMgICAgICAgICAgICAgICAgICAgICAgICAgTVNOQkMgXG4gICAgICAgICAgICAgICAgICAgICAgICAgICA2OCAgICAgICAgICAgICAgICAgICAgICAgIDE3MDM2OSBcbiAgICAgICAgICAgICAgICAgICAgICBSZWQgSWNlICAgICAgICAgICAgICAgUmV0dXJuIE9mIEtpbmdzIFxuICAgICAgICAgICAgICAgICAgICAgICAgIDU4OTEgICAgICAgICAgICAgICAgICAgICAgICAgIDEzMTggXG4gICAgICAgICAgIFJvYW1pbmcgTWlsbGVubmlhbCAgICAgICAgICAgICAgICAgICAgICAgUm9vc2ggViBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICA5ICAgICAgICAgICAgICAgICAgICAgICAgICAgNjY4IFxuICAgICAgICAgICAgICAgU3RldmVuIENyb3dkZXIgICAgICAgICAgICBTdHl4aGV4ZW5oYW1tZXI2NjYgXG4gICAgICAgICAgICAgICAgICAgICAgICA3NDYwOSAgICAgICAgICAgICAgICAgICAgICAgICAgNTE1NiBcblRoZSBOYXRpb25hbCBQb2xpY3kgSW5zdGl0dXRlICAgICAgICAgICAgIFRoZSBSQU1aUEFVTCBTaG93IFxuICAgICAgICAgICAgICAgICAgICAgICAgICAxMTEgICAgICAgICAgICAgICAgICAgICAgICAgICAzMzcgXG4gICAgICAgICAgICAgICAgICAgIFRoZSBSZWJlbCAgICAgICAgICAgICAgICBUb21teSBSb2JpbnNvbiBcbiAgICAgICAgICAgICAgICAgICAgICAgIDMwNzE5ICAgICAgICAgICAgICAgICAgICAgICAgIDIzMDkwIFxuICAgICAgICAgICAgICAgICAgICBWREFSRS5jb20gXG4gICAgICAgICAgICAgICAgICAgICAgICAgMTI0OSBcbiJ9 -->
-<pre><code>
-                     ABC News                    Alex Jones 
-                       429988                        200496 
-                 AltRight.com                        Arktos 
-                         3152                           102 
-                 Baked Alaska           Black Pigeon Speaks 
-                         1922                          6256 
-                 Blaire White                     Breitbart 
-                        23987                        124307 
-           Brittany Pettibone                      Fox News 
-                          367                         34805 
-             Freedomain Radio                 Gavin McInnes 
-                         6435                           187 
-                     InfoWars               Lauren Southern 
-                         1178                          3867 
-              Millennial Woes                         MSNBC 
-                           68                        170369 
-                      Red Ice               Return Of Kings 
-                         5891                          1318 
-           Roaming Millennial                       Roosh V 
-                            9                           668 
-               Steven Crowder            Styxhexenhammer666 
-                        74609                          5156 
-The National Policy Institute             The RAMZPAUL Show 
-                          111                           337 
-                    The Rebel                Tommy Robinson 
-                        30719                         23090 
-                    VDARE.com 
-                         1249 </code></pre>
-<!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 <div id="youtube-merger" class="section level2">
@@ -455,51 +328,16 @@ The National Policy Institute             The RAMZPAUL Show
 <h1>All</h1>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZGF0YXNldHMgPC0gZGlyKGhlcmU6OmhlcmUoXCJkYXRhXCIsIFwieXRcIikpWy0xOi0yXVxubmFtZXMgPC0gc3RyX3JlcGxhY2VfYWxsKGRhdGFzZXRzLCBcInl0X1wiLCBcIlwiKSAlPiVcbiAgc3RyX3JlcGxhY2VfYWxsKFwiX2NvbW1lbnRzLio/JFwiLCBcIlwiKVxubmFtZXNbMTldIDwtIFwibnl0XCJcbmNiaW5kKGRhdGFzZXRzLCBuYW1lcylcbmBgYCJ9 -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZGF0YXNldHMgPC0gZGlyKGhlcmU6OmhlcmUoXCJkYXRhXCIsIFwieXRcIikpWy0xOi0yXVxuXG5uYW1lcyA8LSBzdHJfcmVwbGFjZV9hbGwoZGF0YXNldHMsIFwieXRfXCIsIFwiXCIpICU+JVxuICBzdHJfcmVwbGFjZV9hbGwoXCJfY29tbWVudHMuKj8kXCIsIFwiXCIpXG5cbm5hbWVzWzE5XSA8LSBcIm55dFwiXG5jYmluZChkYXRhc2V0cywgbmFtZXMpXG5cbmJpbmRfaXRfYWxsIDwtIGZ1bmN0aW9uKGRhdGFzZXRzLCBuYW1lcyl7IFxubmV3ZGF0YSA8LSBsaXN0KClcbmZvciAoamogaW4gc2VxX2Fsb25nKGRhdGFzZXRzKSkge1xuICBjYXQoZGF0YXNldHNbampdLCBcIjpcIiwgamosIFwiXFxuXCIpXG4gIGVpbnplbCA8LSBnZXQobG9hZChoZXJlOjpoZXJlKFwiZGF0YVwiLCBcInl0XCIsIGRhdGFzZXRzW2pqXSkpKVxuICBpZihpcy5kYXRhLmZyYW1lKGVpbnplbCkpIGVpbnplbCRjaGFubmVsIDwtIHBhc3RlMChuYW1lc1tqal0pXG4gIG5ld2RhdGFbW2pqXV0gPC0gc3VwcHJlc3NXYXJuaW5ncyhiaW5kX3Jvd3MoZWluemVsKSlcbn1cblxueXRfYWxsX2NvbW1lbnRzX2ZuIDwtIHN1cHByZXNzV2FybmluZ3MoYmluZF9yb3dzKG5ld2RhdGEpKVxuXG5zYXZlKHl0X2FsbF9jb21tZW50c19mbiwgZmlsZSA9IGhlcmU6OmhlcmUoXCJkYXRhXCIsIFwieXRcIiwgXCJ5dF9hbGxfY29tbWVudHNfZm4uUmRhdGFcIikpXG59XG5cbmJpbmRfaXRfYWxsKGRhdGFzZXRzLCBuYW1lcylcblxuYGBgIn0= -->
 <pre class="r"><code>datasets &lt;- dir(here::here(&quot;data&quot;, &quot;yt&quot;))[-1:-2]
+
 names &lt;- str_replace_all(datasets, &quot;yt_&quot;, &quot;&quot;) %&gt;%
   str_replace_all(&quot;_comments.*?$&quot;, &quot;&quot;)
+
 names[19] &lt;- &quot;nyt&quot;
-cbind(datasets, names)</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiICAgICAgZGF0YXNldHMgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgbmFtZXMgICAgICAgICAgICAgICAgXG4gWzEsXSBcInl0X2FsZXhqb25lc19jb21tZW50c18xXzY1MjNfZm4uUmRhdGFcIiAgICAgICAgIFwiYWxleGpvbmVzXCIgICAgICAgICAgXG4gWzIsXSBcInl0X2FsdHJpZ2h0X2NvbW1lbnRzXzFfOTRfZm4uUmRhdGFcIiAgICAgICAgICAgIFwiYWx0cmlnaHRcIiAgICAgICAgICAgXG4gWzMsXSBcInl0X2FtZXJpY2FucmVuYWlzc2FuY2VfY29tbWVudHNfMV80Nl9mbi5SZGF0YVwiIFwiYW1lcmljYW5yZW5haXNzYW5jZVwiXG4gWzQsXSBcInl0X2Jha2VkYWxhc2thX2NvbW1lbnRzXzFfOTVfZm4uUmRhdGFcIiAgICAgICAgIFwiYmFrZWRhbGFza2FcIiAgICAgICAgXG4gWzUsXSBcInl0X2JsYWlyZV93aGl0ZV9jb21tZW50c18xXzQ0X2ZuLlJkYXRhXCIgICAgICAgIFwiYmxhaXJlX3doaXRlXCIgICAgICAgXG4gWzYsXSBcInl0X2Jwc19jb21tZW50c18xXzEyN19mbi5SZGF0YVwiICAgICAgICAgICAgICAgIFwiYnBzXCIgICAgICAgICAgICAgICAgXG4gWzcsXSBcInl0X2JyZWl0YmFydF9jb21tZW50c18xXzI3NF9mbi5SZGF0YVwiICAgICAgICAgIFwiYnJlaXRiYXJ0XCIgICAgICAgICAgXG4gWzgsXSBcInl0X2Nlcm5vdmljaF9jb21tZW50c18xXzE5OV9mbi5SZGF0YVwiICAgICAgICAgIFwiY2Vybm92aWNoXCIgICAgICAgICAgXG4gWzksXSBcInl0X2Nubl9jb21tZW50c18xXzcwODJfZm4uUmRhdGFcIiAgICAgICAgICAgICAgIFwiY25uXCIgICAgICAgICAgICAgICAgXG5bMTAsXSBcInl0X2Nyb3dkZXJfY29tbWVudHNfMV8yMzNfZm4uUmRhdGFcIiAgICAgICAgICAgIFwiY3Jvd2RlclwiICAgICAgICAgICAgXG5bMTEsXSBcInl0X2V1cm9wYV9jb21tZW50c18xXzRfZm4uUmRhdGFcIiAgICAgICAgICAgICAgIFwiZXVyb3BhXCIgICAgICAgICAgICAgXG5bMTIsXSBcInl0X2ZveG5ld3NfY29tbWVudHNfMTE4OTdfMTczNTFfZm4uUmRhdGFcIiAgICAgIFwiZm94bmV3c1wiICAgICAgICAgICAgXG5bMTMsXSBcInl0X2xhdXJlbl9jb21tZW50c18xXzc5X2ZuLlJkYXRhXCIgICAgICAgICAgICAgIFwibGF1cmVuXCIgICAgICAgICAgICAgXG5bMTQsXSBcInl0X21pbG9fY29tbWVudHNfMV8yMzdfZm4uUmRhdGFcIiAgICAgICAgICAgICAgIFwibWlsb1wiICAgICAgICAgICAgICAgXG5bMTUsXSBcInl0X21vbHltZW1lX2NvbW1lbnRzXzFfNDU5X2ZuLlJkYXRhXCIgICAgICAgICAgIFwibW9seW1lbWVcIiAgICAgICAgICAgXG5bMTYsXSBcInl0X21zbmJjX2NvbW1lbnRzXzFfMjc5N19mbi5SZGF0YVwiICAgICAgICAgICAgIFwibXNuYmNcIiAgICAgICAgICAgICAgXG5bMTcsXSBcInl0X213X2NvbW1lbnRzXzFfMjg1X2ZuLlJkYXRhXCIgICAgICAgICAgICAgICAgIFwibXdcIiAgICAgICAgICAgICAgICAgXG5bMTgsXSBcInl0X05QSVJhZGl4X2NvbW1lbnRzXzFfNV9mbi5SZGF0YVwiICAgICAgICAgICAgIFwiTlBJUmFkaXhcIiAgICAgICAgICAgXG5bMTksXSBcInl0X255dF9jb21tZW50c18xXzg1Ml9mbi5SZGF0YVwiICAgICAgICAgICAgICAgIFwibnl0XCIgICAgICAgICAgICAgICAgXG5bMjAsXSBcInl0X3BhdWxlbGFtX2NvbW1lbnRzXzFfMjlfZm4uUmRhdGFcIiAgICAgICAgICAgIFwicGF1bGVsYW1cIiAgICAgICAgICAgXG5bMjEsXSBcInl0X3BldHRpYm9uZV9jb21tZW50c18xXzk2X2ZuLlJkYXRhXCIgICAgICAgICAgIFwicGV0dGlib25lXCIgICAgICAgICAgXG5bMjIsXSBcInl0X3Bqd19jb21tZW50c18xXzExMV9mbi5SZGF0YVwiICAgICAgICAgICAgICAgIFwicGp3XCIgICAgICAgICAgICAgICAgXG5bMjMsXSBcInl0X3JhbXpwYXVsX2NvbW1lbnRzXzFfMTQyX2ZuLlJkYXRhXCIgICAgICAgICAgIFwicmFtenBhdWxcIiAgICAgICAgICAgXG5bMjQsXSBcInl0X3JlYmVsbWVkaWFfY29tbWVudHNfMV8yMTQ4X2ZuLlJkYXRhXCIgICAgICAgIFwicmViZWxtZWRpYVwiICAgICAgICAgXG5bMjUsXSBcInl0X3JlZGljZXR2X2NvbW1lbnRzXzFfMjY3X2ZuLlJkYXRhXCIgICAgICAgICAgIFwicmVkaWNldHZcIiAgICAgICAgICAgXG5bMjYsXSBcInl0X3JldHVybm9ma2luZ3NfY29tbWVudHNfMV8xX2ZuLlJkYXRhXCIgICAgICAgIFwicmV0dXJub2ZraW5nc1wiICAgICAgXG5bMjcsXSBcInl0X3JvYW1pbmdfY29tbWVudHNfMV85Nl9mbi5SZGF0YVwiICAgICAgICAgICAgIFwicm9hbWluZ1wiICAgICAgICAgICAgXG5bMjgsXSBcInl0X3Jvb3NoX2NvbW1lbnRzXzFfMjlfZm4uUmRhdGFcIiAgICAgICAgICAgICAgIFwicm9vc2hcIiAgICAgICAgICAgICAgXG5bMjksXSBcInl0X3N0eXhlbmhhbW1lcl9jb21tZW50c18xXzEyMzdfZm4uUmRhdGFcIiAgICAgIFwic3R5eGVuaGFtbWVyXCIgICAgICAgXG5bMzAsXSBcInl0X3RhcmFfY29tbWVudHNfMV80X2ZuLlJkYXRhXCIgICAgICAgICAgICAgICAgIFwidGFyYVwiICAgICAgICAgICAgICAgXG5bMzEsXSBcInl0X3ZkYXJlX2NvbW1lbnRzXzFfMV9mbi5SZGF0YVwiICAgICAgICAgICAgICAgIFwidmRhcmVcIiAgICAgICAgICAgICAgXG5bMzIsXSBcInl0X3ZpcnR1ZW9mdGhld2VzdF9jb21tZW50c18xXzZfZm4uUmRhdGFcIiAgICAgIFwidmlydHVlb2Z0aGV3ZXN0XCIgICAgXG5bMzMsXSBcInl0X3dhcG9fY29tbWVudHNfMV8zNDMzX2ZuLlJkYXRhXCIgICAgICAgICAgICAgIFwid2Fwb1wiICAgICAgICAgICAgICAgXG4ifQ== -->
-<pre><code>      datasets                                        names                
- [1,] &quot;yt_alexjones_comments_1_6523_fn.Rdata&quot;         &quot;alexjones&quot;          
- [2,] &quot;yt_altright_comments_1_94_fn.Rdata&quot;            &quot;altright&quot;           
- [3,] &quot;yt_americanrenaissance_comments_1_46_fn.Rdata&quot; &quot;americanrenaissance&quot;
- [4,] &quot;yt_bakedalaska_comments_1_95_fn.Rdata&quot;         &quot;bakedalaska&quot;        
- [5,] &quot;yt_blaire_white_comments_1_44_fn.Rdata&quot;        &quot;blaire_white&quot;       
- [6,] &quot;yt_bps_comments_1_127_fn.Rdata&quot;                &quot;bps&quot;                
- [7,] &quot;yt_breitbart_comments_1_274_fn.Rdata&quot;          &quot;breitbart&quot;          
- [8,] &quot;yt_cernovich_comments_1_199_fn.Rdata&quot;          &quot;cernovich&quot;          
- [9,] &quot;yt_cnn_comments_1_7082_fn.Rdata&quot;               &quot;cnn&quot;                
-[10,] &quot;yt_crowder_comments_1_233_fn.Rdata&quot;            &quot;crowder&quot;            
-[11,] &quot;yt_europa_comments_1_4_fn.Rdata&quot;               &quot;europa&quot;             
-[12,] &quot;yt_foxnews_comments_11897_17351_fn.Rdata&quot;      &quot;foxnews&quot;            
-[13,] &quot;yt_lauren_comments_1_79_fn.Rdata&quot;              &quot;lauren&quot;             
-[14,] &quot;yt_milo_comments_1_237_fn.Rdata&quot;               &quot;milo&quot;               
-[15,] &quot;yt_molymeme_comments_1_459_fn.Rdata&quot;           &quot;molymeme&quot;           
-[16,] &quot;yt_msnbc_comments_1_2797_fn.Rdata&quot;             &quot;msnbc&quot;              
-[17,] &quot;yt_mw_comments_1_285_fn.Rdata&quot;                 &quot;mw&quot;                 
-[18,] &quot;yt_NPIRadix_comments_1_5_fn.Rdata&quot;             &quot;NPIRadix&quot;           
-[19,] &quot;yt_nyt_comments_1_852_fn.Rdata&quot;                &quot;nyt&quot;                
-[20,] &quot;yt_paulelam_comments_1_29_fn.Rdata&quot;            &quot;paulelam&quot;           
-[21,] &quot;yt_pettibone_comments_1_96_fn.Rdata&quot;           &quot;pettibone&quot;          
-[22,] &quot;yt_pjw_comments_1_111_fn.Rdata&quot;                &quot;pjw&quot;                
-[23,] &quot;yt_ramzpaul_comments_1_142_fn.Rdata&quot;           &quot;ramzpaul&quot;           
-[24,] &quot;yt_rebelmedia_comments_1_2148_fn.Rdata&quot;        &quot;rebelmedia&quot;         
-[25,] &quot;yt_redicetv_comments_1_267_fn.Rdata&quot;           &quot;redicetv&quot;           
-[26,] &quot;yt_returnofkings_comments_1_1_fn.Rdata&quot;        &quot;returnofkings&quot;      
-[27,] &quot;yt_roaming_comments_1_96_fn.Rdata&quot;             &quot;roaming&quot;            
-[28,] &quot;yt_roosh_comments_1_29_fn.Rdata&quot;               &quot;roosh&quot;              
-[29,] &quot;yt_styxenhammer_comments_1_1237_fn.Rdata&quot;      &quot;styxenhammer&quot;       
-[30,] &quot;yt_tara_comments_1_4_fn.Rdata&quot;                 &quot;tara&quot;               
-[31,] &quot;yt_vdare_comments_1_1_fn.Rdata&quot;                &quot;vdare&quot;              
-[32,] &quot;yt_virtueofthewest_comments_1_6_fn.Rdata&quot;      &quot;virtueofthewest&quot;    
-[33,] &quot;yt_wapo_comments_1_3433_fn.Rdata&quot;              &quot;wapo&quot;               </code></pre>
-<!-- rnb-output-end -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYmluZF9pdF9hbGwgPC0gZnVuY3Rpb24oZGF0YXNldHMsIG5hbWVzKXsgXG5uZXdkYXRhIDwtIGxpc3QoKVxuZm9yIChqaiBpbiBzZXFfYWxvbmcoZGF0YXNldHMpKSB7XG4gIGNhdChkYXRhc2V0c1tqal0sIFwiOlwiLCBqaiwgXCJcXG5cIilcbiAgZWluemVsIDwtIGdldChsb2FkKGhlcmU6OmhlcmUoXCJkYXRhXCIsIFwieXRcIiwgZGF0YXNldHNbampdKSkpXG4gIGlmKGlzLmRhdGEuZnJhbWUoZWluemVsKSkgZWluemVsJGNoYW5uZWwgPC0gcGFzdGUwKG5hbWVzW2pqXSlcbiAgbmV3ZGF0YVtbampdXSA8LSBzdXBwcmVzc1dhcm5pbmdzKGJpbmRfcm93cyhlaW56ZWwpKVxufVxueXRfYWxsX2NvbW1lbnRzX2ZuIDwtIHN1cHByZXNzV2FybmluZ3MoYmluZF9yb3dzKG5ld2RhdGEpKVxuc2F2ZSh5dF9hbGxfY29tbWVudHNfZm4sIGZpbGUgPSBoZXJlOjpoZXJlKFwiZGF0YVwiLCBcInl0XCIsIFwieXRfYWxsX2NvbW1lbnRzX2ZuLlJkYXRhXCIpKVxufVxuYmluZF9pdF9hbGwoZGF0YXNldHMsIG5hbWVzKVxuYGBgIn0= -->
-<pre class="r"><code>bind_it_all &lt;- function(datasets, names){ 
+cbind(datasets, names)
+
+bind_it_all &lt;- function(datasets, names){ 
 newdata &lt;- list()
 for (jj in seq_along(datasets)) {
   cat(datasets[jj], &quot;:&quot;, jj, &quot;\n&quot;)
@@ -507,46 +345,15 @@ for (jj in seq_along(datasets)) {
   if(is.data.frame(einzel)) einzel$channel &lt;- paste0(names[jj])
   newdata[[jj]] &lt;- suppressWarnings(bind_rows(einzel))
 }
+
 yt_all_comments_fn &lt;- suppressWarnings(bind_rows(newdata))
+
 save(yt_all_comments_fn, file = here::here(&quot;data&quot;, &quot;yt&quot;, &quot;yt_all_comments_fn.Rdata&quot;))
 }
-bind_it_all(datasets, names)</code></pre>
+
+bind_it_all(datasets, names)
+</code></pre>
 <!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoieXRfYWxleGpvbmVzX2NvbW1lbnRzXzFfNjUyM19mbi5SZGF0YSA6IDEgXG55dF9hbHRyaWdodF9jb21tZW50c18xXzk0X2ZuLlJkYXRhIDogMiBcbnl0X2FtZXJpY2FucmVuYWlzc2FuY2VfY29tbWVudHNfMV80Nl9mbi5SZGF0YSA6IDMgXG55dF9iYWtlZGFsYXNrYV9jb21tZW50c18xXzk1X2ZuLlJkYXRhIDogNCBcbnl0X2JsYWlyZV93aGl0ZV9jb21tZW50c18xXzQ0X2ZuLlJkYXRhIDogNSBcbnl0X2Jwc19jb21tZW50c18xXzEyN19mbi5SZGF0YSA6IDYgXG55dF9icmVpdGJhcnRfY29tbWVudHNfMV8yNzRfZm4uUmRhdGEgOiA3IFxueXRfY2Vybm92aWNoX2NvbW1lbnRzXzFfMTk5X2ZuLlJkYXRhIDogOCBcbnl0X2Nubl9jb21tZW50c18xXzcwODJfZm4uUmRhdGEgOiA5IFxueXRfY3Jvd2Rlcl9jb21tZW50c18xXzIzM19mbi5SZGF0YSA6IDEwIFxueXRfZXVyb3BhX2NvbW1lbnRzXzFfNF9mbi5SZGF0YSA6IDExIFxueXRfZm94bmV3c19jb21tZW50c18xMTg5N18xNzM1MV9mbi5SZGF0YSA6IDEyIFxueXRfbGF1cmVuX2NvbW1lbnRzXzFfNzlfZm4uUmRhdGEgOiAxMyBcbnl0X21pbG9fY29tbWVudHNfMV8yMzdfZm4uUmRhdGEgOiAxNCBcbnl0X21vbHltZW1lX2NvbW1lbnRzXzFfNDU5X2ZuLlJkYXRhIDogMTUgXG55dF9tc25iY19jb21tZW50c18xXzI3OTdfZm4uUmRhdGEgOiAxNiBcbnl0X213X2NvbW1lbnRzXzFfMjg1X2ZuLlJkYXRhIDogMTcgXG55dF9OUElSYWRpeF9jb21tZW50c18xXzVfZm4uUmRhdGEgOiAxOCBcbnl0X255dF9jb21tZW50c18xXzg1Ml9mbi5SZGF0YSA6IDE5IFxueXRfcGF1bGVsYW1fY29tbWVudHNfMV8yOV9mbi5SZGF0YSA6IDIwIFxueXRfcGV0dGlib25lX2NvbW1lbnRzXzFfOTZfZm4uUmRhdGEgOiAyMSBcbnl0X3Bqd19jb21tZW50c18xXzExMV9mbi5SZGF0YSA6IDIyIFxueXRfcmFtenBhdWxfY29tbWVudHNfMV8xNDJfZm4uUmRhdGEgOiAyMyBcbnl0X3JlYmVsbWVkaWFfY29tbWVudHNfMV8yMTQ4X2ZuLlJkYXRhIDogMjQgXG55dF9yZWRpY2V0dl9jb21tZW50c18xXzI2N19mbi5SZGF0YSA6IDI1IFxueXRfcmV0dXJub2ZraW5nc19jb21tZW50c18xXzFfZm4uUmRhdGEgOiAyNiBcbnl0X3JvYW1pbmdfY29tbWVudHNfMV85Nl9mbi5SZGF0YSA6IDI3IFxueXRfcm9vc2hfY29tbWVudHNfMV8yOV9mbi5SZGF0YSA6IDI4IFxueXRfc3R5eGVuaGFtbWVyX2NvbW1lbnRzXzFfMTIzN19mbi5SZGF0YSA6IDI5IFxueXRfdGFyYV9jb21tZW50c18xXzRfZm4uUmRhdGEgOiAzMCBcbnl0X3ZkYXJlX2NvbW1lbnRzXzFfMV9mbi5SZGF0YSA6IDMxIFxueXRfdmlydHVlb2Z0aGV3ZXN0X2NvbW1lbnRzXzFfNl9mbi5SZGF0YSA6IDMyIFxueXRfd2Fwb19jb21tZW50c18xXzM0MzNfZm4uUmRhdGEgOiAzMyBcbiJ9 -->
-<pre><code>yt_alexjones_comments_1_6523_fn.Rdata : 1 
-yt_altright_comments_1_94_fn.Rdata : 2 
-yt_americanrenaissance_comments_1_46_fn.Rdata : 3 
-yt_bakedalaska_comments_1_95_fn.Rdata : 4 
-yt_blaire_white_comments_1_44_fn.Rdata : 5 
-yt_bps_comments_1_127_fn.Rdata : 6 
-yt_breitbart_comments_1_274_fn.Rdata : 7 
-yt_cernovich_comments_1_199_fn.Rdata : 8 
-yt_cnn_comments_1_7082_fn.Rdata : 9 
-yt_crowder_comments_1_233_fn.Rdata : 10 
-yt_europa_comments_1_4_fn.Rdata : 11 
-yt_foxnews_comments_11897_17351_fn.Rdata : 12 
-yt_lauren_comments_1_79_fn.Rdata : 13 
-yt_milo_comments_1_237_fn.Rdata : 14 
-yt_molymeme_comments_1_459_fn.Rdata : 15 
-yt_msnbc_comments_1_2797_fn.Rdata : 16 
-yt_mw_comments_1_285_fn.Rdata : 17 
-yt_NPIRadix_comments_1_5_fn.Rdata : 18 
-yt_nyt_comments_1_852_fn.Rdata : 19 
-yt_paulelam_comments_1_29_fn.Rdata : 20 
-yt_pettibone_comments_1_96_fn.Rdata : 21 
-yt_pjw_comments_1_111_fn.Rdata : 22 
-yt_ramzpaul_comments_1_142_fn.Rdata : 23 
-yt_rebelmedia_comments_1_2148_fn.Rdata : 24 
-yt_redicetv_comments_1_267_fn.Rdata : 25 
-yt_returnofkings_comments_1_1_fn.Rdata : 26 
-yt_roaming_comments_1_96_fn.Rdata : 27 
-yt_roosh_comments_1_29_fn.Rdata : 28 
-yt_styxenhammer_comments_1_1237_fn.Rdata : 29 
-yt_tara_comments_1_4_fn.Rdata : 30 
-yt_vdare_comments_1_1_fn.Rdata : 31 
-yt_virtueofthewest_comments_1_6_fn.Rdata : 32 
-yt_wapo_comments_1_3433_fn.Rdata : 33 </code></pre>
-<!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 <!-- rnb-text-end -->

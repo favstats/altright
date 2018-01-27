@@ -38,7 +38,7 @@ if (window.hljs) {
   hljs.configure({languages: []});
   hljs.initHighlightingOnLoad();
   if (document.readyState && document.readyState === "complete") {
-    window.setTimeout(function() { hljs.initHighlightingOnLoad(); }, 0);
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
   }
 }
 </script>
@@ -182,8 +182,8 @@ $(document).ready(function () {
 source(&quot;helper_functions.R&quot;)
 getwd()</code></pre>
 <!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiWzFdIFwiRTovRHJvcGJveC9wcm9qZWN0cy9hbHRyaWdodFwiXG4ifQ== -->
-<pre><code>[1] &quot;E:/Dropbox/projects/altright&quot;</code></pre>
+<!-- rnb-output-begin eyJkYXRhIjoiWzFdIFwiQzovVXNlcnMvRmFiaW8vRG9jdW1lbnRzL2dpdF9wcm9qL2FsdHJpZ2h0XCJcbiJ9 -->
+<pre><code>[1] &quot;C:/Users/Fabio/Documents/git_proj/altright&quot;</code></pre>
 <!-- rnb-output-end -->
 <!-- rnb-source-begin eyJkYXRhIjoiYGBgclxub3B0aW9ucyhzY2lwZW4gPSA5OTkpXG5sb2FkKGhlcmUoXCJkYXRhXCIsIFwidHdcIiwgXCJoYW5kbGVyX2lkcy5SZGF0YVwiKSlcbmhhbmRsZXJfaWRzIDwtIGhhbmRsZXJfaWRzICU+JVxuICBmaWx0ZXIoIWR1cGxpY2F0ZWQodHdlZXRfaWQpKVxuZGF0IDwtIGhhbmRsZXJfaWRzXG5gYGAifQ== -->
 <pre class="r"><code>options(scipen = 999)
@@ -199,24 +199,19 @@ dat &lt;- handler_ids</code></pre>
 <h1>Main Function</h1>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGlicmFyeShSU2VsZW5pdW0pXG5wb3J0IDwtIHNhbXBsZSg0MDAwTDo1MDAwTCwgMSlcbnJEIDwtIHJzRHJpdmVyKHZlcmJvc2UgPSBGQUxTRSwgcG9ydCA9IHBvcnQpXG5yRFxuXG5yZW1EciA8LSByRCRjbGllbnRcbiNyZW1EciRjbG9zZSgpXG5cbmZpbmFsX2xpc3QgPC0gZ2V0X3R3ZWV0X3JlcGxpZXMoZGF0LCAyMDAwMDEsIDIxMDAwMClcbmZpbmFsX2R0IDwtIGJpbmRfcm93cyhmaW5hbF9saXN0KVxuYGBgIn0= -->
-<pre class="r"><code>library(RSelenium)
-port &lt;- sample(4000L:5000L, 1)
-rD &lt;- rsDriver(verbose = FALSE, port = port)
-rD
-
-remDr &lt;- rD$client
-#remDr$close()
-
-final_list &lt;- get_tweet_replies(dat, 200001, 210000)
-final_dt &lt;- bind_rows(final_list)</code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxucGFzdGUwKFwiZGF0YS90d19kYXRhX1wiLHN0YXJ0LCBcIl9cIiwgZmluaXNoLCBcIi5SZGF0YVwiKVxuXG5gYGAifQ== -->
+<pre class="r"><code>paste0(&quot;data/tw_data_&quot;,start, &quot;_&quot;, finish, &quot;.Rdata&quot;)
+</code></pre>
 <!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiWzFdIFwiZGF0YS90d19kYXRhXzFfNTAwMDAuUmRhdGFcIlxuIn0= -->
+<pre><code>[1] &quot;data/tw_data_1_50000.Rdata&quot;</code></pre>
+<!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 <!-- rnb-text-end -->
 </div>
 
-<div id="rmd-source-code">LS0tDQp0aXRsZTogIlIgTm90ZWJvb2siDQpvdXRwdXQ6IGh0bWxfbm90ZWJvb2sNCi0tLQ0KDQoNCiMgUnVuIFR3aXR0ZXIgU2NyYXBlIA0KDQpgYGB7cn0NCnBhY21hbjo6cF9sb2FkKHRpZHl2ZXJzZSwgd2RtYW4sIGpzb25saXRlLCBydmVzdCwgeG1sMiwgUlNlbGVuaXVtLCBoZXJlLCBjcmF5b24sIGhlcmUpDQpzb3VyY2UoImhlbHBlcl9mdW5jdGlvbnMuUiIpDQpnZXR3ZCgpDQpvcHRpb25zKHNjaXBlbiA9IDk5OSkNCg0KbG9hZChoZXJlKCJkYXRhIiwgInR3IiwgImhhbmRsZXJfaWRzLlJkYXRhIikpDQoNCmhhbmRsZXJfaWRzIDwtIGhhbmRsZXJfaWRzICU+JQ0KICBmaWx0ZXIoIWR1cGxpY2F0ZWQodHdlZXRfaWQpKQ0KDQpkYXQgPC0gaGFuZGxlcl9pZHMNCmBgYA0KDQoNCiMgTWFpbiBGdW5jdGlvbg0KDQpgYGB7cn0NCmxpYnJhcnkoUlNlbGVuaXVtKQ0KcG9ydCA8LSBzYW1wbGUoNDAwMEw6NTAwMEwsIDEpDQpyRCA8LSByc0RyaXZlcih2ZXJib3NlID0gRkFMU0UsIHBvcnQgPSBwb3J0KQ0KckQNCg0KcmVtRHIgPC0gckQkY2xpZW50DQojcmVtRHIkY2xvc2UoKQ0KDQpmaW5hbF9saXN0IDwtIGdldF90d2VldF9yZXBsaWVzKGRhdCwgMjAwMDAxLCAyMTAwMDApDQpmaW5hbF9kdCA8LSBiaW5kX3Jvd3MoZmluYWxfbGlzdCkNCmBgYA0KDQo=</div>
+<div id="rmd-source-code">LS0tDQp0aXRsZTogIlIgTm90ZWJvb2siDQpvdXRwdXQ6IGh0bWxfbm90ZWJvb2sNCi0tLQ0KDQojIFJ1biBUd2l0dGVyIFNjcmFwZSANCg0KYGBge3J9DQpwYWNtYW46OnBfbG9hZCh0aWR5dmVyc2UsIHdkbWFuLCBqc29ubGl0ZSwgcnZlc3QsIHhtbDIsIFJTZWxlbml1bSwgaGVyZSwgY3JheW9uLCBoZXJlKQ0Kc291cmNlKCJoZWxwZXJfZnVuY3Rpb25zLlIiKQ0KZ2V0d2QoKQ0Kb3B0aW9ucyhzY2lwZW4gPSA5OTkpDQoNCmxvYWQoaGVyZSgiZGF0YSIsICJ0dyIsICJoYW5kbGVyX2lkcy5SZGF0YSIpKQ0KDQpoYW5kbGVyX2lkcyA8LSBoYW5kbGVyX2lkcyAlPiUNCiAgZmlsdGVyKCFkdXBsaWNhdGVkKHR3ZWV0X2lkKSkNCg0KZGF0IDwtIGhhbmRsZXJfaWRzDQpgYGANCiMgTWFpbiBGdW5jdGlvbg0KDQpgYGB7cn0NCmxpYnJhcnkoUlNlbGVuaXVtKQ0KcG9ydCA8LSBzYW1wbGUoNDAwMEw6NTAwMEwsIDEpDQpyRCA8LSByc0RyaXZlcih2ZXJib3NlID0gRkFMU0UsIHBvcnQgPSBwb3J0KQ0KckQNCg0KcmVtRHIgPC0gckQkY2xpZW50DQojcmVtRHIkY2xvc2UoKQ0KDQpzdGFydCA8LSAxDQpmaW5pc2ggPC0gNTAwMDANCg0KZmluYWxfbGlzdCA8LSBnZXRfdHdlZXRfcmVwbGllcyhkYXQsIHN0YXJ0LCBmaW5pc2gpDQpmaW5hbF9kdCA8LSBiaW5kX3Jvd3MoZmluYWxfbGlzdCkNCmJlZXByOjpiZWVwKDgpDQpzYXZlKGZpbmFsX2R0LCBmaWxlID0gcGFzdGUwKCJkYXRhL3R3X2RhdGFfIixzdGFydCwgIl8iLCBmaW5pc2gsICIuUmRhdGEiKSkNCmBgYA0KDQo=</div>
 
 
 
