@@ -9,7 +9,7 @@
 <meta name="generator" content="pandoc" />
 
 
-<meta name="author" content="Simon Roth" />
+<meta name="author" content="Simon und Fabio" />
 
 
 <title>twitter</title>
@@ -169,7 +169,7 @@ $(document).ready(function () {
 
 
 <h1 class="title toc-ignore">twitter</h1>
-<h4 class="author"><em>Simon Roth</em></h4>
+<h4 class="author"><em>Simon und Fabio</em></h4>
 <h4 class="date"><em>26 Januar 2018</em></h4>
 
 </div>
@@ -182,17 +182,8 @@ $(document).ready(function () {
 <h2>R Markdown</h2>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxucGFjbWFuOjpwX2xvYWQodGlkeXZlcnNlLCB3ZG1hbiwganNvbmxpdGUsIHJ2ZXN0LCB4bWwyLCBSU2VsZW5pdW0sIGhlcmUpXG5kaXIoXCJkYXRhXCIpXG5gYGAifQ== -->
-<pre class="r"><code>pacman::p_load(tidyverse, wdman, jsonlite, rvest, xml2, RSelenium, here)
-dir(&quot;data&quot;)</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiWzFdIFwiYW5uY291bHRlcl9pZHMuanNvblwiICAgICBcImFubmNvdWx0ZXJfdHdlZXRzLlJkYXRhXCIgXCJmYlwiICAgICAgICAgICAgICAgICAgICAgXG5bNF0gXCJpZF9kYXRhLlJkYXRhXCIgICAgICAgICAgIFwicmVwbGllcy5SZGF0YVwiICAgICAgICAgICBcInJlcGxpZXNfbGlzdF8xXzEwLlJkYXRhXCJcbls3XSBcInR3XCIgICAgICAgICAgICAgICAgICAgICBcbiJ9 -->
-<pre><code>[1] &quot;anncoulter_ids.json&quot;     &quot;anncoulter_tweets.Rdata&quot; &quot;fb&quot;                     
-[4] &quot;id_data.Rdata&quot;           &quot;replies.Rdata&quot;           &quot;replies_list_1_10.Rdata&quot;
-[7] &quot;tw&quot;                     </code></pre>
-<!-- rnb-output-end -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYW5faWRzIDwtIGpzb25saXRlOjpmcm9tSlNPTihcImRhdGEvYW5uY291bHRlcl9pZHMuanNvblwiKVxuYGBgIn0= -->
-<pre class="r"><code>an_ids &lt;- jsonlite::fromJSON(&quot;data/anncoulter_ids.json&quot;)</code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxucGFjbWFuOjpwX2xvYWQodGlkeXZlcnNlLCB3ZG1hbiwganNvbmxpdGUsIHJ2ZXN0LCB4bWwyLCBSU2VsZW5pdW0sIGhlcmUsIGNyYXlvbiwgaGVyZSlcbmBgYCJ9 -->
+<pre class="r"><code>pacman::p_load(tidyverse, wdman, jsonlite, rvest, xml2, RSelenium, here, crayon, here)</code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
@@ -201,75 +192,63 @@ dir(&quot;data&quot;)</code></pre>
 <h1>reading twitter ids</h1>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBBQkNfaWRzIDwtIGZyb21KU09OKGhlcmUoXCJkYXRhXCIsIFwidHdcIiwgXCJ0d19hYmNfaWRzLmpzb25cIikpXG4jICBsZW5ndGgoQUJDX2lkcylcbnR3ZWV0X2lkcyA8LSBkaXIoaGVyZShcImRhdGFcIiwgXCJ0d1wiKSlbLTFdXG4jaGVyZTo6aGVyZShcImRhdGFcIiwgXCJ0d1wiKVxuIyB0d2VldF9pZHNfbGlzdCA8LSBsaXN0KClcbiMgZm9yIChqaiBpbiBzZXFfYWxvbmcodHdlZXRfaWRzKSkge1xuIyAgIHR3ZWV0X2lkc19saXN0W1tqal1dIDwtIGpzb25saXRlOjpmcm9tSlNPTihoZXJlKFwiZGF0YVwiLCBcInR3XCIsIHR3ZWV0X2lkc1tqal0pKVxuIyB9XG5oYW5kbGVycyA8LSBjKFwiUmVhbEFsZXhKb25lc1wiLCBcIkFubkNvdWx0ZXJcIiwgXCJNc0JsYWlyZVdoaXRlXCIsIFwibmF2eWhhdG9cIiwgXCJCcmVpdGJhcnROZXdzXCIsIFwiQ2Vybm92aWNoXCIsIFwiQ05OXCIsIFwiRm94TmV3c1wiLCBcImluZm93YXJzXCIsIFwiTGF1cmVuX1NvdXRoZXJuXCIsIFwiTVNOQkNcIiwgXCJQcmlzb25QbGFuZXRcIiwgXCJUaGVSZWJlbFRWXCIsIFwiUm9hbWluZ01pbFwiLFwiVFJvYmluc29uTmV3RXJhXCIsIFwid2FzaGluZ3RvbnBvc3RcIilcbnR3ZWV0X2luaXQgPC0gZnJvbUpTT04oaGVyZShcImRhdGFcIiwgXCJ0d1wiLCBcInR3X2FiY19pZHMuanNvblwiKSkgJT4lIFxuICBkYXRhLmZyYW1lKGhhbmRsZXIgPSBcIkFCQ1wiKVxuZm9yIChqaiBpbiBzZXFfYWxvbmcodHdlZXRfaWRzKSkge1xuICAgdHdlZXRfaW5pdCA8LSBwbHlyOjpyYmluZC5maWxsKHR3ZWV0X2luaXQsIFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIGpzb25saXRlOjpmcm9tSlNPTihcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIGhlcmUoXG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBcImRhdGFcIiwgXCJ0d1wiLCB0d2VldF9pZHNbampdXG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICApXG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgKSAlPiUgXG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgZGF0YS5mcmFtZShoYW5kbGVyID0gaGFuZGxlcnNbampdKSlcbiAgIGNhdChqaiwgXCJcXG5cIilcbn1cbmBgYCJ9 -->
-<pre class="r"><code># ABC_ids &lt;- fromJSON(here(&quot;data&quot;, &quot;tw&quot;, &quot;tw_abc_ids.json&quot;))
-#  length(ABC_ids)
-tweet_ids &lt;- dir(here(&quot;data&quot;, &quot;tw&quot;))[-1]
-#here::here(&quot;data&quot;, &quot;tw&quot;)
-# tweet_ids_list &lt;- list()
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBcbiMgdHdlZXRfaWRzIDwtIGRpcihoZXJlKFwiZGF0YVwiLCBcInR3XCIpKVstMTotMl1cbiMgXG4jIFxuIyBoYW5kbGVycyA8LSBjKFwiUmVhbEFsZXhKb25lc1wiLCBcIkFubkNvdWx0ZXJcIiwgXCJBcmt0b3NNZWRpYVwiLCBcIk1zQmxhaXJlV2hpdGVcIiwgXCJuYXZ5aGF0b1wiLCBcIkJyZWl0YmFydE5ld3NcIiwgXCJDZXJub3ZpY2hcIiwgXCJDTk5cIiwgXCJOZXdSaWdodEFtZXJpY2FcIiwgXCJzY3Jvd2RlclwiLCBcIklkZW50aXR5RXZyb3BhXCIsIFwiRm94TmV3c1wiLCBcIkdhdmluX01jSW5uZXNcIiAsIFwiaW5mb3dhcnNcIiwgXCJMYXVyZW5fU291dGhlcm5cIiwgIFwiU3RlZmFuTW9seW5ldXhcIiwgXCJNU05CQ1wiLCBcIk1pbGxlbm5pYWxXb2VzXCIsIFwibnl0aW1lc1wiLCBcIkFWb2ljZWZvck1lblwiLCBcIkJyaXR0UGV0dGlib25lXCIsIFwiUHJpc29uUGxhbmV0XCIsIFwicmFtenBhdWxcIiwgIFwiVGhlUmViZWxUVlwiLCBcInJlZGljZXR2XCIsIFwiUmV0dXJuT2ZLaW5nc1wiLCBcIlJpY2hhcmRCU3BlbmNlclwiLCBcIlJvYW1pbmdNaWxcIixcIlRSb2JpbnNvbk5ld0VyYVwiLCBcIlN0eXg2NjZPZmZpY2lhbFwiLFwidmRhcmVcIiwgXCJ3YXNoaW5ndG9ucG9zdFwiKVxuIyBcbiMgY2JpbmQodHdlZXRfaWRzLCBoYW5kbGVycylcbiMgXG4jIHR3ZWV0X2luaXQgPC0gZnJvbUpTT04oaGVyZShcImRhdGFcIiwgXCJ0d1wiLCBcInR3X2FiY19pZHMuanNvblwiKSkgJT4lIFxuIyAgIGRhdGEuZnJhbWUoaGFuZGxlciA9IFwiQUJDXCIpXG4jIGZvciAoamogaW4gc2VxX2Fsb25nKHR3ZWV0X2lkcykpIHtcbiMgICAgdHdlZXRfaW5pdCA8LSBwbHlyOjpyYmluZC5maWxsKHR3ZWV0X2luaXQsIFxuIyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAganNvbmxpdGU6OmZyb21KU09OKFxuIyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBoZXJlKFxuIyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBcImRhdGFcIiwgXCJ0d1wiLCB0d2VldF9pZHNbampdXG4jICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIClcbiMgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICkgJT4lIFxuIyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgZGF0YS5mcmFtZShoYW5kbGVyID0gaGFuZGxlcnNbampdKSlcbiMgICAgY2F0KGpqLCBcIlxcblwiKVxuIyB9XG4jIGhhbmRsZXJfaWRzIDwtIHR3ZWV0X2luaXRcbiMgXG4jIGNvbG5hbWVzKGhhbmRsZXJfaWRzKSA8LSBjKFwidHdlZXRfaWRcIiwgXCJoYW5kbGVyXCIpXG4jIFxuIyBzYXZlKGhhbmRsZXJfaWRzLCBmaWxlID0gaGVyZShcImRhdGFcIiwgXCJ0d1wiLCBcImhhbmRsZXJfaWRzLlJkYXRhXCIpKVxuIyBcbmxvYWQoaGVyZShcImRhdGFcIiwgXCJ0d1wiLCBcImhhbmRsZXJfaWRzLlJkYXRhXCIpKVxuaGFuZGxlcl9pZHMgPC0gaGFuZGxlcl9pZHMgJT4lXG4gIGZpbHRlcighZHVwbGljYXRlZCh0d2VldF9pZCkpXG50YWJsZShoYW5kbGVyX2lkcyRoYW5kbGVyKVxuYGBgIn0= -->
+<pre class="r"><code># 
+# tweet_ids &lt;- dir(here(&quot;data&quot;, &quot;tw&quot;))[-1:-2]
+# 
+# 
+# handlers &lt;- c(&quot;RealAlexJones&quot;, &quot;AnnCoulter&quot;, &quot;ArktosMedia&quot;, &quot;MsBlaireWhite&quot;, &quot;navyhato&quot;, &quot;BreitbartNews&quot;, &quot;Cernovich&quot;, &quot;CNN&quot;, &quot;NewRightAmerica&quot;, &quot;scrowder&quot;, &quot;IdentityEvropa&quot;, &quot;FoxNews&quot;, &quot;Gavin_McInnes&quot; , &quot;infowars&quot;, &quot;Lauren_Southern&quot;,  &quot;StefanMolyneux&quot;, &quot;MSNBC&quot;, &quot;MillennialWoes&quot;, &quot;nytimes&quot;, &quot;AVoiceforMen&quot;, &quot;BrittPettibone&quot;, &quot;PrisonPlanet&quot;, &quot;ramzpaul&quot;,  &quot;TheRebelTV&quot;, &quot;redicetv&quot;, &quot;ReturnOfKings&quot;, &quot;RichardBSpencer&quot;, &quot;RoamingMil&quot;,&quot;TRobinsonNewEra&quot;, &quot;Styx666Official&quot;,&quot;vdare&quot;, &quot;washingtonpost&quot;)
+# 
+# cbind(tweet_ids, handlers)
+# 
+# tweet_init &lt;- fromJSON(here(&quot;data&quot;, &quot;tw&quot;, &quot;tw_abc_ids.json&quot;)) %&gt;% 
+#   data.frame(handler = &quot;ABC&quot;)
 # for (jj in seq_along(tweet_ids)) {
-#   tweet_ids_list[[jj]] &lt;- jsonlite::fromJSON(here(&quot;data&quot;, &quot;tw&quot;, tweet_ids[jj]))
+#    tweet_init &lt;- plyr::rbind.fill(tweet_init, 
+#                                   jsonlite::fromJSON(
+#                                     here(
+#                                     &quot;data&quot;, &quot;tw&quot;, tweet_ids[jj]
+#                                     )
+#                                   ) %&gt;% 
+#                                   data.frame(handler = handlers[jj]))
+#    cat(jj, &quot;\n&quot;)
 # }
-handlers &lt;- c(&quot;RealAlexJones&quot;, &quot;AnnCoulter&quot;, &quot;MsBlaireWhite&quot;, &quot;navyhato&quot;, &quot;BreitbartNews&quot;, &quot;Cernovich&quot;, &quot;CNN&quot;, &quot;FoxNews&quot;, &quot;infowars&quot;, &quot;Lauren_Southern&quot;, &quot;MSNBC&quot;, &quot;PrisonPlanet&quot;, &quot;TheRebelTV&quot;, &quot;RoamingMil&quot;,&quot;TRobinsonNewEra&quot;, &quot;washingtonpost&quot;)
-tweet_init &lt;- fromJSON(here(&quot;data&quot;, &quot;tw&quot;, &quot;tw_abc_ids.json&quot;)) %&gt;% 
-  data.frame(handler = &quot;ABC&quot;)
-for (jj in seq_along(tweet_ids)) {
-   tweet_init &lt;- plyr::rbind.fill(tweet_init, 
-                                  jsonlite::fromJSON(
-                                    here(
-                                    &quot;data&quot;, &quot;tw&quot;, tweet_ids[jj]
-                                    )
-                                  ) %&gt;% 
-                                  data.frame(handler = handlers[jj]))
-   cat(jj, &quot;\n&quot;)
-}</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiMSBcbjIgXG4zIFxuNCBcbjUgXG42IFxuNyBcbjggXG45IFxuMTAgXG4xMSBcbjEyIFxuMTMgXG4xNCBcbjE1IFxuMTYgXG4xNyBcbiJ9 -->
-<pre><code>1 
-2 
-3 
-4 
-5 
-6 
-7 
-8 
-9 
-10 
-11 
-12 
-13 
-14 
-15 
-16 
-17 </code></pre>
-<!-- rnb-output-end -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuaGFuZGxlcl9pZHMgPC0gdHdlZXRfaW5pdFxuY29sbmFtZXMoaGFuZGxlcl9pZHMpIDwtIGMoXCJ0d2VldF9pZFwiLCBcImhhbmRsZXJcIilcbnRhYmxlKGhhbmRsZXJfaWRzJGhhbmRsZXIpXG5gYGAifQ== -->
-<pre class="r"><code>handler_ids &lt;- tweet_init
-colnames(handler_ids) &lt;- c(&quot;tweet_id&quot;, &quot;handler&quot;)
+# handler_ids &lt;- tweet_init
+# 
+# colnames(handler_ids) &lt;- c(&quot;tweet_id&quot;, &quot;handler&quot;)
+# 
+# save(handler_ids, file = here(&quot;data&quot;, &quot;tw&quot;, &quot;handler_ids.Rdata&quot;))
+# 
+load(here(&quot;data&quot;, &quot;tw&quot;, &quot;handler_ids.Rdata&quot;))
+handler_ids &lt;- handler_ids %&gt;%
+  filter(!duplicated(tweet_id))
 table(handler_ids$handler)</code></pre>
 <!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiXG4gICAgICAgICAgICBBQkMgICBSZWFsQWxleEpvbmVzICAgICAgQW5uQ291bHRlciAgIE1zQmxhaXJlV2hpdGUgICAgICAgIG5hdnloYXRvIFxuICAgICAgICAgIDM0NzQyICAgICAgICAgICAgNzA0NiAgICAgICAgICAgIDM2OTYgICAgICAgICAgICAxMDI1ICAgICAgICAgICAgMTQ3NCBcbiAgQnJlaXRiYXJ0TmV3cyAgICAgICBDZXJub3ZpY2ggICAgICAgICAgICAgQ05OICAgICAgICAgRm94TmV3cyAgICAgICAgaW5mb3dhcnMgXG4gICAgICAgICAgMTM4NzkgICAgICAgICAgIDE3NjkzICAgICAgICAgICA0NjcyNyAgICAgICAgICAgNjIxMzQgICAgICAgICAgICA3Mjg2IFxuTGF1cmVuX1NvdXRoZXJuICAgICAgICAgICBNU05CQyAgICBQcmlzb25QbGFuZXQgICAgICBUaGVSZWJlbFRWICAgICAgUm9hbWluZ01pbCBcbiAgICAgICAgICAgMTc5MiAgICAgICAgICAgMTA5MjIgICAgICAgICAgIDM3MDQ2ICAgICAgICAgICAxMjc1NiAgICAgICAgICAgMTIzNzQgXG5UUm9iaW5zb25OZXdFcmEgIHdhc2hpbmd0b25wb3N0IFxuICAgICAgICAgICA0MTAyICAgICAgICAgICAxMTk5MiBcbiJ9 -->
+<!-- rnb-output-begin eyJkYXRhIjoiXG4gICAgICAgICAgICBBQkMgICBSZWFsQWxleEpvbmVzICAgICAgQW5uQ291bHRlciBcbiAgICAgICAgICAzNDc0MiAgICAgICAgICAgIDcwNDYgICAgICAgICAgICAzNjk2IFxuICAgIEFya3Rvc01lZGlhICAgTXNCbGFpcmVXaGl0ZSAgICAgICAgbmF2eWhhdG8gXG4gICAgICAgICAgICAxNDAgICAgICAgICAgICAxMDI1ICAgICAgICAgICAgMTQ3NCBcbiAgQnJlaXRiYXJ0TmV3cyAgICAgICBDZXJub3ZpY2ggICAgICAgICAgICAgQ05OIFxuICAgICAgICAgIDEzODc5ICAgICAgICAgICAxNzY5MyAgICAgICAgICAgNDY3MjcgXG5OZXdSaWdodEFtZXJpY2EgICAgICAgIHNjcm93ZGVyICBJZGVudGl0eUV2cm9wYSBcbiAgICAgICAgICAgMTI5MCAgICAgICAgICAgIDc5MjQgICAgICAgICAgICAgNTQ3IFxuICAgICAgICBGb3hOZXdzICAgR2F2aW5fTWNJbm5lcyAgICAgICAgaW5mb3dhcnMgXG4gICAgICAgICAgNjIxMzQgICAgICAgICAgICAzNjgxICAgICAgICAgICAgNzI4NSBcbkxhdXJlbl9Tb3V0aGVybiAgU3RlZmFuTW9seW5ldXggICAgICAgICAgIE1TTkJDIFxuICAgICAgICAgICAxNzkyICAgICAgICAgICAgNjgyMiAgICAgICAgICAgMTA5MjIgXG4gTWlsbGVubmlhbFdvZXMgICAgICAgICBueXRpbWVzICAgIEFWb2ljZWZvck1lbiBcbiAgICAgICAgICAgMTg4MSAgICAgICAgICAgMzcwNDYgICAgICAgICAgICAxMzY3IFxuIEJyaXR0UGV0dGlib25lICAgIFByaXNvblBsYW5ldCAgICAgICAgcmFtenBhdWwgXG4gICAgICAgICAgIDE2MzEgICAgICAgICAgIDEyNzU2ICAgICAgICAgICAxMDc2NiBcbiAgICAgVGhlUmViZWxUViAgICAgICAgcmVkaWNldHYgICBSZXR1cm5PZktpbmdzIFxuICAgICAgICAgICA1MTI2ICAgICAgICAgICAgMTc4OCAgICAgICAgICAgIDIzNDIgXG5SaWNoYXJkQlNwZW5jZXIgICAgICBSb2FtaW5nTWlsIFRSb2JpbnNvbk5ld0VyYSBcbiAgICAgICAgICAgMzQ4MCAgICAgICAgICAgIDQxMDIgICAgICAgICAgIDExOTkyIFxuU3R5eDY2Nk9mZmljaWFsICAgICAgICAgICB2ZGFyZSAgd2FzaGluZ3RvbnBvc3QgXG4gICAgICAgICAgIDY3ODEgICAgICAgICAgICA3NzcwICAgICAgICAgICA0NTc5NyBcbiJ9 -->
 <pre><code>
-            ABC   RealAlexJones      AnnCoulter   MsBlaireWhite        navyhato 
-          34742            7046            3696            1025            1474 
-  BreitbartNews       Cernovich             CNN         FoxNews        infowars 
-          13879           17693           46727           62134            7286 
-Lauren_Southern           MSNBC    PrisonPlanet      TheRebelTV      RoamingMil 
-           1792           10922           37046           12756           12374 
-TRobinsonNewEra  washingtonpost 
-           4102           11992 </code></pre>
+            ABC   RealAlexJones      AnnCoulter 
+          34742            7046            3696 
+    ArktosMedia   MsBlaireWhite        navyhato 
+            140            1025            1474 
+  BreitbartNews       Cernovich             CNN 
+          13879           17693           46727 
+NewRightAmerica        scrowder  IdentityEvropa 
+           1290            7924             547 
+        FoxNews   Gavin_McInnes        infowars 
+          62134            3681            7285 
+Lauren_Southern  StefanMolyneux           MSNBC 
+           1792            6822           10922 
+ MillennialWoes         nytimes    AVoiceforMen 
+           1881           37046            1367 
+ BrittPettibone    PrisonPlanet        ramzpaul 
+           1631           12756           10766 
+     TheRebelTV        redicetv   ReturnOfKings 
+           5126            1788            2342 
+RichardBSpencer      RoamingMil TRobinsonNewEra 
+           3480            4102           11992 
+Styx666Official           vdare  washingtonpost 
+           6781            7770           45797 </code></pre>
 <!-- rnb-output-end -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBlbmZyYW1lZF90d2VldHMgPC0gZW5mcmFtZSh0d2VldF9pZHNfbGlzdClcbiMgZmYgPC0gbGlzdCgpXG4jIGZvciAoamogaW4gc2VxX2Fsb25nKGhhbmRsZXJzKSkge1xuIyAgIGZmW1tqal1dIDwtIGNiaW5kKGVuZnJhbWVkX3R3ZWV0cyR2YWx1ZVtbampdXSwgaGFuZGxlcnNbampdKVxuIyB9XG4jIGhhbmRsZXJfaWRzIDwtIHJsaXN0OjpsaXN0LnJiaW5kKGZmKSAlPiUgXG4jICAgIGFzLmRhdGEuZnJhbWUoKVxuIyBoYW5kbGVyX2lkcyAlPiUgXG4jICAgZmlsdGVyKGhhbmRsZXIgPT0gXCJCcmVpdGJhcnROZXdzXCIpXG5gYGAifQ== -->
-<pre class="r"><code># enframed_tweets &lt;- enframe(tweet_ids_list)
-# ff &lt;- list()
-# for (jj in seq_along(handlers)) {
-#   ff[[jj]] &lt;- cbind(enframed_tweets$value[[jj]], handlers[jj])
-# }
-# handler_ids &lt;- rlist::list.rbind(ff) %&gt;% 
-#    as.data.frame()
-# handler_ids %&gt;% 
-#   filter(handler == &quot;BreitbartNews&quot;)</code></pre>
-<!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 <!-- rnb-text-end -->
@@ -305,10 +284,26 @@ TRobinsonNewEra  washingtonpost
 <h1>Rselenium</h1>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGlicmFyeShSU2VsZW5pdW0pXG5yRCA8LSByc0RyaXZlcih2ZXJib3NlID0gRkFMU0UsIHBvcnQgPSA1NTU2TClcbnJlbURyIDwtIHJEJGNsaWVudFxuYGBgIn0= -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGlicmFyeShSU2VsZW5pdW0pXG5wb3J0IDwtIHNhbXBsZSg0MDAwTDo1MDAwTCwgMSlcbnJEIDwtIHJzRHJpdmVyKHZlcmJvc2UgPSBGQUxTRSwgcG9ydCA9IHBvcnQpXG5yRFxuYGBgIn0= -->
 <pre class="r"><code>library(RSelenium)
-rD &lt;- rsDriver(verbose = FALSE, port = 5556L)
-remDr &lt;- rD$client</code></pre>
+port &lt;- sample(4000L:5000L, 1)
+rD &lt;- rsDriver(verbose = FALSE, port = port)
+rD</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiJGNsaWVudFxuICBicm93c2VyTmFtZSAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBpZFxuMSAgICAgIGNocm9tZSBkOTZmZDkwY2NlZmRjMzIzZmRjNDQxOWE5ZjM3NDc1OFxuXG4kc2VydmVyXG5Qcm9jZXNzIEhhbmRsZVxuY29tbWFuZCAgIDogQzpcXFVzZXJzXFxXb3JrcGxhY2VcXEFwcERhdGFcXExvY2FsXFxUZW1wXFxSdG1wSzB3M0gzXFxmaWxlNGNjMjcyNjRhNDcuYmF0IFxuc3lzdGVtIGlkIDogMTU5MzZcbnN0YXRlICAgICA6IHJ1bm5pbmdcbiJ9 -->
+<pre><code>$client
+  browserName                               id
+1      chrome d96fd90ccefdc323fdc4419a9f374758
+
+$server
+Process Handle
+command   : C:\Users\Workplace\AppData\Local\Temp\RtmpK0w3H3\file4cc27264a47.bat 
+system id : 15936
+state     : running</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxucmVtRHIgPC0gckQkY2xpZW50XG4jcmVtRHIkY2xvc2UoKVxuYGBgIn0= -->
+<pre class="r"><code>remDr &lt;- rD$client
+#remDr$close()</code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
@@ -318,26 +313,27 @@ remDr &lt;- rD$client</code></pre>
 <p>first loop</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZ2V0X3JlcGxpZXMgPC0gZnVuY3Rpb24oaHRtbCkge1xuICBcbiAgaWZfbm90bnVsbCA8LSBmdW5jdGlvbih4KSBpZmVsc2UoaWRlbnRpY2FsKHgsIGNoYXJhY3RlcigwKSkgfCBpcy5udWxsKHgpLCBOQSwgeClcbiAgXG4gIGh0bWxfbGlzdCA8LSBodG1sICU+JSBcbiAgICBodG1sX25vZGVzKFwiLnBlcm1hbGluay1kZXNjZW5kYW50LXR3ZWV0ICwgLmpzLWluaXRpYWwtZm9jdXNcIikgIyNzdHJlYW0taXRlbXMtaWRcbiAgXG4gIHN0b3JhZ2UgPC0gZGF0YS5mcmFtZSgpXG4gIFxuICBmb3IoamogaW4gc2VxX2Fsb25nKGh0bWxfbGlzdCkpe1xuICBcbiAgICBuYW1lcyA8LSBodG1sX2xpc3RbampdICU+JVxuICAgICAgaHRtbF9ub2RlcyhcIi5qcy1uYXYgLnUtdGV4dFRydW5jYXRlIGJcIikgJT4lXG4gICAgICBodG1sX3RleHQoKSBcbiAgICBpZihpcy5udWxsKG5hbWVzKSkgbmFtZXMgPC0gTkFcbiAgXG4gICAgdGV4dCA8LSBodG1sX2xpc3RbampdICU+JVxuICAgICAgaHRtbF9ub2RlcyhcIi50d2VldC10ZXh0XCIpICU+JVxuICAgICAgaHRtbF90ZXh0KCkgXG4gICAgaWYoaXMubnVsbCh0ZXh0KSkgdGV4dCA8LSBOQVxuICAgIFxuICAgIGRhdGVzIDwtIGh0bWxfbGlzdFtqal0gJT4lXG4gICAgICBodG1sX25vZGVzKFwiLmpzLXNob3J0LXRpbWVzdGFtcFwiKSAlPiVcbiAgICAgIGh0bWxfdGV4dCgpIFxuICAgIGlmKGlzLm51bGwoZGF0ZXMpKSBkYXRlcyA8LSBOQVxuICBcbiAgICBmYXZvcml0ZXMgPC0gaHRtbF9saXN0W2pqXSAlPiVcbiAgICAgIGh0bWxfbm9kZXMoXCIuanMtYWN0aW9uRmF2b3JpdGUgLlByb2ZpbGVUd2VldC1hY3Rpb25Db3VudEZvclByZXNlbnRhdGlvblwiKSAlPiVcbiAgICAgIGh0bWxfdGV4dCgpICU+JVxuICAgICAgYXMubnVtZXJpYygpICU+JVxuICAgICAgaWZlbHNlKGlzLm5hKC4pLCAwLCAuKVxuICAgIGlmKGlzLm51bGwoZmF2b3JpdGVzKSkgZmF2b3JpdGVzIDwtIE5BXG4gICAgICBodG1sX25vZGVzKFwiLmpzLWFjdGlvblJldHdlZXQgLlByb2ZpbGVUd2VldC1hY3Rpb25Db3VudEZvclByZXNlbnRhdGlvblwiKSAlPiVcbiAgICAgIGh0bWxfdGV4dCgpICU+JVxuICAgICAgYXMubnVtZXJpYygpICU+JVxuICAgIGlmKGlzLm51bGwocmV0d2VldHMpKSByZXR3ZWV0cyA8LSBOQVxuICAgIFxuICAgIGNvbW1lbnRzIDwtICBodG1sX2xpc3RbampdICU+JVxuICAgICAgaHRtbF9ub2RlcyhcIi5qcy1hY3Rpb25SZXBseSAuUHJvZmlsZVR3ZWV0LWFjdGlvbkNvdW50Rm9yUHJlc2VudGF0aW9uXCIpICU+JVxuICAgICAgaHRtbF90ZXh0KCkgJT4lXG4gICAgICBpZmVsc2UoaXMubmEoLiksIDAsIC4pXG4gICAgaWYoaXMubnVsbChjb21tZW50cykpIGNvbW1lbnRzIDwtIE5BXG4gIFxuICAgIHJlcGxpZXMgPC0gZGF0YS5mcmFtZShcbiAgICAgIG5hbWVzLCBkYXRlcywgdGV4dCwgXG4gICAgICBmYXZvcml0ZXMsIHJldHdlZXRzLCBjb21tZW50cywgXG4gICAgICBzdHJpbmdzQXNGYWN0b3JzID0gRlxuICAgIClcbiAgICBcbiAgICBzdG9yYWdlIDwtIHJiaW5kKHN0b3JhZ2UsIHJlcGxpZXMpXG4gIH1cbmBgYCJ9 -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZ2V0X3JlcGxpZXMgPC0gZnVuY3Rpb24oaHRtbCkge1xuICBcbiAgaHRtbF9saXN0IDwtIGh0bWwgJT4lXG4gICAgIyMjIGRlYnVnXG4gICAgI3JlbURyJGdldFBhZ2VTb3VyY2UoKVtbMV1dICU+JSByZWFkX2h0bWwoKSAlPiVcbiAgICAjaHRtbF9ub2RlcyhcIiNzdHJlYW0taXRlbXMtaWRcIikgJT4lXG4gICAgaHRtbF9ub2RlcyhcIi5wZXJtYWxpbmstZGVzY2VuZGFudC10d2VldCwgLmpzLWluaXRpYWwtZm9jdXNcIikgXG4gIFxuICByZXBseV9saXN0IDwtIGxpc3QoKVxuICBcbiAgZm9yKGpqIGluIHNlcV9hbG9uZyhodG1sX2xpc3QpKXtcbiAgXG4gICAgbmFtZXMgPC0gaHRtbF9saXN0W2pqXSAlPiVcbiAgICAgIGh0bWxfbm9kZXMoXCIuanMtbmF2IC51LXRleHRUcnVuY2F0ZSBiXCIpICU+JVxuICAgICAgaHRtbF90ZXh0KClcbiAgICBpZihpcy5udWxsKG5hbWVzKSkgbmFtZXMgPC0gTkFcbiAgXG4gICAgdGV4dCA8LSBodG1sX2xpc3RbampdICU+JVxuICAgICAgaHRtbF9ub2RlcyhcIi50d2VldC10ZXh0XCIpICU+JVxuICAgICAgaHRtbF90ZXh0KClcbiAgICBpZihpcy5udWxsKHRleHQpKSB0ZXh0IDwtIE5BXG4gICAgXG4gICAgZGF0ZXMgPC0gaHRtbF9saXN0W2pqXSAlPiVcbiAgICAgIGh0bWxfbm9kZXMoXCIuanMtc2hvcnQtdGltZXN0YW1wXCIpICU+JVxuICAgICAgaHRtbF90ZXh0KCkgXG4gICAgaWYoaXMubnVsbChkYXRlcykpIGRhdGVzIDwtIE5BXG4gIFxuICAgIGZhdm9yaXRlcyA8LSBodG1sX2xpc3RbampdICU+JVxuICAgICAgaHRtbF9ub2RlcyhcIi5qcy1hY3Rpb25GYXZvcml0ZSAuUHJvZmlsZVR3ZWV0LWFjdGlvbkNvdW50Rm9yUHJlc2VudGF0aW9uXCIpICU+JVxuICAgICAgaHRtbF90ZXh0KCkgJT4lXG4gICAgICBhcy5udW1lcmljKCkgXG4gICAgaWYoaXMubnVsbChmYXZvcml0ZXMpKSBmYXZvcml0ZXMgPC0gTkFcbiAgICAgIFxuICAgIHJldHdlZXRzIDwtIGh0bWxfbGlzdFtqal0gJT4lXG4gICAgICBodG1sX25vZGVzKFwiLmpzLWFjdGlvblJldHdlZXQgLlByb2ZpbGVUd2VldC1hY3Rpb25Db3VudEZvclByZXNlbnRhdGlvblwiKSAlPiVcbiAgICAgIGh0bWxfdGV4dCgpICU+JVxuICAgICAgYXMubnVtZXJpYygpIFxuICAgIGlmKGlzLm51bGwocmV0d2VldHMpKSByZXR3ZWV0cyA8LSBOQVxuICAgIFxuICAgIGNvbW1lbnRzIDwtICBodG1sX2xpc3RbampdICU+JVxuICAgICAgaHRtbF9ub2RlcyhcIi5qcy1hY3Rpb25SZXBseSAuUHJvZmlsZVR3ZWV0LWFjdGlvbkNvdW50Rm9yUHJlc2VudGF0aW9uXCIpICU+JVxuICAgICAgaHRtbF90ZXh0KCkgJT4lXG4gICAgICBhcy5udW1lcmljKCkgXG4gICAgaWYoaXMubnVsbChjb21tZW50cykpIGNvbW1lbnRzIDwtIE5BXG4gIFxuICAgICMgcmVwbHlfbGlzdFtbampdXSA8LSBkYXRhLmZyYW1lKFxuICAgICMgICBuYW1lcyA9IG5hbWVzWzFdLFxuICAgICMgICBkYXRlcyA9IGRhdGVzWzFdLFxuICAgICMgICB0ZXh0ID0gdGV4dFsxXSxcbiAgICAjICAgZmF2b3JpdGVzID0gZmF2b3JpdGVzWzFdLFxuICAgICMgICByZXR3ZWV0cyA9IHJldHdlZXRzWzFdLFxuICAgICMgICBjb21tZW50cyA9IGNvbW1lbnRzWzFdLFxuICAgICMgICBzdHJpbmdzQXNGYWN0b3JzID0gRlxuICAgICMgKVxuICAgIHJlcGx5X2xpc3RbW2pqXV0gPC0gZGF0YS5mcmFtZShcbiAgICAgIG5hbWVzLCBkYXRlcywgdGV4dCxcbiAgICAgIGZhdm9yaXRlcywgcmV0d2VldHMsIGNvbW1lbnRzLFxuICAgICAgc3RyaW5nc0FzRmFjdG9ycyA9IEZcbiAgICApXG4gIH1cbiAgXG4gIHJlcGxpZXMgPC0gcmVwbHlfbGlzdCAlPiVcbiAgICBiaW5kX3Jvd3MoKSAjIGRvLmNhbGwoXCJyYmluZFwiLCByZXBseSlcbiAgXG4gIHJldHVybihyZXBsaWVzKVxufVxuYGBgIn0= -->
 <pre class="r"><code>get_replies &lt;- function(html) {
   
-  if_notnull &lt;- function(x) ifelse(identical(x, character(0)) | is.null(x), NA, x)
+  html_list &lt;- html %&gt;%
+    ### debug
+    #remDr$getPageSource()[[1]] %&gt;% read_html() %&gt;%
+    #html_nodes(&quot;#stream-items-id&quot;) %&gt;%
+    html_nodes(&quot;.permalink-descendant-tweet, .js-initial-focus&quot;) 
   
-  html_list &lt;- html %&gt;% 
-    html_nodes(&quot;.permalink-descendant-tweet , .js-initial-focus&quot;) ##stream-items-id
-  
-  storage &lt;- data.frame()
+  reply_list &lt;- list()
   
   for(jj in seq_along(html_list)){
   
     names &lt;- html_list[jj] %&gt;%
       html_nodes(&quot;.js-nav .u-textTruncate b&quot;) %&gt;%
-      html_text() 
+      html_text()
     if(is.null(names)) names &lt;- NA
   
     text &lt;- html_list[jj] %&gt;%
       html_nodes(&quot;.tweet-text&quot;) %&gt;%
-      html_text() 
+      html_text()
     if(is.null(text)) text &lt;- NA
     
     dates &lt;- html_list[jj] %&gt;%
@@ -348,28 +344,42 @@ remDr &lt;- rD$client</code></pre>
     favorites &lt;- html_list[jj] %&gt;%
       html_nodes(&quot;.js-actionFavorite .ProfileTweet-actionCountForPresentation&quot;) %&gt;%
       html_text() %&gt;%
-      as.numeric() %&gt;%
-      ifelse(is.na(.), 0, .)
+      as.numeric() 
     if(is.null(favorites)) favorites &lt;- NA
+      
+    retweets &lt;- html_list[jj] %&gt;%
       html_nodes(&quot;.js-actionRetweet .ProfileTweet-actionCountForPresentation&quot;) %&gt;%
       html_text() %&gt;%
-      as.numeric() %&gt;%
+      as.numeric() 
     if(is.null(retweets)) retweets &lt;- NA
     
     comments &lt;-  html_list[jj] %&gt;%
       html_nodes(&quot;.js-actionReply .ProfileTweet-actionCountForPresentation&quot;) %&gt;%
       html_text() %&gt;%
-      ifelse(is.na(.), 0, .)
+      as.numeric() 
     if(is.null(comments)) comments &lt;- NA
   
-    replies &lt;- data.frame(
-      names, dates, text, 
-      favorites, retweets, comments, 
+    # reply_list[[jj]] &lt;- data.frame(
+    #   names = names[1],
+    #   dates = dates[1],
+    #   text = text[1],
+    #   favorites = favorites[1],
+    #   retweets = retweets[1],
+    #   comments = comments[1],
+    #   stringsAsFactors = F
+    # )
+    reply_list[[jj]] &lt;- data.frame(
+      names, dates, text,
+      favorites, retweets, comments,
       stringsAsFactors = F
     )
-    
-    storage &lt;- rbind(storage, replies)
-  }</code></pre>
+  }
+  
+  replies &lt;- reply_list %&gt;%
+    bind_rows() # do.call(&quot;rbind&quot;, reply)
+  
+  return(replies)
+}</code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
@@ -382,174 +392,161 @@ remDr &lt;- rD$client</code></pre>
 </ul>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubnR3X2FmdGVyXG5cbmBgYCJ9 -->
-<pre class="r"><code>ntw_after
-</code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGlicmFyeShydmVzdClcbmdldF9yZXBsaWVzX3Njcm9sbCA8LSBmdW5jdGlvbihoYW5kbGUsIGlkcykge1xuICAjIyMgc2Nyb2xsZXIgc2NyaXB0XG4gIGNzc19lbGVtZW50IDwtIFwiI3Blcm1hbGluay1vdmVybGF5LWRpYWxvZyA+IGRpdi5QZXJtYWxpbmtPdmVybGF5LWNvbnRlbnQgPiBkaXYgPiBkaXYgPiBkaXYucGVybWFsaW5rLWZvb3RlclwiICMgdGFyZ2V0IGVsZW1lbnRcbiAgc2NyaXB0IDwtIFwiYXJndW1lbnRzWzBdLnNjcm9sbEludG9WaWV3KHRydWUpO1wiICMgc2Nyb2xsZXIgZnVuY3Rpb25cbiAgXG4gIG50d2VldHMgPC0gZnVuY3Rpb24oKXtcbiAgICBudHdlZXRzIDwtIHJlbURyJGdldFBhZ2VTb3VyY2UoKVtbMV1dICU+JSBcbiAgICAgIHJlYWRfaHRtbCgpICU+JVxuICAgICAgaHRtbF9ub2RlcyhcIi5qcy1uYXYgLnUtdGV4dFRydW5jYXRlIGJcIikgJT4lXG4gICAgICBodG1sX3RleHQoKSAlPiUgXG4gICAgICBsZW5ndGgoKVxuICB9XG4gIFxuICAjIyMgcHJlcFxuICB1IDwtIHBhc3RlMChcImh0dHBzOi8vdHdpdHRlci5jb20vXCIsIGhhbmRsZSwgXCIvc3RhdHVzL1wiLCBpZHMsIFwiP2xhbmc9ZW5cIilcbiAgXG4gIHJlcGxpZXNfcGFnZV9saXN0IDwtIGxpc3QoKVxuICBcbiAgZm9yKGpqIGluIHNlcV9hbG9uZyh1KSkge1xuICAgXG4gICAgIyBjYWxsIHR3aXR0ZXIgdXJsXG4gICAgcmVtRHIkbmF2aWdhdGUodVtqal0pXG4gICAgXG4gICAgIyMjIHNjcm9sbGVyXG4gICAgayA8LSA1MFxuICAgIG50d19iZWZvcmUgPC0gbnR3ZWV0cygpXG4gICAgXG4gICAgd2hpbGUoayA+IDApe1xuICAgICAgdHJ5Q2F0Y2goe1xuICAgICAgICAjIHNjcm9sbFxuICAgICAgICB3ZWJFbGVtIDwtIHJlbURyJGZpbmRFbGVtZW50KFwiY3NzXCIsIGNzc19lbGVtZW50KVxuICAgICAgICByZW1EciRleGVjdXRlU2NyaXB0KHNjcmlwdCwgYXJncyA9IGxpc3Qod2ViRWxlbSkpXG4gICAgICAgIFN5cy5zbGVlcCgxKVxuICAgICAgICBcbiAgICAgICAgbnR3X2FmdGVyIDwtIG50d2VldHMoKVxuICAgICAgICBpZihudHdfYmVmb3JlID09IG50d19hZnRlcikge1xuICAgICAgICAgIGsgPC0gMFxuICAgICAgICAgIGNhdChncmVlbihcIkRvbmUgc2Nyb2xsaW5nISBOZXh0IHR3ZWV0OiBcXG5cIikpXG4gICAgICAgIH0gZWxzZSB7XG4gICAgICAgICAgayA8LSBrIC0gMVxuICAgICAgICAgIG50d19iZWZvcmUgPC0gbnR3X2FmdGVyXG4gICAgICAgICAgIGNhdChncmVlbihrKSAlKyUgYmx1ZShcIiBzY3JvbGxzIHJlbWFpbiAuLi5cXG5cIikpXG4gICAgICAgIH1cbiAgICAgIH0sIGVycm9yID0gZnVuY3Rpb24oZSl7XG4gICAgICAgIGsgPC0gMFxuICAgICAgfSlcbiAgICB9XG4gICAgdHJ5Q2F0Y2goe1xuICAgICAgcmVtRHIkZ2V0UGFnZVNvdXJjZSgpW1sxXV0gJT4lIFxuICAgICAgICB4bWwyOjpyZWFkX2h0bWwoKSAlPiVcbiAgICAgICAgZ2V0X3JlcGxpZXMoKSAtPiByZXBsaWVzX3BhZ2VfbGlzdFtbampdXSBcbiAgICB9LCBlcnJvciA9IGZ1bmN0aW9uKGUpe1xuICAgICAgcmVwbGllc19wYWdlX2xpc3RbW2pqXV0gPC0gTlVMTFxuICAgICAgY2F0KFwic29ycnkgbm90IGZvdW5kLlwiKVxuICAgIH0pXG4gIH1cbiAgXG4gIHJlcGxpZXNfYWxsIDwtIHJlcGxpZXNfcGFnZV9saXN0ICU+JSBcbiAgICBiaW5kX3Jvd3MoKSAlPiVcbiAgICBmaWx0ZXIoIWR1cGxpY2F0ZWQodGV4dCkpICU+JVxuICAgIGZpbHRlcighaXMubmEodGV4dCkpXG4gIGlmKGlzLmRhdGEuZnJhbWUocmVwbGllc19hbGwpKSByZXBsaWVzX2FsbCRoYW5kbGUgPC0gaGFuZGxlXG4gIHJldHVybihyZXBsaWVzX2FsbClcbn1cbmBgYCJ9 -->
+<pre class="r"><code>library(rvest)
+get_replies_scroll &lt;- function(handle, ids) {
+  ### scroller script
+  css_element &lt;- &quot;#permalink-overlay-dialog &gt; div.PermalinkOverlay-content &gt; div &gt; div &gt; div.permalink-footer&quot; # target element
+  script &lt;- &quot;arguments[0].scrollIntoView(true);&quot; # scroller function
+  
+  ntweets &lt;- function(){
+    ntweets &lt;- remDr$getPageSource()[[1]] %&gt;% 
+      read_html() %&gt;%
+      html_nodes(&quot;.js-nav .u-textTruncate b&quot;) %&gt;%
+      html_text() %&gt;% 
+      length()
+  }
+  
+  ### prep
+  u &lt;- paste0(&quot;https://twitter.com/&quot;, handle, &quot;/status/&quot;, ids, &quot;?lang=en&quot;)
+  
+  replies_page_list &lt;- list()
+  
+  for(jj in seq_along(u)) {
+   
+    # call twitter url
+    remDr$navigate(u[jj])
+    
+    ### scroller
+    k &lt;- 50
+    ntw_before &lt;- ntweets()
+    
+    while(k &gt; 0){
+      tryCatch({
+        # scroll
+        webElem &lt;- remDr$findElement(&quot;css&quot;, css_element)
+        remDr$executeScript(script, args = list(webElem))
+        Sys.sleep(1)
+        
+        ntw_after &lt;- ntweets()
+        if(ntw_before == ntw_after) {
+          k &lt;- 0
+          cat(green(&quot;Done scrolling! Next tweet: \n&quot;))
+        } else {
+          k &lt;- k - 1
+          ntw_before &lt;- ntw_after
+           cat(green(k) %+% blue(&quot; scrolls remain ...\n&quot;))
+        }
+      }, error = function(e){
+        k &lt;- 0
+      })
+    }
+    tryCatch({
+      remDr$getPageSource()[[1]] %&gt;% 
+        xml2::read_html() %&gt;%
+        get_replies() -&gt; replies_page_list[[jj]] 
+    }, error = function(e){
+      replies_page_list[[jj]] &lt;- NULL
+      cat(&quot;sorry not found.&quot;)
+    })
+  }
+  
+  replies_all &lt;- replies_page_list %&gt;% 
+    bind_rows() %&gt;%
+    filter(!duplicated(text)) %&gt;%
+    filter(!is.na(text))
+  if(is.data.frame(replies_all)) replies_all$handle &lt;- handle
+  return(replies_all)
+}</code></pre>
 <!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiWzFdIDM2XG4ifQ== -->
-<pre><code>[1] 36</code></pre>
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxub3B0aW9ucyhzY2lwZW4gPSA5OTkpXG5kYXQgPC0gaGFuZGxlcl9pZHNcbmhhbmRsZSA8LSBkYXQkaGFuZGxlcls4XSAlPiUgYXMuY2hhcmFjdGVyKClcbmlkcyA8LSBkYXQkdHdlZXRfaWRbOF0gJT4lIGFzLmNoYXJhY3RlcigpXG5nZXRfcmVwbGllc19zY3JvbGwoaGFuZGxlLCBpZHMpXG5gYGAifQ== -->
+<pre class="r"><code>options(scipen = 999)
+dat &lt;- handler_ids
+handle &lt;- dat$handler[8] %&gt;% as.character()
+ids &lt;- dat$tweet_id[8] %&gt;% as.character()
+get_replies_scroll(handle, ids)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiXHUwMDFiWzMybTQ5XHUwMDFiWzM5bVx1MDAxYlszNG0gc2Nyb2xscyByZW1haW4gLi4uXG5cdTAwMWJbMzltXHUwMDFiWzMybURvbmUgc2Nyb2xsaW5nISBOZXh0IHR3ZWV0OiBcblx1MDAxYlszOW1cbiJ9 -->
+<pre><code>[32m49[39m[34m scrolls remain ...
+[39m[32mDone scrolling! Next tweet: 
+[39m</code></pre>
 <!-- rnb-output-end -->
+<!-- rnb-frame-begin eyJtZXRhZGF0YSI6eyJjbGFzc2VzIjpbImRhdGEuZnJhbWUiXSwibmNvbCI6NywibnJvdyI6MTN9LCJyZGYiOiJINHNJQUFBQUFBQUFCdVZXelc0Y1JSQ2UyRTZNTjNKQTRnVXFzaUFjTm1PdkxZamlBOG5HUDhGSW00RFhJb0ZiYlUvTlR1T1o3cUc3WjhjTEJ5ekVDWWtINElaNEZCNkZKOGdUQktwbnBvMjlCQTRJeElIVjduWjFWWGZWVjMvZGZiei9mTHYzdkJkRjBWSzB2TElVTFMwenlXTVVYWXRXb2pVL25rWFI4cHRNclBMdkRmNnRkNExsNGFPOWpyeHBLNU9TS2RDNW5ZNTE2MEJaVEdjNDBrYlAwSFhjM3Vqa3NjNlRTVjRWSFdkTkNEazF1aXB0V0pManhLRFRpZ0xucGlHeUpLMmxmTkN4Ymt3bmFOemtsYk5iWTEzUVBwVzVOampKS2FoMUdhVkttNFRNWDY1YjMwTmp0Um9ha1pFWkxMaDhjM0FmUmppSDdhM0J2ZjhGSzdnZm5YdlJ0M3RHT2lrc1dHRXFKNVg4a21DTVZTSmh5Q0dVZU1kQ1ZoV293TWhwNWl3WUVoeHd3SXd3QVozQ1I0WnNEQ2VtS2txWVNTdGRESmx6NWU3bUprNkVpbXU3dWYzRjRRNk9Ebi8rc1pRaWRyVjBqa3dzZExFNWtyTjVlbWcrbm4zV3dmeDBhS0d5RmViQVpRaFBxTGJnakNUKzExQldEcDRjUEI2ZUhIMXlBTXFMYUVZS0pwUnFRNTM5aG1NSU9jM0pGU2R1ZDg1K1AzalBZOTdlZ2pyVElMQ3l2UEQrNW1BQU5iR1dEZXYzV09qN0ZkMjZoait1bEpMd3kva1BYdmJXWUt1UmJoeU5qOFp3ZkVWcU1KRUM4N2kzMFpodnJVTnBkS0VkQlNudnREa1djZWYxZDA4cloyVkNYdWN6c2h3ZEJRZVYwU1ZCU25VZlpBcW81bjFRNktSV25BNmNFWlNhUXkyWmVFVnlZamhLR2ZpbGpDWStOR2JlcWVoN1lhMnJQR2wxS1EyWTV4em5nQ2pkbHdsd2I0SEZna0Q4c1VDOGJDK1hpanVhNjZQT09Pek1rZ1pTWGFta01RSW9CSldPVFJlU2xYdmdLWWVoMmRyRXhqN29yQ2x2N2FIUE9Db21mTm40OVBLQklWbXRxU3c3cGxYTzZEWGo4TVk1UlVyWFRLQ0RKcFFnZlRuSS9BRjh5TXVoOENXeGNZaW4xTlNRRHVoS1BsR0NqL3Y3Vk1NeFR2M1dCdGk0MUtlb0NKNmh6YVNhT3U4QzQ2bTFPZVVWMnNDWVJNV2hRRy9jdFQ1MHV2QlI1ZnJBZ3NZNUVvWWNjclE1bjJPSHpvZFJKbjNJeWQxcDl6SjFOVzlUWnNnR0pkVFliRVNZYXMxSmtKeUFPQTZnM3ovaEZTUDB3Umh4eko5NllrOHJRZXdYd0JGWHRBSkxiWDRjait5SllmV1ljMU1rODZEbGM1N2xPVmNVTDVzdnByVWtYZWJVOUFkT3VEOWdpbk83V2ZPeHF0b3NOTmx1KzgyeUNEeG16bkRiL0Y1RkVjTkdRa1d1cDFKMEZyOFo3TUlIeDgvZ2JSZ1dmQWU0ZVZ0NEUySlZiWG54WmpXRjhSQjRGQlRhdXFzeEdNUmJ2ZDcyTGh6NEt1WmJCT2pNRnhlZkF6cVhFOHQ2bVJLK3hoSWQ5M283dXgxQVVZbFRyc0M1cm9Mdlh3V1ZHZnE0MU42REJnYUgzMVpscVkzejRSOGRnT0JTYms2ZlBvdzBGMVZqQ0JuVWs4NG91cllVUzgwYSswMnhjQ2R4ci9OKy9tYXlZRFRlSys1ZTUwdXFnM0E3UURqOHZWa21ORzFPdVVTbWZPZjZpOHdmMFEvZmpaclAxeS84LytwUC8vVDQ0RVVVUHEyOWQvNWRlMkc4c0JmL1BYc0I5K0w0TUhxMXZ1aFBIem4vTFhuMVVYWmQ4V2xyTzZ5clY1bmRoS3ZsWXJMaTZDdzh3ZFpTbkdudW93dmhhM3dFMVVUdVlzNzNMWGZ3eGZ4R3h1WEs3Nk9yQ05hTXJ1T0FnaDhJMGRKNUc5RDFSYWdpUnh1Z0JtYVAwV0djR3Q3UHM1Y0xXMVoxMlZ4ZnJEUThQSHVOdVAxZFZuVE5YQkpHQzhMWCtiSmxDOGxka1ZYcTlPNjloYVhySGIxK2lWNXRvU3o5dWhEYkZSS1pEZ0VoTlpVcVBCaXZrekU2dkNtdjgrT1Y4dkRBNUJBMUVZcEx3MTBjWEdldWpaMTJHTmIxaE00RHB3bEc5UEkzZGtGZXpKY0xBQUE9In0= -->
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["names"],"name":[1],"type":["chr"],"align":["left"]},{"label":["dates"],"name":[2],"type":["chr"],"align":["left"]},{"label":["text"],"name":[3],"type":["chr"],"align":["left"]},{"label":["favorites"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["retweets"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["comments"],"name":[6],"type":["dbl"],"align":["right"]},{"label":["handle"],"name":[7],"type":["chr"],"align":["left"]}],"data":[{"1":"ABC","2":"19 May 2017","3":"Critics scrutinize Saudi Arabia's human rights record ahead of Pres. Trump visit. http://abcn.ws/2qF3aMF pic.twitter.com/MivyfFrQvZ","4":"21","5":"12","6":"15","7":"ABC"},{"1":"surfermatt3","2":"19 May 2017","3":"As usual ABC News tries to put NEGATIVE news even before Trump even reached Saudi Arabia!","4":"NA","5":"NA","6":"NA","7":"ABC"},{"1":"EnsafvaMorovat","2":"19 May 2017","3":"16 of 20 who caused 9/11 were #saudis , 20 of 20 were #Sunni ’s , %100 of #ISIS R #Sunni ’s radical.\\n#SaudiArabia promote radical #Islam.","4":"NA","5":"NA","6":"NA","7":"ABC"},{"1":"MTGoldblum","2":"19 May 2017","3":"Outside of Western Europe few, if any, nations have positive human rights record. If we scrutinized every nation, we would have no allies.","4":"NA","5":"NA","6":"NA","7":"ABC"},{"1":"ccigroups","2":"19 May 2017","3":"Did the same critics scrutinize the Clinton's when their foundation accepted millions from the Saudis?","4":"NA","5":"NA","6":"NA","7":"ABC"},{"1":"labratones","2":"19 May 2017","3":"Did @ABC and @abcnews brain trusts only notice this now that Islam is evil? Just more #FakeNews on their part.","4":"NA","5":"NA","6":"NA","7":"ABC"},{"1":"reeseissel1","2":"19 May 2017","3":"Dew Rag is from Spokane Washington and works for Securitas not Saudi","4":"NA","5":"NA","6":"NA","7":"ABC"},{"1":"gbartb","2":"19 May 2017","3":"But, as the Secretary of State said, let's not let human rights get in the way of a good time ...","4":"NA","5":"NA","6":"1","7":"ABC"},{"1":"gbartb","2":"19 May 2017","3":"The Manly Men Only Concert.  I can see the tee shirts already.","4":"NA","5":"NA","6":"1","7":"ABC"},{"1":"SomeDeplorable","2":"19 May 2017","3":"really, they scrutinize the people who abuse gays/women only when Trump says he will visit them. #demlogic","4":"NA","5":"NA","6":"1","7":"ABC"},{"1":"thefnorder","2":"19 May 2017","3":"1: HRW & Amnesty have been criticising SA since before Clinton 1.0\\n\\n2: Everyone except neolibs & neocons do.\\n\\n3: Trump cucked you.","4":"NA","5":"NA","6":"2","7":"ABC"},{"1":"SomeDeplorable","2":"19 May 2017","3":"Clinton has always been in support of ME countries, Most libs are Neolibs at this point, and no proof of him doing anything","4":"NA","5":"NA","6":"NA","7":"ABC"},{"1":"CarsonArcher1","2":"19 May 2017","3":"Clinton Foundation begs to differ","4":"1","5":"NA","6":"NA","7":"ABC"}],"options":{"columns":{"min":{},"max":[10],"total":[7]},"rows":{"min":[10],"max":[10],"total":[13]},"pages":{}}}
+  </script>
+</div>
+<!-- rnb-frame-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 <p>third loop</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZGF0IDwtIGhhbmRsZXJfaWRzWzEwOjIwLCBdXG4jaGFuZGxlIDwtIGRhdCRoYW5kbGVyWzhdXG4jaWRzIDwtIGRhdCR0d2VldF9pZFs4XVxuc3RhcnQgPC0gMVxuZmluYWwgPC0gbGlzdCgpXG5mb3IgKGpqIGluIHN0YXJ0Om5yb3coZGF0KSkge1xuICByZCA8LSBnZXRfcmVwbGllc19kZihkYXQkaGFuZGxlcltqal0sIGRhdCR0d2VldF9pZFtqal0pXG4gIFxuICBmaWxlX2V4aXN0cyA8LSBmaWxlLmV4aXN0cyhwYXN0ZTAoXCJkYXRhL3JlcGxpZXNfbGlzdFwiLCBcIl9cIiwgc3RhcnQsIFwiX1wiLCBqaiAtIDEsIFwiLlJkYXRhXCIpKVxuICBpc19hdmFpbGFibGUgPC0gKCFpcy5kYXRhLmZyYW1lKHJkKSB8ICFpcy5udWxsKHJkKSlcbiAgXG4gIGlmIChpc19hdmFpbGFibGUpIHtcbiAgICBpZihmaWxlX2V4aXN0cykgZmlsZS5yZW1vdmUocGFzdGUwKFwiZGF0YS9yZXBsaWVzX2xpc3RcIiwgXCJfXCIsIHN0YXJ0LCBcIl9cIiwgamogLSAxLCBcIi5SZGF0YVwiKSlcbiAgICBmaW5hbFtbampdXSA8LSByZFxuICAgIHNhdmUoZmluYWwsIGZpbGUgPSBwYXN0ZTAoXCJkYXRhL3JlcGxpZXNfbGlzdFwiLCBcIl9cIiwgc3RhcnQsIFwiX1wiLCBqaiwgXCIuUmRhdGFcIikpXG4gIH1cbiAgY2F0KGpqLCBcIlxcdFwiKVxufVxuXG5gYGAifQ== -->
-<pre class="r"><code>dat &lt;- handler_ids[10:20, ]
-#handle &lt;- dat$handler[8]
-#ids &lt;- dat$tweet_id[8]
-start &lt;- 1
-final &lt;- list()
-for (jj in start:nrow(dat)) {
-  rd &lt;- get_replies_df(dat$handler[jj], dat$tweet_id[jj])
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZ2V0X3R3ZWV0X3JlcGxpZXMgPC0gZnVuY3Rpb24oZGF0LCBzdGFydCwgZW5kKXtcbiAgXG4gIHNxcCA8LSBzdGFydDplbmRcbiAgZmluYWxfbGlzdCA8LSBsaXN0KClcbiAgXG4gIGZvcihqaiBpbiBzZXFfYWxvbmcoc3FwKSkge1xuICAgIHBhc3RlMChcIlxcbiArKysgVHdlZXQgIzogXCIsIGpqLCBcIiBieTogXCIsIGRhdCRoYW5kbGVyW3NxcFtqal1dLCBcIiArKysgXFxuXCIpICU+JVxuICAgICAgYmdSZWQkYm9sZCgpICU+JVxuICAgICAgY2F0KClcbiAgICBcbiAgICByZCA8LSBnZXRfcmVwbGllc19zY3JvbGwoXG4gICAgICBoYW5kbGUgPSBkYXQkaGFuZGxlcltzcXBbampdXSwgXG4gICAgICBpZHMgPSBkYXQkdHdlZXRfaWRbc3FwW2pqXV1cbiAgICApIFxuICAgIFxuICAgIGZpbGVfZXhpc3RzIDwtIGZpbGUuZXhpc3RzKFxuICAgICAgcGFzdGUwKFwiZGF0YS9maW5hbF9saXN0XCIsIFwiX1wiLCBzdGFydCwgXCJfXCIsIHNxcFtqal0gLSAxLCBcIi5SZGF0YVwiKSlcbiAgICBpc19hdmFpbGFibGUgPC0gKGlzLmRhdGEuZnJhbWUocmQpICYgIWlzLm51bGwocmQpKVxuICAgIFxuICAgIGZpbmFsX2xpc3RbW2pqXV0gPC0gcmRcbiAgICAgIFxuICAgIGlmIChpc19hdmFpbGFibGUpIHtcbiAgICAgIGlmKGZpbGVfZXhpc3RzKXtcbiAgICAgICAgZmlsZS5yZW1vdmUocGFzdGUwKFwiZGF0YS9maW5hbF9saXN0XCIsIFwiX1wiLCBzdGFydCwgXCJfXCIsIHNxcFtqal0gLSAxLCBcIi5SZGF0YVwiKSlcbiAgICAgIH0gXG4gICAgICBcbiAgICAgIHNhdmUoZmluYWxfbGlzdCwgZmlsZSA9IHBhc3RlMChcImRhdGEvZmluYWxfbGlzdFwiLCBcIl9cIiwgc3RhcnQsIFwiX1wiLCBzcXBbampdLCBcIi5SZGF0YVwiKSlcbiAgXG4gICAgfVxuICB9XG59XG5gYGAifQ== -->
+<pre class="r"><code>get_tweet_replies &lt;- function(dat, start, end){
   
-  file_exists &lt;- file.exists(paste0(&quot;data/replies_list&quot;, &quot;_&quot;, start, &quot;_&quot;, jj - 1, &quot;.Rdata&quot;))
-  is_available &lt;- (!is.data.frame(rd) | !is.null(rd))
+  sqp &lt;- start:end
+  final_list &lt;- list()
   
-  if (is_available) {
-    if(file_exists) file.remove(paste0(&quot;data/replies_list&quot;, &quot;_&quot;, start, &quot;_&quot;, jj - 1, &quot;.Rdata&quot;))
-    final[[jj]] &lt;- rd
-    save(final, file = paste0(&quot;data/replies_list&quot;, &quot;_&quot;, start, &quot;_&quot;, jj, &quot;.Rdata&quot;))
+  for(jj in seq_along(sqp)) {
+    paste0(&quot;\n +++ Tweet #: &quot;, jj, &quot; by: &quot;, dat$handler[sqp[jj]], &quot; +++ \n&quot;) %&gt;%
+      bgRed$bold() %&gt;%
+      cat()
+    
+    rd &lt;- get_replies_scroll(
+      handle = dat$handler[sqp[jj]], 
+      ids = dat$tweet_id[sqp[jj]]
+    ) 
+    
+    file_exists &lt;- file.exists(
+      paste0(&quot;data/final_list&quot;, &quot;_&quot;, start, &quot;_&quot;, sqp[jj] - 1, &quot;.Rdata&quot;))
+    is_available &lt;- (is.data.frame(rd) &amp; !is.null(rd))
+    
+    final_list[[jj]] &lt;- rd
+      
+    if (is_available) {
+      if(file_exists){
+        file.remove(paste0(&quot;data/final_list&quot;, &quot;_&quot;, start, &quot;_&quot;, sqp[jj] - 1, &quot;.Rdata&quot;))
+      } 
+      
+      save(final_list, file = paste0(&quot;data/final_list&quot;, &quot;_&quot;, start, &quot;_&quot;, sqp[jj], &quot;.Rdata&quot;))
+  
+    }
   }
-  cat(jj, &quot;\t&quot;)
-}
+}</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZmluYWxfbGlzdCA8LSBnZXRfdHdlZXRfcmVwbGllcyhkYXQsIDI0MDAwMSwgMjQwMDAyKVxuXG5gYGAifQ== -->
+<pre class="r"><code>final_list &lt;- get_tweet_replies(dat, 240001, 240002)
 </code></pre>
 <!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiXG4gMCAgc2Nyb2xscyByZW1haW5cbjEgXHRcbiAwICBzY3JvbGxzIHJlbWFpblxuMiBcdFxuIDAgIHNjcm9sbHMgcmVtYWluXG4zIFx0XG4gMCAgc2Nyb2xscyByZW1haW5cbjQgXHRcbiAwICBzY3JvbGxzIHJlbWFpblxuIn0= -->
-<pre><code>
- 0  scrolls remain
-1   
- 0  scrolls remain
-2   
- 0  scrolls remain
-3   
- 0  scrolls remain
-4   
- 0  scrolls remain</code></pre>
+<!-- rnb-output-begin eyJkYXRhIjoiXHUwMDFiWzQxbVx1MDAxYlsxbVxuICsrKyBUd2VldCAjOiAxIGJ5OiBueXRpbWVzICsrKyBcblx1MDAxYlsyMm1cdTAwMWJbNDltXHUwMDFiWzMybTQ5XHUwMDFiWzM5bVx1MDAxYlszNG0gc2Nyb2xscyByZW1haW4gLi4uXG5cdTAwMWJbMzltXHUwMDFiWzMybURvbmUgc2Nyb2xsaW5nISBOZXh0IHR3ZWV0OiBcblx1MDAxYlszOW1cdTAwMWJbNDFtXHUwMDFiWzFtXG4gKysrIFR3ZWV0ICM6IDIgYnk6IG55dGltZXMgKysrIFxuXHUwMDFiWzIybVx1MDAxYls0OW1cdTAwMWJbMzJtNDlcdTAwMWJbMzltXHUwMDFiWzM0bSBzY3JvbGxzIHJlbWFpbiAuLi5cblx1MDAxYlszOW1cdTAwMWJbMzJtNDhcdTAwMWJbMzltXHUwMDFiWzM0bSBzY3JvbGxzIHJlbWFpbiAuLi5cblx1MDAxYlszOW1cdTAwMWJbMzJtNDdcdTAwMWJbMzltXHUwMDFiWzM0bSBzY3JvbGxzIHJlbWFpbiAuLi5cblx1MDAxYlszOW1cdTAwMWJbMzJtRG9uZSBzY3JvbGxpbmchIE5leHQgdHdlZXQ6IFxuXHUwMDFiWzM5bVxuIn0= -->
+<pre><code>[41m[1m
+ +++ Tweet #: 1 by: nytimes +++ 
+[22m[49m[32m49[39m[34m scrolls remain ...
+[39m[32mDone scrolling! Next tweet: 
+[39m[41m[1m
+ +++ Tweet #: 2 by: nytimes +++ 
+[22m[49m[32m49[39m[34m scrolls remain ...
+[39m[32m48[39m[34m scrolls remain ...
+[39m[32m47[39m[34m scrolls remain ...
+[39m[32mDone scrolling! Next tweet: 
+[39m</code></pre>
 <!-- rnb-output-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiTkFzIGludHJvZHVjZWQgYnkgY29lcmNpb25OQXMgaW50cm9kdWNlZCBieSBjb2VyY2lvblxuIn0= -->
-<pre><code>NAs introduced by coercionNAs introduced by coercion</code></pre>
-<!-- rnb-output-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiNSBcdFxuIDAgIHNjcm9sbHMgcmVtYWluXG4ifQ== -->
-<pre><code>5   
- 0  scrolls remain</code></pre>
-<!-- rnb-output-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiTkFzIGludHJvZHVjZWQgYnkgY29lcmNpb25cbiJ9 -->
-<pre><code>NAs introduced by coercion</code></pre>
-<!-- rnb-output-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiNiBcdFxuIDAgIHNjcm9sbHMgcmVtYWluXG43IFx0XG4gMCAgc2Nyb2xscyByZW1haW5cbjggXHRcbiAwICBzY3JvbGxzIHJlbWFpblxuOSBcdFxuIDAgIHNjcm9sbHMgcmVtYWluXG4xMCBcdFxuIDAgIHNjcm9sbHMgcmVtYWluXG4ifQ== -->
-<pre><code>6   
- 0  scrolls remain
-7   
- 0  scrolls remain
-8   
- 0  scrolls remain
-9   
- 0  scrolls remain
-10  
- 0  scrolls remain</code></pre>
-<!-- rnb-output-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiTkFzIGludHJvZHVjZWQgYnkgY29lcmNpb25cbiJ9 -->
-<pre><code>NAs introduced by coercion</code></pre>
-<!-- rnb-output-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiMTEgXHRcbiJ9 -->
-<pre><code>11  </code></pre>
-<!-- rnb-output-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-</div>
-<div id="scroll-stuff" class="section level1">
-<h1>Scroll Stuff</h1>
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuaHRtbCA8LSB3ZWJFbGVtJGdldFBhZ2VTb3VyY2UoKVtbMV1dICU+JSByZWFkX2h0bWwoKVxuXG5yZXBsaWVzMSA8LSBnZXRfcmVwbGllcyhodG1sKVxuXG4jIGh0bWwgPC0gcmVtRHIkZ2V0UGFnZVNvdXJjZSgpW1sxXV0gJT4lIHJlYWRfaHRtbCgpXG4jIFxuIyByZXBsaWVzMiA8LSBnZXRfcmVwbGllcyhodG1sKVxuYGBgIn0= -->
-<pre class="r"><code>html &lt;- webElem$getPageSource()[[1]] %&gt;% read_html()
-
-replies1 &lt;- get_replies(html)
-
-# html &lt;- remDr$getPageSource()[[1]] %&gt;% read_html()
-# 
-# replies2 &lt;- get_replies(html)</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBzZWxTZXJ2IDwtIHNlbGVuaXVtKHZlcmJvc2UgPSBUUlVFKVxuIyBzZWxTZXJ2JHByb2Nlc3NcbiMgc2VsU2VydiRsb2coKVxuIyAjc2VsU2VydiRzdG9wKClcbmBgYCJ9 -->
-<pre class="r"><code># selServ &lt;- selenium(verbose = TRUE)
-# selServ$process
-# selServ$log()
-# #selServ$stop()</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBwanNEcnYgPC0gcGhhbnRvbWpzKHZlcmJvc2UgPSBGQUxTRSwgY2hlY2sgPSBGQUxTRSlcbiMgcGpzRHJ2JHByb2Nlc3NcbiMgcGpzRHJ2JG91dHB1dCgpXG4jIHBqc0RydiRzdG9wKClcbmBgYCJ9 -->
-<pre class="r"><code># pjsDrv &lt;- phantomjs(verbose = FALSE, check = FALSE)
-# pjsDrv$process
-# pjsDrv$output()
-# pjsDrv$stop()</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyByZW1EciRuYXZpZ2F0ZSh1cmxfc3RyKVxuIyByZW1EciRzY3JlZW5zaG90KHVzZVZpZXdlciA9IFQsIGRpc3BsYXkgPSBUKVxuI3dlYkVsZW0gPC0gcmVtRHIkZmluZEVsZW1lbnQoXCJjc3NcIiwgXCJib2R5XCIpXG4jd2ViRWxlbSRzZW5kS2V5c1RvRWxlbWVudChsaXN0KGtleSA9IFwiZW5kXCIpKVxuIyB3ZWJFbGVtJHNjcmVlbnNob3QodXNlVmlld2VyID0gVCwgZGlzcGxheSA9IFQpXG4jIGZvcihpIGluIDE6NSl7XG4jICAgd2ViRWxlbSRzZW5kS2V5c1RvRWxlbWVudChsaXN0KGtleSA9IFwiZG93bl9hcnJvd1wiKSlcbiMgICBTeXMuc2xlZXAoMilcbiMgfVxuI3JlbURyJGV4ZWN1dGVTY3JpcHQoXCJ3aW5kb3cuc2Nyb2xsQnkoMCwyNTApO1wiKVxuIyB3ZWJFbGVtIDwtIHJlbURyJGZpbmRFbGVtZW50KFwieHBhdGhcIiwgJy8vKltjb250YWlucyhjb25jYXQoIFwiIFwiLCBAY2xhc3MsIFwiIFwiICksIGNvbmNhdCggXCIgXCIsIFwiSWNvbi0tbG9nb1wiLCBcIiBcIiApKV0nKVxuIyByZW1EciRtb3VzZU1vdmVUb0xvY2F0aW9uKHdlYkVsZW1lbnQgPSB3ZWJFbGVtKVxuIyBcbiMgc2NyaXB0IDwtIFwid2luZG93LnNjcm9sbFRvKDAsMjAwMClcIlxuIyByZW1EciRleGVjdXRlU2NyaXB0KHNjcmlwdCwgYXJncyA9IGxpc3QoXCJsYWxhXCIpKVxuYGBgIn0= -->
-<pre class="r"><code># remDr$navigate(url_str)
-# remDr$screenshot(useViewer = T, display = T)
-#webElem &lt;- remDr$findElement(&quot;css&quot;, &quot;body&quot;)
-#webElem$sendKeysToElement(list(key = &quot;end&quot;))
-# webElem$screenshot(useViewer = T, display = T)
-# for(i in 1:5){
-#   webElem$sendKeysToElement(list(key = &quot;down_arrow&quot;))
-#   Sys.sleep(2)
-# }
-#remDr$executeScript(&quot;window.scrollBy(0,250);&quot;)
-# webElem &lt;- remDr$findElement(&quot;xpath&quot;, '//*[contains(concat( &quot; &quot;, @class, &quot; &quot; ), concat( &quot; &quot;, &quot;Icon--logo&quot;, &quot; &quot; ))]')
-# remDr$mouseMoveToLocation(webElement = webElem)
-# 
-# script &lt;- &quot;window.scrollTo(0,2000)&quot;
-# remDr$executeScript(script, args = list(&quot;lala&quot;))</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-</div>
-<div id="old" class="section level1">
-<h1>old</h1>
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuXG4jICMjZmV0Y2ggdHdlZXRzIGZyb20gQHVzZXJOYW1lIHRpbWVsaW5lXG4jIHR3ZWV0cyA8LSB1c2VyVGltZWxpbmUodXNlck5hbWUsIG4gPSAxMDApXG4jIFxuIyAjIyBjb252ZXJ0aW5nIHR3ZWV0cyBsaXN0IHRvIERhdGFGcmFtZSAgXG4jIHR3ZWV0cyA8LSB0d0xpc3RUb0RGKHR3ZWV0cykgIFxuXG4jIyBidWlsZGluZyBxdWVyeVN0cmluZyB0byBmZXRjaCByZXR3ZWV0cyBcbnF1ZXJ5U3RyaW5nID0gcGFzdGUwKFwidG86XCIsIHVzZXJOYW1lKVxuXG4jIyByZXRyaWV2aW5nIHR3ZWV0IElEIGZvciB3aGljaCByZXBseSBpcyB0byBiZSBmZXRjaGVkIFxuI0lkID0gdHdlZXRzWzMxLFwiaWRcIl0gIFxuXG4jIyBmZXRjaGluZyBhbGwgdGhlIHJlcGx5IHRvIHVzZXJOYW1lXG5ycGx5IDwtIHNlYXJjaFR3aXR0ZXIocXVlcnlTdHJpbmcsIHNpbmNlSUQgPSBpZCwgbiA9IDEwMCkgXG5ycGx5IDwtIHR3TGlzdFRvREYocnBseSlcblxuIyMgZWxpbWluYXRlIGFsbCB0aGUgcmVwbHkgb3RoZXIgdGhlbiByZXBseSB0byByZXF1aXJlZCB0d2VldCBJZCAgXG5ycGx5ID0gcnBseVshcnBseSRyZXBseVRvU0lEID4gaWQsXVxucnBseSA9IHJwbHlbIXJwbHkkcmVwbHlUb1NJRCA8IGlkLF1cbnJwbHkgPSBycGx5W2NvbXBsZXRlLmNhc2VzKHJwbHlbLFwicmVwbHlUb1NJRFwiXSksXVxuXG4jIyBub3cgcnBseSBEYXRhRnJhbWUgY29udGFpbnMgYWxsIHRoZSByZXF1aXJlZCByZXBsaWVzLlxuYGBgIn0= -->
-<pre class="r"><code>
-# ##fetch tweets from @userName timeline
-# tweets &lt;- userTimeline(userName, n = 100)
-# 
-# ## converting tweets list to DataFrame  
-# tweets &lt;- twListToDF(tweets)  
-
-## building queryString to fetch retweets 
-queryString = paste0(&quot;to:&quot;, userName)
-
-## retrieving tweet ID for which reply is to be fetched 
-#Id = tweets[31,&quot;id&quot;]  
-
-## fetching all the reply to userName
-rply &lt;- searchTwitter(queryString, sinceID = id, n = 100) 
-rply &lt;- twListToDF(rply)
-
-## eliminate all the reply other then reply to required tweet Id  
-rply = rply[!rply$replyToSID &gt; id,]
-rply = rply[!rply$replyToSID &lt; id,]
-rply = rply[complete.cases(rply[,&quot;replyToSID&quot;]),]
-
-## now rply DataFrame contains all the required replies.</code></pre>
-<!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 <!-- rnb-text-end -->
 </div>
 
-<div id="rmd-source-code">LS0tDQp0aXRsZTogInR3aXR0ZXIiDQphdXRob3I6ICJTaW1vbiBSb3RoIg0KZGF0ZTogIjI2IEphbnVhciAyMDE4Ig0Kb3V0cHV0OiBodG1sX25vdGVib29rDQotLS0NCg0KYGBge3Igc2V0dXAsIGluY2x1ZGU9RkFMU0V9DQprbml0cjo6b3B0c19jaHVuayRzZXQoZWNobyA9IFRSVUUpDQpgYGANCg0KIyMgUiBNYXJrZG93bg0KDQpgYGB7cn0NCnBhY21hbjo6cF9sb2FkKHRpZHl2ZXJzZSwgd2RtYW4sIGpzb25saXRlLCBydmVzdCwgeG1sMiwgUlNlbGVuaXVtLCBoZXJlKQ0KDQpkaXIoImRhdGEiKQ0KYW5faWRzIDwtIGpzb25saXRlOjpmcm9tSlNPTigiZGF0YS9hbm5jb3VsdGVyX2lkcy5qc29uIikNCmBgYA0KDQojIHJlYWRpbmcgdHdpdHRlciBpZHMNCg0KYGBge3J9DQojIEFCQ19pZHMgPC0gZnJvbUpTT04oaGVyZSgiZGF0YSIsICJ0dyIsICJ0d19hYmNfaWRzLmpzb24iKSkNCiMgIGxlbmd0aChBQkNfaWRzKQ0KdHdlZXRfaWRzIDwtIGRpcihoZXJlKCJkYXRhIiwgInR3IikpWy0xXQ0KI2hlcmU6OmhlcmUoImRhdGEiLCAidHciKQ0KDQojIHR3ZWV0X2lkc19saXN0IDwtIGxpc3QoKQ0KIyBmb3IgKGpqIGluIHNlcV9hbG9uZyh0d2VldF9pZHMpKSB7DQojICAgdHdlZXRfaWRzX2xpc3RbW2pqXV0gPC0ganNvbmxpdGU6OmZyb21KU09OKGhlcmUoImRhdGEiLCAidHciLCB0d2VldF9pZHNbampdKSkNCiMgfQ0KDQpoYW5kbGVycyA8LSBjKCJSZWFsQWxleEpvbmVzIiwgIkFubkNvdWx0ZXIiLCAiTXNCbGFpcmVXaGl0ZSIsICJuYXZ5aGF0byIsICJCcmVpdGJhcnROZXdzIiwgIkNlcm5vdmljaCIsICJDTk4iLCAiRm94TmV3cyIsICJpbmZvd2FycyIsICJMYXVyZW5fU291dGhlcm4iLCAiTVNOQkMiLCAiUHJpc29uUGxhbmV0IiwgIlRoZVJlYmVsVFYiLCAiUm9hbWluZ01pbCIsIlRSb2JpbnNvbk5ld0VyYSIsICJ3YXNoaW5ndG9ucG9zdCIpDQoNCnR3ZWV0X2luaXQgPC0gZnJvbUpTT04oaGVyZSgiZGF0YSIsICJ0dyIsICJ0d19hYmNfaWRzLmpzb24iKSkgJT4lIA0KICBkYXRhLmZyYW1lKGhhbmRsZXIgPSAiQUJDIikNCmZvciAoamogaW4gc2VxX2Fsb25nKHR3ZWV0X2lkcykpIHsNCiAgIHR3ZWV0X2luaXQgPC0gcGx5cjo6cmJpbmQuZmlsbCh0d2VldF9pbml0LCANCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBqc29ubGl0ZTo6ZnJvbUpTT04oDQogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBoZXJlKA0KICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgImRhdGEiLCAidHciLCB0d2VldF9pZHNbampdDQogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICApDQogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgKSAlPiUgDQogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgZGF0YS5mcmFtZShoYW5kbGVyID0gaGFuZGxlcnNbampdKSkNCiAgIGNhdChqaiwgIlxuIikNCn0NCmhhbmRsZXJfaWRzIDwtIHR3ZWV0X2luaXQNCg0KY29sbmFtZXMoaGFuZGxlcl9pZHMpIDwtIGMoInR3ZWV0X2lkIiwgImhhbmRsZXIiKQ0KdGFibGUoaGFuZGxlcl9pZHMkaGFuZGxlcikNCiMgZW5mcmFtZWRfdHdlZXRzIDwtIGVuZnJhbWUodHdlZXRfaWRzX2xpc3QpDQojIGZmIDwtIGxpc3QoKQ0KIyBmb3IgKGpqIGluIHNlcV9hbG9uZyhoYW5kbGVycykpIHsNCiMgICBmZltbampdXSA8LSBjYmluZChlbmZyYW1lZF90d2VldHMkdmFsdWVbW2pqXV0sIGhhbmRsZXJzW2pqXSkNCiMgfQ0KDQojIGhhbmRsZXJfaWRzIDwtIHJsaXN0OjpsaXN0LnJiaW5kKGZmKSAlPiUgDQojICAgIGFzLmRhdGEuZnJhbWUoKQ0KDQojIGhhbmRsZXJfaWRzICU+JSANCiMgICBmaWx0ZXIoaGFuZGxlciA9PSAiQnJlaXRiYXJ0TmV3cyIpDQpgYGANCg0KYGBge3J9DQojICBsaWJyYXJ5KHR3aXR0ZVIpDQojICBjb25zdW1lcl9rZXkgPC0gIml0dDR2alhYaWhzZFpBSUVLNDhySzFYT1IiDQojICBjb25zdW1lcl9zZWNyZXQgPC0gImdJSGRaWDllY1pvUDVpMGs2emtQQlpiMld1TXZQWUhZRlFVUHFDTzRLWE1PMUVVTFdFIg0KIyAgb3B0aW9ucyhodHRyX29hdXRoX2NhY2hlPVQpDQojICB0d2l0dGVSOjpzZXR1cF90d2l0dGVyX29hdXRoKGNvbnN1bWVyX2tleSwgY29uc3VtZXJfc2VjcmV0KQ0KIyANCiMgDQojIHVzZXJOYW1lIDwtIGhhbmRsZXJfaWRzJGhhbmRsZXINCiMgIyANCiMgIyBpZCA8LSBhbl9pZHNbbGVuZ3RoKGFuX2lkcyldDQojIA0KIyAjIHR3aXR0ZVI6OnNob3dTdGF0dXMoaWQpDQojICMgbG9va3VwX3N0YXR1c2VzKGFuX2lkc1sxOjEwXSkNCiMgDQojIHR3X2V2ZXJ5dHdlZXQgPC0gcnR3ZWV0Ojpsb29rdXBfdHdlZXRzKGhhbmRsZXJfaWRzJHR3ZWV0X2lkKQ0KIyBzYXZlKHR3X2V2ZXJ5dHdlZXQsIGZpbGUgPSAiZGF0YS90d19ldmVyeXR3ZWV0LlJkYXRhIikNCiMgZ2xpbXBzZShldmVyeV90d2VldCkNCg0KIyBhbm5jb3VsdGVyX3R3ZWV0cyRjcmVhdGVkX2F0ICU+JQ0KIyAgIHJhbmdlDQoNCiMgdXJsX3N0ciA8LSAiaHR0cHM6Ly90d2l0dGVyLmNvbS9hbm5jb3VsdGVyL3N0YXR1cy84MzQyMTc1NjYxMjYxMDg2NzM/bGFuZz1lbiINCiMgDQojIGh0bWxfZmlsZSA8LSB4bWwyOjpyZWFkX2h0bWwodXJsX3N0cikgDQpgYGANCg0KDQoNCg0KIyBSc2VsZW5pdW0NCg0KYGBge3J9DQpsaWJyYXJ5KFJTZWxlbml1bSkNCnJEIDwtIHJzRHJpdmVyKHZlcmJvc2UgPSBGQUxTRSwgcG9ydCA9IDU1NTZMKQ0KcmVtRHIgPC0gckQkY2xpZW50DQpgYGANCg0KDQoNCiMgIEhlbHBlcg0KDQpmaXJzdCBsb29wDQoNCmBgYHtyfQ0KZ2V0X3JlcGxpZXMgPC0gZnVuY3Rpb24oaHRtbCkgew0KICANCiAgaWZfbm90bnVsbCA8LSBmdW5jdGlvbih4KSBpZmVsc2UoaWRlbnRpY2FsKHgsIGNoYXJhY3RlcigwKSkgfCBpcy5udWxsKHgpLCBOQSwgeCkNCiAgDQogIGh0bWxfbGlzdCA8LSBodG1sICU+JSANCiAgICBodG1sX25vZGVzKCIucGVybWFsaW5rLWRlc2NlbmRhbnQtdHdlZXQgLCAuanMtaW5pdGlhbC1mb2N1cyIpICMjc3RyZWFtLWl0ZW1zLWlkDQogIA0KICBzdG9yYWdlIDwtIGRhdGEuZnJhbWUoKQ0KICANCiAgZm9yKGpqIGluIHNlcV9hbG9uZyhodG1sX2xpc3QpKXsNCiAgDQogICAgbmFtZXMgPC0gaHRtbF9saXN0W2pqXSAlPiUNCiAgICAgIGh0bWxfbm9kZXMoIi5qcy1uYXYgLnUtdGV4dFRydW5jYXRlIGIiKSAlPiUNCiAgICAgIGh0bWxfdGV4dCgpIA0KICAgIGlmKGlzLm51bGwobmFtZXMpKSBuYW1lcyA8LSBOQQ0KICANCiAgICB0ZXh0IDwtIGh0bWxfbGlzdFtqal0gJT4lDQogICAgICBodG1sX25vZGVzKCIudHdlZXQtdGV4dCIpICU+JQ0KICAgICAgaHRtbF90ZXh0KCkgDQogICAgaWYoaXMubnVsbCh0ZXh0KSkgdGV4dCA8LSBOQQ0KICAgIA0KICAgIGRhdGVzIDwtIGh0bWxfbGlzdFtqal0gJT4lDQogICAgICBodG1sX25vZGVzKCIuanMtc2hvcnQtdGltZXN0YW1wIikgJT4lDQogICAgICBodG1sX3RleHQoKSANCiAgICBpZihpcy5udWxsKGRhdGVzKSkgZGF0ZXMgPC0gTkENCiAgDQogICAgZmF2b3JpdGVzIDwtIGh0bWxfbGlzdFtqal0gJT4lDQogICAgICBodG1sX25vZGVzKCIuanMtYWN0aW9uRmF2b3JpdGUgLlByb2ZpbGVUd2VldC1hY3Rpb25Db3VudEZvclByZXNlbnRhdGlvbiIpICU+JQ0KICAgICAgaHRtbF90ZXh0KCkgJT4lDQogICAgICBhcy5udW1lcmljKCkgJT4lDQogICAgICBpZmVsc2UoaXMubmEoLiksIDAsIC4pDQogICAgaWYoaXMubnVsbChmYXZvcml0ZXMpKSBmYXZvcml0ZXMgPC0gTkENCiAgICAgIA0KICAgIHJldHdlZXRzIDwtIGh0bWxfbGlzdFtqal0gJT4lDQogICAgICBodG1sX25vZGVzKCIuanMtYWN0aW9uUmV0d2VldCAuUHJvZmlsZVR3ZWV0LWFjdGlvbkNvdW50Rm9yUHJlc2VudGF0aW9uIikgJT4lDQogICAgICBodG1sX3RleHQoKSAlPiUNCiAgICAgIGFzLm51bWVyaWMoKSAlPiUNCiAgICAgIGlmZWxzZShpcy5uYSguKSwgMCwgLikNCiAgICBpZihpcy5udWxsKHJldHdlZXRzKSkgcmV0d2VldHMgPC0gTkENCiAgICANCiAgICBjb21tZW50cyA8LSAgaHRtbF9saXN0W2pqXSAlPiUNCiAgICAgIGh0bWxfbm9kZXMoIi5qcy1hY3Rpb25SZXBseSAuUHJvZmlsZVR3ZWV0LWFjdGlvbkNvdW50Rm9yUHJlc2VudGF0aW9uIikgJT4lDQogICAgICBodG1sX3RleHQoKSAlPiUNCiAgICAgIGFzLm51bWVyaWMoKSAlPiUNCiAgICAgIGlmZWxzZShpcy5uYSguKSwgMCwgLikNCiAgICBpZihpcy5udWxsKGNvbW1lbnRzKSkgY29tbWVudHMgPC0gTkENCiAgDQogICAgcmVwbGllcyA8LSBkYXRhLmZyYW1lKA0KICAgICAgbmFtZXMsIGRhdGVzLCB0ZXh0LCANCiAgICAgIGZhdm9yaXRlcywgcmV0d2VldHMsIGNvbW1lbnRzLCANCiAgICAgIHN0cmluZ3NBc0ZhY3RvcnMgPSBGDQogICAgKQ0KICAgIA0KICAgIHN0b3JhZ2UgPC0gcmJpbmQoc3RvcmFnZSwgcmVwbGllcykNCiAgfQ0KICANCiAgcmV0dXJuKHN0b3JhZ2UpDQp9DQpgYGANCg0KDQojIE1haW4gRnVuY3Rpb24NCg0Kc2Vjb25kIGxvb3ANCg0KKiBzY3JvbGxlcl0oaHR0cHM6Ly9zdGFja292ZXJmbG93LmNvbS9xdWVzdGlvbnMvNDUyMDQ5MzQvY2hlY2staWYtaXRzLXBvc3NpYmxlLXRvLXNjcm9sbC1kb3duLXdpdGgtcnNlbGVuaXVtKQ0KDQoNCmBgYHtyfQ0KbGlicmFyeShydmVzdCkNCg0KbnR3ZWV0cyA8LSBmdW5jdGlvbigpew0KICBudHdlZXRzIDwtIHJlbURyJGdldFBhZ2VTb3VyY2UoKVtbMV1dICU+JSANCiAgICByZWFkX2h0bWwoKSAlPiUNCiAgICBodG1sX25vZGVzKCIuanMtbmF2IC51LXRleHRUcnVuY2F0ZSBiIikgJT4lDQogICAgaHRtbF90ZXh0KCkgJT4lIA0KICAgIGxlbmd0aCgpDQp9DQoNCg0KZ2V0X3JlcGxpZXNfZGYgPC0gZnVuY3Rpb24oaGFuZGxlLCBpZHMpIHsNCg0KICAjIyMgc2Nyb2xsZXIgc2NyaXB0DQogIGNzc19lbGVtZW50IDwtICIjcGVybWFsaW5rLW92ZXJsYXktZGlhbG9nID4gZGl2LlBlcm1hbGlua092ZXJsYXktY29udGVudCA+IGRpdiA+IGRpdiA+IGRpdi5wZXJtYWxpbmstZm9vdGVyIiAjIHRhcmdldCBlbGVtZW50DQogIHNjcmlwdCA8LSAiYXJndW1lbnRzWzBdLnNjcm9sbEludG9WaWV3KHRydWUpOyIgIyBzY3JvbGxlciBmdW5jdGlvbg0KICANCiAgIyMjIHByZXANCiAgdSA8LSBwYXN0ZTAoImh0dHBzOi8vdHdpdHRlci5jb20vIiwgaGFuZGxlLCAiL3N0YXR1cy8iLCBpZHMsICI/bGFuZz1lbiIpDQogIHJlcGxpZXMgPC0gbGlzdCgpDQogIA0KICBmb3IoamogaW4gc2VxX2Fsb25nKHUpKSB7DQogICANCiAgICAjIGNhbGwgdHdpdHRlciB1cmwNCiAgICByZW1EciRuYXZpZ2F0ZSh1W2pqXSkNCiAgICANCiAgICAjIyMgc2Nyb2xsZXINCiAgICBrIDwtIDUwDQogICAgbnR3X2JlZm9yZSA8LSBudHdlZXRzKCkNCiAgICANCiAgICB3aGlsZShrID4gMCl7DQogICAgICB0cnlDYXRjaCh7DQogICAgICAgICMgc2Nyb2xsDQoNCiAgICAgICAgd2ViRWxlbSA8LSByZW1EciRmaW5kRWxlbWVudCgiY3NzIiwgY3NzX2VsZW1lbnQpDQogICAgICAgIHJlbURyJGV4ZWN1dGVTY3JpcHQoc2NyaXB0LCBhcmdzID0gbGlzdCh3ZWJFbGVtKSkNCiAgICAgICAgI1N5cy5zbGVlcCgxKQ0KICAgICAgICANCiAgICAgICAgbnR3X2FmdGVyIDwtIG50d2VldHMoKQ0KDQogICAgICAgIA0KICAgICAgICBpZihudHdfYmVmb3JlID09IG50d19hZnRlcikgew0KICAgICAgICAgIGsgPC0gMA0KICAgICAgICB9IGVsc2Ugew0KICAgICAgICAgIGsgPC0gayAtIDENCiAgICAgICAgICBudHdfYmVmb3JlIDwtIG50d19hZnRlcg0KICAgICAgICB9DQoNCiAgICAgICAgY2F0KCJcbiIsIGssICIgc2Nyb2xscyByZW1haW5cbiIpDQogICAgICB9LCBlcnJvciA9IGZ1bmN0aW9uKGUpew0KICAgICAgICBrIDwtIDANCiAgICAgIH0pDQogICAgfQ0KDQogICAgdHJ5Q2F0Y2goew0KICAgICAgcmVwbGllc1tbampdXSA8LSByZW1EciRnZXRQYWdlU291cmNlKClbWzFdXSAlPiUgDQogICAgICB4bWwyOjpyZWFkX2h0bWwoKSAlPiUNCiAgICAgIGdldF9yZXBsaWVzKCkNCiAgICB9LCBlcnJvciA9IGZ1bmN0aW9uKGUpew0KICAgICAgcmVwbGllc1tbampdXSA8LSBOQQ0KICAgICAgY2F0KCJzb3JyeSBub3QgZm91bmQuIikNCiAgICB9KQ0KDQogICAgI2NhdChqaiwgIlx0IikNCiAgfQ0KICANCiAgcmVwbGllcyA8LSBkby5jYWxsKCJyYmluZCIsIHJlcGxpZXMpDQogIGlmKCFpcy5udWxsKHJlcGxpZXMpKSByZXBsaWVzJGhhbmRsZSA8LSBoYW5kbGUNCiAgICAgIyBzYXZlKHJlcGxpZXMsIGZpbGUgPSAiZGF0YS9yZXBsaWVzLlJkYXRhIikNCiAgcmV0dXJuKHJlcGxpZXMpDQp9DQpgYGANCg0KdGhpcmQgbG9vcA0KDQpgYGB7cn0NCmRhdCA8LSBoYW5kbGVyX2lkc1sxMDoyMCwgXQ0KDQojaGFuZGxlIDwtIGRhdCRoYW5kbGVyWzhdDQojaWRzIDwtIGRhdCR0d2VldF9pZFs4XQ0KDQpzdGFydCA8LSAxDQpmaW5hbCA8LSBsaXN0KCkNCg0KZm9yIChqaiBpbiBzdGFydDpucm93KGRhdCkpIHsNCiAgcmQgPC0gZ2V0X3JlcGxpZXNfZGYoZGF0JGhhbmRsZXJbampdLCBkYXQkdHdlZXRfaWRbampdKQ0KICANCiAgZmlsZV9leGlzdHMgPC0gZmlsZS5leGlzdHMocGFzdGUwKCJkYXRhL3JlcGxpZXNfbGlzdCIsICJfIiwgc3RhcnQsICJfIiwgamogLSAxLCAiLlJkYXRhIikpDQogIGlzX2F2YWlsYWJsZSA8LSAoIWlzLmRhdGEuZnJhbWUocmQpIHwgIWlzLm51bGwocmQpKQ0KICANCiAgaWYgKGlzX2F2YWlsYWJsZSkgew0KICAgIGlmKGZpbGVfZXhpc3RzKSBmaWxlLnJlbW92ZShwYXN0ZTAoImRhdGEvcmVwbGllc19saXN0IiwgIl8iLCBzdGFydCwgIl8iLCBqaiAtIDEsICIuUmRhdGEiKSkNCiAgICBmaW5hbFtbampdXSA8LSByZA0KICAgIHNhdmUoZmluYWwsIGZpbGUgPSBwYXN0ZTAoImRhdGEvcmVwbGllc19saXN0IiwgIl8iLCBzdGFydCwgIl8iLCBqaiwgIi5SZGF0YSIpKQ0KICB9DQoNCiAgY2F0KGpqLCAiXHQiKQ0KfQ0KDQoNCmZpbmFsX2R0IDwtIGJpbmRfcm93cyhmaW5hbCkgJT4lDQogICMjIGV4dHJhY3QgdW5pcXVlIGVsZW1lbnRzDQogIGZpbHRlcighZHVwbGljYXRlZCh0ZXh0KSkNCmJlZXByOjpiZWVwKDgpDQpzYXZlKGZpbmFsX2R0LCBmaWxlID0gImRhdGEvcmVwbGllcy5SZGF0YSIpDQpgYGANCg0KDQoNCg0KDQojIFNjcm9sbCBTdHVmZg0KDQpgYGB7cn0NCmh0bWwgPC0gd2ViRWxlbSRnZXRQYWdlU291cmNlKClbWzFdXSAlPiUgcmVhZF9odG1sKCkNCg0KcmVwbGllczEgPC0gZ2V0X3JlcGxpZXMoaHRtbCkNCg0KIyBodG1sIDwtIHJlbURyJGdldFBhZ2VTb3VyY2UoKVtbMV1dICU+JSByZWFkX2h0bWwoKQ0KIyANCiMgcmVwbGllczIgPC0gZ2V0X3JlcGxpZXMoaHRtbCkNCmBgYA0KDQoNCmBgYHtyfQ0KIyBzZWxTZXJ2IDwtIHNlbGVuaXVtKHZlcmJvc2UgPSBUUlVFKQ0KIyBzZWxTZXJ2JHByb2Nlc3MNCiMgc2VsU2VydiRsb2coKQ0KIyAjc2VsU2VydiRzdG9wKCkNCmBgYA0KDQpgYGB7cn0NCiMgcGpzRHJ2IDwtIHBoYW50b21qcyh2ZXJib3NlID0gRkFMU0UsIGNoZWNrID0gRkFMU0UpDQojIHBqc0RydiRwcm9jZXNzDQojIHBqc0RydiRvdXRwdXQoKQ0KIyBwanNEcnYkc3RvcCgpDQpgYGANCg0KYGBge3J9DQojIHJlbURyJG5hdmlnYXRlKHVybF9zdHIpDQojIHJlbURyJHNjcmVlbnNob3QodXNlVmlld2VyID0gVCwgZGlzcGxheSA9IFQpDQojd2ViRWxlbSA8LSByZW1EciRmaW5kRWxlbWVudCgiY3NzIiwgImJvZHkiKQ0KI3dlYkVsZW0kc2VuZEtleXNUb0VsZW1lbnQobGlzdChrZXkgPSAiZW5kIikpDQojIHdlYkVsZW0kc2NyZWVuc2hvdCh1c2VWaWV3ZXIgPSBULCBkaXNwbGF5ID0gVCkNCiMgZm9yKGkgaW4gMTo1KXsNCiMgICB3ZWJFbGVtJHNlbmRLZXlzVG9FbGVtZW50KGxpc3Qoa2V5ID0gImRvd25fYXJyb3ciKSkNCiMgICBTeXMuc2xlZXAoMikNCiMgfQ0KI3JlbURyJGV4ZWN1dGVTY3JpcHQoIndpbmRvdy5zY3JvbGxCeSgwLDI1MCk7IikNCiMgd2ViRWxlbSA8LSByZW1EciRmaW5kRWxlbWVudCgieHBhdGgiLCAnLy8qW2NvbnRhaW5zKGNvbmNhdCggIiAiLCBAY2xhc3MsICIgIiApLCBjb25jYXQoICIgIiwgIkljb24tLWxvZ28iLCAiICIgKSldJykNCiMgcmVtRHIkbW91c2VNb3ZlVG9Mb2NhdGlvbih3ZWJFbGVtZW50ID0gd2ViRWxlbSkNCiMgDQojIHNjcmlwdCA8LSAid2luZG93LnNjcm9sbFRvKDAsMjAwMCkiDQojIHJlbURyJGV4ZWN1dGVTY3JpcHQoc2NyaXB0LCBhcmdzID0gbGlzdCgibGFsYSIpKQ0KYGBgDQoNCg0KDQoNCg0KIyBvbGQgDQoNCmBgYHtyfQ0KDQojICMjZmV0Y2ggdHdlZXRzIGZyb20gQHVzZXJOYW1lIHRpbWVsaW5lDQojIHR3ZWV0cyA8LSB1c2VyVGltZWxpbmUodXNlck5hbWUsIG4gPSAxMDApDQojIA0KIyAjIyBjb252ZXJ0aW5nIHR3ZWV0cyBsaXN0IHRvIERhdGFGcmFtZSAgDQojIHR3ZWV0cyA8LSB0d0xpc3RUb0RGKHR3ZWV0cykgIA0KDQojIyBidWlsZGluZyBxdWVyeVN0cmluZyB0byBmZXRjaCByZXR3ZWV0cyANCnF1ZXJ5U3RyaW5nID0gcGFzdGUwKCJ0bzoiLCB1c2VyTmFtZSkNCg0KIyMgcmV0cmlldmluZyB0d2VldCBJRCBmb3Igd2hpY2ggcmVwbHkgaXMgdG8gYmUgZmV0Y2hlZCANCiNJZCA9IHR3ZWV0c1szMSwiaWQiXSAgDQoNCiMjIGZldGNoaW5nIGFsbCB0aGUgcmVwbHkgdG8gdXNlck5hbWUNCnJwbHkgPC0gc2VhcmNoVHdpdHRlcihxdWVyeVN0cmluZywgc2luY2VJRCA9IGlkLCBuID0gMTAwKSANCnJwbHkgPC0gdHdMaXN0VG9ERihycGx5KQ0KDQojIyBlbGltaW5hdGUgYWxsIHRoZSByZXBseSBvdGhlciB0aGVuIHJlcGx5IHRvIHJlcXVpcmVkIHR3ZWV0IElkICANCnJwbHkgPSBycGx5WyFycGx5JHJlcGx5VG9TSUQgPiBpZCxdDQpycGx5ID0gcnBseVshcnBseSRyZXBseVRvU0lEIDwgaWQsXQ0KcnBseSA9IHJwbHlbY29tcGxldGUuY2FzZXMocnBseVssInJlcGx5VG9TSUQiXSksXQ0KDQojIyBub3cgcnBseSBEYXRhRnJhbWUgY29udGFpbnMgYWxsIHRoZSByZXF1aXJlZCByZXBsaWVzLg0KYGBgDQoNCg==</div>
+<div id="rmd-source-code">LS0tDQp0aXRsZTogInR3aXR0ZXIiDQphdXRob3I6ICJTaW1vbiB1bmQgRmFiaW8iDQpkYXRlOiAiMjYgSmFudWFyIDIwMTgiDQpvdXRwdXQ6IGh0bWxfbm90ZWJvb2sNCi0tLQ0KDQpgYGB7ciBzZXR1cCwgaW5jbHVkZT1GQUxTRX0NCmtuaXRyOjpvcHRzX2NodW5rJHNldChlY2hvID0gVFJVRSkNCmBgYA0KDQojIyBSIE1hcmtkb3duDQoNCmBgYHtyfQ0KcGFjbWFuOjpwX2xvYWQodGlkeXZlcnNlLCB3ZG1hbiwganNvbmxpdGUsIHJ2ZXN0LCB4bWwyLCBSU2VsZW5pdW0sIGhlcmUsIGNyYXlvbiwgaGVyZSkNCmBgYA0KDQojIHJlYWRpbmcgdHdpdHRlciBpZHMNCg0KYGBge3J9DQojIA0KIyB0d2VldF9pZHMgPC0gZGlyKGhlcmUoImRhdGEiLCAidHciKSlbLTE6LTJdDQojIA0KIyANCiMgaGFuZGxlcnMgPC0gYygiUmVhbEFsZXhKb25lcyIsICJBbm5Db3VsdGVyIiwgIkFya3Rvc01lZGlhIiwgIk1zQmxhaXJlV2hpdGUiLCAibmF2eWhhdG8iLCAiQnJlaXRiYXJ0TmV3cyIsICJDZXJub3ZpY2giLCAiQ05OIiwgIk5ld1JpZ2h0QW1lcmljYSIsICJzY3Jvd2RlciIsICJJZGVudGl0eUV2cm9wYSIsICJGb3hOZXdzIiwgIkdhdmluX01jSW5uZXMiICwgImluZm93YXJzIiwgIkxhdXJlbl9Tb3V0aGVybiIsICAiU3RlZmFuTW9seW5ldXgiLCAiTVNOQkMiLCAiTWlsbGVubmlhbFdvZXMiLCAibnl0aW1lcyIsICJBVm9pY2Vmb3JNZW4iLCAiQnJpdHRQZXR0aWJvbmUiLCAiUHJpc29uUGxhbmV0IiwgInJhbXpwYXVsIiwgICJUaGVSZWJlbFRWIiwgInJlZGljZXR2IiwgIlJldHVybk9mS2luZ3MiLCAiUmljaGFyZEJTcGVuY2VyIiwgIlJvYW1pbmdNaWwiLCJUUm9iaW5zb25OZXdFcmEiLCAiU3R5eDY2Nk9mZmljaWFsIiwidmRhcmUiLCAid2FzaGluZ3RvbnBvc3QiKQ0KIyANCiMgY2JpbmQodHdlZXRfaWRzLCBoYW5kbGVycykNCiMgDQojIHR3ZWV0X2luaXQgPC0gZnJvbUpTT04oaGVyZSgiZGF0YSIsICJ0dyIsICJ0d19hYmNfaWRzLmpzb24iKSkgJT4lIA0KIyAgIGRhdGEuZnJhbWUoaGFuZGxlciA9ICJBQkMiKQ0KIyBmb3IgKGpqIGluIHNlcV9hbG9uZyh0d2VldF9pZHMpKSB7DQojICAgIHR3ZWV0X2luaXQgPC0gcGx5cjo6cmJpbmQuZmlsbCh0d2VldF9pbml0LCANCiMgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIGpzb25saXRlOjpmcm9tSlNPTigNCiMgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgaGVyZSgNCiMgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgImRhdGEiLCAidHciLCB0d2VldF9pZHNbampdDQojICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICkNCiMgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICkgJT4lIA0KIyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgZGF0YS5mcmFtZShoYW5kbGVyID0gaGFuZGxlcnNbampdKSkNCiMgICAgY2F0KGpqLCAiXG4iKQ0KIyB9DQojIGhhbmRsZXJfaWRzIDwtIHR3ZWV0X2luaXQNCiMgDQojIGNvbG5hbWVzKGhhbmRsZXJfaWRzKSA8LSBjKCJ0d2VldF9pZCIsICJoYW5kbGVyIikNCiMgDQojIHNhdmUoaGFuZGxlcl9pZHMsIGZpbGUgPSBoZXJlKCJkYXRhIiwgInR3IiwgImhhbmRsZXJfaWRzLlJkYXRhIikpDQojIA0KDQoNCmxvYWQoaGVyZSgiZGF0YSIsICJ0dyIsICJoYW5kbGVyX2lkcy5SZGF0YSIpKQ0KDQpoYW5kbGVyX2lkcyA8LSBoYW5kbGVyX2lkcyAlPiUNCiAgZmlsdGVyKCFkdXBsaWNhdGVkKHR3ZWV0X2lkKSkNCg0KdGFibGUoaGFuZGxlcl9pZHMkaGFuZGxlcikNCmBgYA0KDQpgYGB7cn0NCiMgIGxpYnJhcnkodHdpdHRlUikNCiMgIGNvbnN1bWVyX2tleSA8LSAiaXR0NHZqWFhpaHNkWkFJRUs0OHJLMVhPUiINCiMgIGNvbnN1bWVyX3NlY3JldCA8LSAiZ0lIZFpYOWVjWm9QNWkwazZ6a1BCWmIyV3VNdlBZSFlGUVVQcUNPNEtYTU8xRVVMV0UiDQojICBvcHRpb25zKGh0dHJfb2F1dGhfY2FjaGU9VCkNCiMgIHR3aXR0ZVI6OnNldHVwX3R3aXR0ZXJfb2F1dGgoY29uc3VtZXJfa2V5LCBjb25zdW1lcl9zZWNyZXQpDQojIA0KIyANCiMgdXNlck5hbWUgPC0gaGFuZGxlcl9pZHMkaGFuZGxlcg0KIyAjIA0KIyAjIGlkIDwtIGFuX2lkc1tsZW5ndGgoYW5faWRzKV0NCiMgDQojICMgdHdpdHRlUjo6c2hvd1N0YXR1cyhpZCkNCiMgIyBsb29rdXBfc3RhdHVzZXMoYW5faWRzWzE6MTBdKQ0KIyANCiMgdHdfZXZlcnl0d2VldCA8LSBydHdlZXQ6Omxvb2t1cF90d2VldHMoaGFuZGxlcl9pZHMkdHdlZXRfaWQpDQojIHNhdmUodHdfZXZlcnl0d2VldCwgZmlsZSA9ICJkYXRhL3R3X2V2ZXJ5dHdlZXQuUmRhdGEiKQ0KIyBnbGltcHNlKGV2ZXJ5X3R3ZWV0KQ0KDQojIGFubmNvdWx0ZXJfdHdlZXRzJGNyZWF0ZWRfYXQgJT4lDQojICAgcmFuZ2UNCg0KIyB1cmxfc3RyIDwtICJodHRwczovL3R3aXR0ZXIuY29tL2FubmNvdWx0ZXIvc3RhdHVzLzgzNDIxNzU2NjEyNjEwODY3Mz9sYW5nPWVuIg0KIyANCiMgaHRtbF9maWxlIDwtIHhtbDI6OnJlYWRfaHRtbCh1cmxfc3RyKSANCmBgYA0KDQoNCg0KDQojIFJzZWxlbml1bQ0KDQpgYGB7cn0NCmxpYnJhcnkoUlNlbGVuaXVtKQ0KcG9ydCA8LSBzYW1wbGUoNDAwMEw6NTAwMEwsIDEpDQpyRCA8LSByc0RyaXZlcih2ZXJib3NlID0gRkFMU0UsIHBvcnQgPSBwb3J0KQ0KckQNCg0KcmVtRHIgPC0gckQkY2xpZW50DQojcmVtRHIkY2xvc2UoKQ0KYGBgDQoNCg0KDQojICBIZWxwZXINCg0KZmlyc3QgbG9vcA0KDQpgYGB7cn0NCmdldF9yZXBsaWVzIDwtIGZ1bmN0aW9uKGh0bWwpIHsNCiAgDQogIGh0bWxfbGlzdCA8LSBodG1sICU+JQ0KICAgICMjIyBkZWJ1Zw0KICAgICNyZW1EciRnZXRQYWdlU291cmNlKClbWzFdXSAlPiUgcmVhZF9odG1sKCkgJT4lDQogICAgI2h0bWxfbm9kZXMoIiNzdHJlYW0taXRlbXMtaWQiKSAlPiUNCiAgICBodG1sX25vZGVzKCIucGVybWFsaW5rLWRlc2NlbmRhbnQtdHdlZXQsIC5qcy1pbml0aWFsLWZvY3VzIikgDQogIA0KICByZXBseV9saXN0IDwtIGxpc3QoKQ0KICANCiAgZm9yKGpqIGluIHNlcV9hbG9uZyhodG1sX2xpc3QpKXsNCiAgDQogICAgbmFtZXMgPC0gaHRtbF9saXN0W2pqXSAlPiUNCiAgICAgIGh0bWxfbm9kZXMoIi5qcy1uYXYgLnUtdGV4dFRydW5jYXRlIGIiKSAlPiUNCiAgICAgIGh0bWxfdGV4dCgpDQogICAgaWYoaXMubnVsbChuYW1lcykpIG5hbWVzIDwtIE5BDQogIA0KICAgIHRleHQgPC0gaHRtbF9saXN0W2pqXSAlPiUNCiAgICAgIGh0bWxfbm9kZXMoIi50d2VldC10ZXh0IikgJT4lDQogICAgICBodG1sX3RleHQoKQ0KICAgIGlmKGlzLm51bGwodGV4dCkpIHRleHQgPC0gTkENCiAgICANCiAgICBkYXRlcyA8LSBodG1sX2xpc3RbampdICU+JQ0KICAgICAgaHRtbF9ub2RlcygiLmpzLXNob3J0LXRpbWVzdGFtcCIpICU+JQ0KICAgICAgaHRtbF90ZXh0KCkgDQogICAgaWYoaXMubnVsbChkYXRlcykpIGRhdGVzIDwtIE5BDQogIA0KICAgIGZhdm9yaXRlcyA8LSBodG1sX2xpc3RbampdICU+JQ0KICAgICAgaHRtbF9ub2RlcygiLmpzLWFjdGlvbkZhdm9yaXRlIC5Qcm9maWxlVHdlZXQtYWN0aW9uQ291bnRGb3JQcmVzZW50YXRpb24iKSAlPiUNCiAgICAgIGh0bWxfdGV4dCgpICU+JQ0KICAgICAgYXMubnVtZXJpYygpIA0KICAgIGlmKGlzLm51bGwoZmF2b3JpdGVzKSkgZmF2b3JpdGVzIDwtIE5BDQogICAgICANCiAgICByZXR3ZWV0cyA8LSBodG1sX2xpc3RbampdICU+JQ0KICAgICAgaHRtbF9ub2RlcygiLmpzLWFjdGlvblJldHdlZXQgLlByb2ZpbGVUd2VldC1hY3Rpb25Db3VudEZvclByZXNlbnRhdGlvbiIpICU+JQ0KICAgICAgaHRtbF90ZXh0KCkgJT4lDQogICAgICBhcy5udW1lcmljKCkgDQogICAgaWYoaXMubnVsbChyZXR3ZWV0cykpIHJldHdlZXRzIDwtIE5BDQogICAgDQogICAgY29tbWVudHMgPC0gIGh0bWxfbGlzdFtqal0gJT4lDQogICAgICBodG1sX25vZGVzKCIuanMtYWN0aW9uUmVwbHkgLlByb2ZpbGVUd2VldC1hY3Rpb25Db3VudEZvclByZXNlbnRhdGlvbiIpICU+JQ0KICAgICAgaHRtbF90ZXh0KCkgJT4lDQogICAgICBhcy5udW1lcmljKCkgDQogICAgaWYoaXMubnVsbChjb21tZW50cykpIGNvbW1lbnRzIDwtIE5BDQogIA0KICAgICMgcmVwbHlfbGlzdFtbampdXSA8LSBkYXRhLmZyYW1lKA0KICAgICMgICBuYW1lcyA9IG5hbWVzWzFdLA0KICAgICMgICBkYXRlcyA9IGRhdGVzWzFdLA0KICAgICMgICB0ZXh0ID0gdGV4dFsxXSwNCiAgICAjICAgZmF2b3JpdGVzID0gZmF2b3JpdGVzWzFdLA0KICAgICMgICByZXR3ZWV0cyA9IHJldHdlZXRzWzFdLA0KICAgICMgICBjb21tZW50cyA9IGNvbW1lbnRzWzFdLA0KICAgICMgICBzdHJpbmdzQXNGYWN0b3JzID0gRg0KICAgICMgKQ0KICAgIHJlcGx5X2xpc3RbW2pqXV0gPC0gZGF0YS5mcmFtZSgNCiAgICAgIG5hbWVzLCBkYXRlcywgdGV4dCwNCiAgICAgIGZhdm9yaXRlcywgcmV0d2VldHMsIGNvbW1lbnRzLA0KICAgICAgc3RyaW5nc0FzRmFjdG9ycyA9IEYNCiAgICApDQogIH0NCiAgDQogIHJlcGxpZXMgPC0gcmVwbHlfbGlzdCAlPiUNCiAgICBiaW5kX3Jvd3MoKSAjIGRvLmNhbGwoInJiaW5kIiwgcmVwbHkpDQogIA0KICByZXR1cm4ocmVwbGllcykNCn0NCmBgYA0KDQoNCiMgTWFpbiBGdW5jdGlvbg0KDQpzZWNvbmQgbG9vcA0KDQoqIHNjcm9sbGVyXShodHRwczovL3N0YWNrb3ZlcmZsb3cuY29tL3F1ZXN0aW9ucy80NTIwNDkzNC9jaGVjay1pZi1pdHMtcG9zc2libGUtdG8tc2Nyb2xsLWRvd24td2l0aC1yc2VsZW5pdW0pDQoNCg0KYGBge3J9DQpsaWJyYXJ5KHJ2ZXN0KQ0KDQpnZXRfcmVwbGllc19zY3JvbGwgPC0gZnVuY3Rpb24oaGFuZGxlLCBpZHMpIHsNCg0KICAjIyMgc2Nyb2xsZXIgc2NyaXB0DQogIGNzc19lbGVtZW50IDwtICIjcGVybWFsaW5rLW92ZXJsYXktZGlhbG9nID4gZGl2LlBlcm1hbGlua092ZXJsYXktY29udGVudCA+IGRpdiA+IGRpdiA+IGRpdi5wZXJtYWxpbmstZm9vdGVyIiAjIHRhcmdldCBlbGVtZW50DQogIHNjcmlwdCA8LSAiYXJndW1lbnRzWzBdLnNjcm9sbEludG9WaWV3KHRydWUpOyIgIyBzY3JvbGxlciBmdW5jdGlvbg0KICANCiAgbnR3ZWV0cyA8LSBmdW5jdGlvbigpew0KICAgIG50d2VldHMgPC0gcmVtRHIkZ2V0UGFnZVNvdXJjZSgpW1sxXV0gJT4lIA0KICAgICAgcmVhZF9odG1sKCkgJT4lDQogICAgICBodG1sX25vZGVzKCIuanMtbmF2IC51LXRleHRUcnVuY2F0ZSBiIikgJT4lDQogICAgICBodG1sX3RleHQoKSAlPiUgDQogICAgICBsZW5ndGgoKQ0KICB9DQogIA0KICAjIyMgcHJlcA0KICB1IDwtIHBhc3RlMCgiaHR0cHM6Ly90d2l0dGVyLmNvbS8iLCBoYW5kbGUsICIvc3RhdHVzLyIsIGlkcywgIj9sYW5nPWVuIikNCiAgDQogIHJlcGxpZXNfcGFnZV9saXN0IDwtIGxpc3QoKQ0KICANCiAgZm9yKGpqIGluIHNlcV9hbG9uZyh1KSkgew0KICAgDQogICAgIyBjYWxsIHR3aXR0ZXIgdXJsDQogICAgcmVtRHIkbmF2aWdhdGUodVtqal0pDQogICAgDQogICAgIyMjIHNjcm9sbGVyDQogICAgayA8LSA1MA0KICAgIG50d19iZWZvcmUgPC0gbnR3ZWV0cygpDQogICAgDQogICAgd2hpbGUoayA+IDApew0KICAgICAgdHJ5Q2F0Y2goew0KICAgICAgICAjIHNjcm9sbA0KICAgICAgICB3ZWJFbGVtIDwtIHJlbURyJGZpbmRFbGVtZW50KCJjc3MiLCBjc3NfZWxlbWVudCkNCiAgICAgICAgcmVtRHIkZXhlY3V0ZVNjcmlwdChzY3JpcHQsIGFyZ3MgPSBsaXN0KHdlYkVsZW0pKQ0KICAgICAgICBTeXMuc2xlZXAoMSkNCiAgICAgICAgDQogICAgICAgIG50d19hZnRlciA8LSBudHdlZXRzKCkNCg0KICAgICAgICBpZihudHdfYmVmb3JlID09IG50d19hZnRlcikgew0KICAgICAgICAgIGsgPC0gMA0KICAgICAgICAgIGNhdChncmVlbigiRG9uZSBzY3JvbGxpbmchIE5leHQgdHdlZXQ6IFxuIikpDQogICAgICAgIH0gZWxzZSB7DQogICAgICAgICAgayA8LSBrIC0gMQ0KICAgICAgICAgIG50d19iZWZvcmUgPC0gbnR3X2FmdGVyDQogICAgICAgICAgIGNhdChncmVlbihrKSAlKyUgYmx1ZSgiIHNjcm9sbHMgcmVtYWluIC4uLlxuIikpDQogICAgICAgIH0NCg0KICAgICAgfSwgZXJyb3IgPSBmdW5jdGlvbihlKXsNCiAgICAgICAgayA8LSAwDQogICAgICB9KQ0KICAgIH0NCg0KICAgIHRyeUNhdGNoKHsNCiAgICAgIHJlbURyJGdldFBhZ2VTb3VyY2UoKVtbMV1dICU+JSANCiAgICAgICAgeG1sMjo6cmVhZF9odG1sKCkgJT4lDQogICAgICAgIGdldF9yZXBsaWVzKCkgLT4gcmVwbGllc19wYWdlX2xpc3RbW2pqXV0gDQogICAgfSwgZXJyb3IgPSBmdW5jdGlvbihlKXsNCiAgICAgIHJlcGxpZXNfcGFnZV9saXN0W1tqal1dIDwtIE5VTEwNCiAgICAgIGNhdCgic29ycnkgbm90IGZvdW5kLiIpDQogICAgfSkNCiAgfQ0KICANCiAgcmVwbGllc19hbGwgPC0gcmVwbGllc19wYWdlX2xpc3QgJT4lIA0KICAgIGJpbmRfcm93cygpICU+JQ0KICAgIGZpbHRlcighZHVwbGljYXRlZCh0ZXh0KSkgJT4lDQogICAgZmlsdGVyKCFpcy5uYSh0ZXh0KSkNCiAgaWYoaXMuZGF0YS5mcmFtZShyZXBsaWVzX2FsbCkpIHJlcGxpZXNfYWxsJGhhbmRsZSA8LSBoYW5kbGUNCg0KICByZXR1cm4ocmVwbGllc19hbGwpDQp9DQpgYGANCg0KDQpgYGB7cn0NCm9wdGlvbnMoc2NpcGVuID0gOTk5KQ0KZGF0IDwtIGhhbmRsZXJfaWRzDQoNCmhhbmRsZSA8LSBkYXQkaGFuZGxlcls4XSAlPiUgYXMuY2hhcmFjdGVyKCkNCmlkcyA8LSBkYXQkdHdlZXRfaWRbOF0gJT4lIGFzLmNoYXJhY3RlcigpDQoNCmdldF9yZXBsaWVzX3Njcm9sbChoYW5kbGUsIGlkcykNCmBgYA0KDQoNCg0KdGhpcmQgbG9vcA0KDQpgYGB7cn0NCmdldF90d2VldF9yZXBsaWVzIDwtIGZ1bmN0aW9uKGRhdCwgc3RhcnQsIGVuZCl7DQogIA0KICBzcXAgPC0gc3RhcnQ6ZW5kDQogIGZpbmFsX2xpc3QgPC0gbGlzdCgpDQogIA0KICBmb3IoamogaW4gc2VxX2Fsb25nKHNxcCkpIHsNCiAgICBwYXN0ZTAoIlxuICsrKyBUd2VldCAjOiAiLCBzcXBbampdLCAiIGJ5OiAiLCBkYXQkaGFuZGxlcltzcXBbampdXSwgIiArKysgXG4iKSAlPiUNCiAgICAgIGJnUmVkJGJvbGQoKSAlPiUNCiAgICAgIGNhdCgpDQogICAgDQogICAgcmQgPC0gZ2V0X3JlcGxpZXNfc2Nyb2xsKA0KICAgICAgaGFuZGxlID0gZGF0JGhhbmRsZXJbc3FwW2pqXV0sIA0KICAgICAgaWRzID0gZGF0JHR3ZWV0X2lkW3NxcFtqal1dDQogICAgKSANCiAgICANCiAgICBmaWxlX2V4aXN0cyA8LSBmaWxlLmV4aXN0cygNCiAgICAgIHBhc3RlMCgiZGF0YS9maW5hbF9saXN0IiwgIl8iLCBzdGFydCwgIl8iLCBzcXBbampdIC0gMSwgIi5SZGF0YSIpKQ0KICAgIGlzX2F2YWlsYWJsZSA8LSAoaXMuZGF0YS5mcmFtZShyZCkgJiAhaXMubnVsbChyZCkpDQogICAgDQogICAgZmluYWxfbGlzdFtbampdXSA8LSByZA0KICAgICAgDQogICAgaWYoaXNfYXZhaWxhYmxlKSB7DQogICAgICBpZihmaWxlX2V4aXN0cyl7DQogICAgICAgIGZpbGUucmVtb3ZlKHBhc3RlMCgiZGF0YS9maW5hbF9saXN0IiwgIl8iLCBzdGFydCwgIl8iLCBzcXBbampdIC0gMSwgIi5SZGF0YSIpKQ0KICAgICAgfSANCiAgICAgIA0KICAgICAgc2F2ZShmaW5hbF9saXN0LCBmaWxlID0gcGFzdGUwKCJkYXRhL2ZpbmFsX2xpc3QiLCAiXyIsIHN0YXJ0LCAiXyIsIHNxcFtqal0sICIuUmRhdGEiKSkNCiAgDQogICAgfQ0KICB9DQogIHJldHVybihmaW5hbF9saXN0KQ0KfQ0KYGBgDQoNCg0KDQpgYGB7cn0NCmZpbmFsX2xpc3QgPC0gZ2V0X3R3ZWV0X3JlcGxpZXMoZGF0LCAyNDAwMDEsIDI0MDAwMikNCg0KZmluYWxfZHQgPC0gYmluZF9yb3dzKGZpbmFsX2xpc3QpICMgJT4lDQojIGJlZXByOjpiZWVwKDgpDQojIHNhdmUoZmluYWxfZHQsIGZpbGUgPSAiZGF0YS9yZXBsaWVzLlJkYXRhIikNCnRhYmxlKGR1cGxpY2F0ZWQoZmluYWxfZHQpKQ0KYGBgDQoNCg==</div>
 
 
 

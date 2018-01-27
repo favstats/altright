@@ -1,6 +1,6 @@
 ---
 title: "twitter"
-author: "Simon Roth"
+author: "Simon und Fabio"
 date: "26 Januar 2018"
 output: html_notebook
 ---
@@ -12,54 +12,46 @@ knitr::opts_chunk$set(echo = TRUE)
 ## R Markdown
 
 ```{r}
-pacman::p_load(tidyverse, wdman, jsonlite, rvest, xml2, RSelenium, here)
-
-dir("data")
-an_ids <- jsonlite::fromJSON("data/anncoulter_ids.json")
+pacman::p_load(tidyverse, wdman, jsonlite, rvest, xml2, RSelenium, here, crayon, here)
 ```
 
 # reading twitter ids
 
 ```{r}
-# ABC_ids <- fromJSON(here("data", "tw", "tw_abc_ids.json"))
-#  length(ABC_ids)
-tweet_ids <- dir(here("data", "tw"))[-1]
-#here::here("data", "tw")
-
-# tweet_ids_list <- list()
+# 
+# tweet_ids <- dir(here("data", "tw"))[-1:-2]
+# 
+# 
+# handlers <- c("RealAlexJones", "AnnCoulter", "ArktosMedia", "MsBlaireWhite", "navyhato", "BreitbartNews", "Cernovich", "CNN", "NewRightAmerica", "scrowder", "IdentityEvropa", "FoxNews", "Gavin_McInnes" , "infowars", "Lauren_Southern",  "StefanMolyneux", "MSNBC", "MillennialWoes", "nytimes", "AVoiceforMen", "BrittPettibone", "PrisonPlanet", "ramzpaul",  "TheRebelTV", "redicetv", "ReturnOfKings", "RichardBSpencer", "RoamingMil","TRobinsonNewEra", "Styx666Official","vdare", "washingtonpost")
+# 
+# cbind(tweet_ids, handlers)
+# 
+# tweet_init <- fromJSON(here("data", "tw", "tw_abc_ids.json")) %>% 
+#   data.frame(handler = "ABC")
 # for (jj in seq_along(tweet_ids)) {
-#   tweet_ids_list[[jj]] <- jsonlite::fromJSON(here("data", "tw", tweet_ids[jj]))
+#    tweet_init <- plyr::rbind.fill(tweet_init, 
+#                                   jsonlite::fromJSON(
+#                                     here(
+#                                     "data", "tw", tweet_ids[jj]
+#                                     )
+#                                   ) %>% 
+#                                   data.frame(handler = handlers[jj]))
+#    cat(jj, "\n")
 # }
+# handler_ids <- tweet_init
+# 
+# colnames(handler_ids) <- c("tweet_id", "handler")
+# 
+# save(handler_ids, file = here("data", "tw", "handler_ids.Rdata"))
+# 
 
-handlers <- c("RealAlexJones", "AnnCoulter", "MsBlaireWhite", "navyhato", "BreitbartNews", "Cernovich", "CNN", "FoxNews", "infowars", "Lauren_Southern", "MSNBC", "PrisonPlanet", "TheRebelTV", "RoamingMil","TRobinsonNewEra", "washingtonpost")
 
-tweet_init <- fromJSON(here("data", "tw", "tw_abc_ids.json")) %>% 
-  data.frame(handler = "ABC")
-for (jj in seq_along(tweet_ids)) {
-   tweet_init <- plyr::rbind.fill(tweet_init, 
-                                  jsonlite::fromJSON(
-                                    here(
-                                    "data", "tw", tweet_ids[jj]
-                                    )
-                                  ) %>% 
-                                  data.frame(handler = handlers[jj]))
-   cat(jj, "\n")
-}
-handler_ids <- tweet_init
+load(here("data", "tw", "handler_ids.Rdata"))
 
-colnames(handler_ids) <- c("tweet_id", "handler")
+handler_ids <- handler_ids %>%
+  filter(!duplicated(tweet_id))
+
 table(handler_ids$handler)
-# enframed_tweets <- enframe(tweet_ids_list)
-# ff <- list()
-# for (jj in seq_along(handlers)) {
-#   ff[[jj]] <- cbind(enframed_tweets$value[[jj]], handlers[jj])
-# }
-
-# handler_ids <- rlist::list.rbind(ff) %>% 
-#    as.data.frame()
-
-# handler_ids %>% 
-#   filter(handler == "BreitbartNews")
 ```
 
 ```{r}
@@ -96,8 +88,12 @@ table(handler_ids$handler)
 
 ```{r}
 library(RSelenium)
-rD <- rsDriver(verbose = FALSE, port = 5556L)
+port <- sample(4000L:5000L, 1)
+rD <- rsDriver(verbose = FALSE, port = port)
+rD
+
 remDr <- rD$client
+#remDr$close()
 ```
 
 
@@ -109,23 +105,24 @@ first loop
 ```{r}
 get_replies <- function(html) {
   
-  if_notnull <- function(x) ifelse(identical(x, character(0)) | is.null(x), NA, x)
+  html_list <- html %>%
+    ### debug
+    #remDr$getPageSource()[[1]] %>% read_html() %>%
+    #html_nodes("#stream-items-id") %>%
+    html_nodes(".permalink-descendant-tweet, .js-initial-focus") 
   
-  html_list <- html %>% 
-    html_nodes(".permalink-descendant-tweet , .js-initial-focus") ##stream-items-id
-  
-  storage <- data.frame()
+  reply_list <- list()
   
   for(jj in seq_along(html_list)){
   
     names <- html_list[jj] %>%
       html_nodes(".js-nav .u-textTruncate b") %>%
-      html_text() 
+      html_text()
     if(is.null(names)) names <- NA
   
     text <- html_list[jj] %>%
       html_nodes(".tweet-text") %>%
-      html_text() 
+      html_text()
     if(is.null(text)) text <- NA
     
     dates <- html_list[jj] %>%
@@ -136,34 +133,41 @@ get_replies <- function(html) {
     favorites <- html_list[jj] %>%
       html_nodes(".js-actionFavorite .ProfileTweet-actionCountForPresentation") %>%
       html_text() %>%
-      as.numeric() %>%
-      ifelse(is.na(.), 0, .)
+      as.numeric() 
     if(is.null(favorites)) favorites <- NA
       
     retweets <- html_list[jj] %>%
       html_nodes(".js-actionRetweet .ProfileTweet-actionCountForPresentation") %>%
       html_text() %>%
-      as.numeric() %>%
-      ifelse(is.na(.), 0, .)
+      as.numeric() 
     if(is.null(retweets)) retweets <- NA
     
     comments <-  html_list[jj] %>%
       html_nodes(".js-actionReply .ProfileTweet-actionCountForPresentation") %>%
       html_text() %>%
-      as.numeric() %>%
-      ifelse(is.na(.), 0, .)
+      as.numeric() 
     if(is.null(comments)) comments <- NA
   
-    replies <- data.frame(
-      names, dates, text, 
-      favorites, retweets, comments, 
+    # reply_list[[jj]] <- data.frame(
+    #   names = names[1],
+    #   dates = dates[1],
+    #   text = text[1],
+    #   favorites = favorites[1],
+    #   retweets = retweets[1],
+    #   comments = comments[1],
+    #   stringsAsFactors = F
+    # )
+    reply_list[[jj]] <- data.frame(
+      names, dates, text,
+      favorites, retweets, comments,
       stringsAsFactors = F
     )
-    
-    storage <- rbind(storage, replies)
   }
   
-  return(storage)
+  replies <- reply_list %>%
+    bind_rows() # do.call("rbind", reply)
+  
+  return(replies)
 }
 ```
 
@@ -178,24 +182,24 @@ second loop
 ```{r}
 library(rvest)
 
-ntweets <- function(){
-  ntweets <- remDr$getPageSource()[[1]] %>% 
-    read_html() %>%
-    html_nodes(".js-nav .u-textTruncate b") %>%
-    html_text() %>% 
-    length()
-}
-
-
-get_replies_df <- function(handle, ids) {
+get_replies_scroll <- function(handle, ids) {
 
   ### scroller script
   css_element <- "#permalink-overlay-dialog > div.PermalinkOverlay-content > div > div > div.permalink-footer" # target element
   script <- "arguments[0].scrollIntoView(true);" # scroller function
   
+  ntweets <- function(){
+    ntweets <- remDr$getPageSource()[[1]] %>% 
+      read_html() %>%
+      html_nodes(".js-nav .u-textTruncate b") %>%
+      html_text() %>% 
+      length()
+  }
+  
   ### prep
   u <- paste0("https://twitter.com/", handle, "/status/", ids, "?lang=en")
-  replies <- list()
+  
+  replies_page_list <- list()
   
   for(jj in seq_along(u)) {
    
@@ -209,158 +213,104 @@ get_replies_df <- function(handle, ids) {
     while(k > 0){
       tryCatch({
         # scroll
-
         webElem <- remDr$findElement("css", css_element)
         remDr$executeScript(script, args = list(webElem))
-        #Sys.sleep(1)
+        Sys.sleep(1)
         
         ntw_after <- ntweets()
 
-        
         if(ntw_before == ntw_after) {
           k <- 0
+          cat(green("Done scrolling! Next tweet: \n"))
         } else {
           k <- k - 1
           ntw_before <- ntw_after
+           cat(green(k) %+% blue(" scrolls remain ...\n"))
         }
 
-        cat("\n", k, " scrolls remain\n")
       }, error = function(e){
         k <- 0
       })
     }
 
     tryCatch({
-      replies[[jj]] <- remDr$getPageSource()[[1]] %>% 
-      xml2::read_html() %>%
-      get_replies()
+      remDr$getPageSource()[[1]] %>% 
+        xml2::read_html() %>%
+        get_replies() -> replies_page_list[[jj]] 
     }, error = function(e){
-      replies[[jj]] <- NA
+      replies_page_list[[jj]] <- NULL
       cat("sorry not found.")
     })
-
-    #cat(jj, "\t")
   }
   
-  replies <- do.call("rbind", replies)
-  if(!is.null(replies)) replies$handle <- handle
-     # save(replies, file = "data/replies.Rdata")
-  return(replies)
+  replies_all <- replies_page_list %>% 
+    bind_rows() %>%
+    filter(!duplicated(text)) %>%
+    filter(!is.na(text))
+  if(is.data.frame(replies_all)) replies_all$handle <- handle
+
+  return(replies_all)
 }
 ```
+
+
+```{r}
+options(scipen = 999)
+dat <- handler_ids
+
+handle <- dat$handler[8] %>% as.character()
+ids <- dat$tweet_id[8] %>% as.character()
+
+get_replies_scroll(handle, ids)
+```
+
+
 
 third loop
 
 ```{r}
-dat <- handler_ids[10:20, ]
-
-#handle <- dat$handler[8]
-#ids <- dat$tweet_id[8]
-
-start <- 1
-final <- list()
-
-for (jj in start:nrow(dat)) {
-  rd <- get_replies_df(dat$handler[jj], dat$tweet_id[jj])
+get_tweet_replies <- function(dat, start, end){
   
-  file_exists <- file.exists(paste0("data/replies_list", "_", start, "_", jj - 1, ".Rdata"))
-  is_available <- (!is.data.frame(rd) | !is.null(rd))
+  sqp <- start:end
+  final_list <- list()
   
-  if (is_available) {
-    if(file_exists) file.remove(paste0("data/replies_list", "_", start, "_", jj - 1, ".Rdata"))
-    final[[jj]] <- rd
-    save(final, file = paste0("data/replies_list", "_", start, "_", jj, ".Rdata"))
+  for(jj in seq_along(sqp)) {
+    paste0("\n +++ Tweet #: ", sqp[jj], " by: ", dat$handler[sqp[jj]], " +++ \n") %>%
+      bgRed$bold() %>%
+      cat()
+    
+    rd <- get_replies_scroll(
+      handle = dat$handler[sqp[jj]], 
+      ids = dat$tweet_id[sqp[jj]]
+    ) 
+    
+    file_exists <- file.exists(
+      paste0("data/final_list", "_", start, "_", sqp[jj] - 1, ".Rdata"))
+    is_available <- (is.data.frame(rd) & !is.null(rd))
+    
+    final_list[[jj]] <- rd
+      
+    if(is_available) {
+      if(file_exists){
+        file.remove(paste0("data/final_list", "_", start, "_", sqp[jj] - 1, ".Rdata"))
+      } 
+      
+      save(final_list, file = paste0("data/final_list", "_", start, "_", sqp[jj], ".Rdata"))
+  
+    }
   }
-
-  cat(jj, "\t")
+  return(final_list)
 }
-
-
-final_dt <- bind_rows(final) %>%
-  ## extract unique elements
-  filter(!duplicated(text))
-beepr::beep(8)
-save(final_dt, file = "data/replies.Rdata")
 ```
 
 
 
-
-
-# Scroll Stuff
-
 ```{r}
-html <- webElem$getPageSource()[[1]] %>% read_html()
+final_list <- get_tweet_replies(dat, 240001, 240002)
 
-replies1 <- get_replies(html)
-
-# html <- remDr$getPageSource()[[1]] %>% read_html()
-# 
-# replies2 <- get_replies(html)
-```
-
-
-```{r}
-# selServ <- selenium(verbose = TRUE)
-# selServ$process
-# selServ$log()
-# #selServ$stop()
-```
-
-```{r}
-# pjsDrv <- phantomjs(verbose = FALSE, check = FALSE)
-# pjsDrv$process
-# pjsDrv$output()
-# pjsDrv$stop()
-```
-
-```{r}
-# remDr$navigate(url_str)
-# remDr$screenshot(useViewer = T, display = T)
-#webElem <- remDr$findElement("css", "body")
-#webElem$sendKeysToElement(list(key = "end"))
-# webElem$screenshot(useViewer = T, display = T)
-# for(i in 1:5){
-#   webElem$sendKeysToElement(list(key = "down_arrow"))
-#   Sys.sleep(2)
-# }
-#remDr$executeScript("window.scrollBy(0,250);")
-# webElem <- remDr$findElement("xpath", '//*[contains(concat( " ", @class, " " ), concat( " ", "Icon--logo", " " ))]')
-# remDr$mouseMoveToLocation(webElement = webElem)
-# 
-# script <- "window.scrollTo(0,2000)"
-# remDr$executeScript(script, args = list("lala"))
-```
-
-
-
-
-
-# old 
-
-```{r}
-
-# ##fetch tweets from @userName timeline
-# tweets <- userTimeline(userName, n = 100)
-# 
-# ## converting tweets list to DataFrame  
-# tweets <- twListToDF(tweets)  
-
-## building queryString to fetch retweets 
-queryString = paste0("to:", userName)
-
-## retrieving tweet ID for which reply is to be fetched 
-#Id = tweets[31,"id"]  
-
-## fetching all the reply to userName
-rply <- searchTwitter(queryString, sinceID = id, n = 100) 
-rply <- twListToDF(rply)
-
-## eliminate all the reply other then reply to required tweet Id  
-rply = rply[!rply$replyToSID > id,]
-rply = rply[!rply$replyToSID < id,]
-rply = rply[complete.cases(rply[,"replyToSID"]),]
-
-## now rply DataFrame contains all the required replies.
+final_dt <- bind_rows(final_list) # %>%
+# beepr::beep(8)
+# save(final_dt, file = "data/replies.Rdata")
+table(duplicated(final_dt))
 ```
 
