@@ -11,12 +11,12 @@ source("helper_functions.R")
 getwd()
 options(scipen = 999)
 
-tweet_ids <- get(load(here("data", "tw", "tweet_ids", "tweet_ids.Rdata")))
+todo_ids_ar <- get(load(here("data", "tw", "todo_ids_ar.Rdata")))
 
-tweet_ids <- tweet_ids %>%
-  filter(!duplicated(tweet_id))
+todo_ids_ar <- todo_ids_ar %>%
+  filter(!duplicated(todo_ids_ar))
 
-dat <- tweet_ids
+dat <- todo_ids_ar
 
 
 ```

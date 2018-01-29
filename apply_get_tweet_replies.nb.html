@@ -177,54 +177,20 @@ $(document).ready(function () {
 <h1>Run Twitter Scrape</h1>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxucGFjbWFuOjpwX2xvYWQodGlkeXZlcnNlLCB3ZG1hbiwganNvbmxpdGUsIHJ2ZXN0LCB4bWwyLCBSU2VsZW5pdW0sIGhlcmUsIGNyYXlvbiwgaGVyZSlcbmBgYCJ9 -->
-<pre class="r"><code>pacman::p_load(tidyverse, wdman, jsonlite, rvest, xml2, RSelenium, here, crayon, here)</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiSW5zdGFsbGluZyBwYWNrYWdlIGludG8g46S847ixQzovVXNlcnMvRmFiaW8vRG9jdW1lbnRzL1Ivd2luLWxpYnJhcnkvMy4046S847iyXG4oYXMg46S847ixbGli46S847iyIGlzIHVuc3BlY2lmaWVkKVxuY2Fubm90IG9wZW4gVVJMICdodHRwOi8vd3d3LnN0YXRzLm94LmFjLnVrL3B1Yi9SV2luL3NyYy9jb250cmliL1BBQ0tBR0VTLnJkcyc6IEhUVFAgc3RhdHVzIHdhcyAnNDA0IE5vdCBGb3VuZCdhbHNvIGluc3RhbGxpbmcgdGhlIGRlcGVuZGVuY3kg46S847ixaGF2ZW7jpLzjuLJcblxuY2Fubm90IG9wZW4gVVJMICdodHRwOi8vd3d3LnN0YXRzLm94LmFjLnVrL3B1Yi9SV2luL2Jpbi93aW5kb3dzL2NvbnRyaWIvMy40L1BBQ0tBR0VTLnJkcyc6IEhUVFAgc3RhdHVzIHdhcyAnNDA0IE5vdCBGb3VuZCd0cnlpbmcgVVJMICdodHRwczovL2NyYW4ucnN0dWRpby5jb20vYmluL3dpbmRvd3MvY29udHJpYi8zLjQvaGF2ZW5fMS4xLjEuemlwJ1xuQ29udGVudCB0eXBlICdhcHBsaWNhdGlvbi96aXAnIGxlbmd0aCA4ODE4ODEgYnl0ZXMgKDg2MSBLQilcbmRvd25sb2FkZWQgODYxIEtCXG5cbnRyeWluZyBVUkwgJ2h0dHBzOi8vY3Jhbi5yc3R1ZGlvLmNvbS9iaW4vd2luZG93cy9jb250cmliLzMuNC90aWR5dmVyc2VfMS4yLjEuemlwJ1xuQ29udGVudCB0eXBlICdhcHBsaWNhdGlvbi96aXAnIGxlbmd0aCA4MjM1NSBieXRlcyAoODAgS0IpXG5kb3dubG9hZGVkIDgwIEtCXG4ifQ== -->
-<pre><code>Installing package into 㤼㸱C:/Users/Fabio/Documents/R/win-library/3.4㤼㸲
-(as 㤼㸱lib㤼㸲 is unspecified)
-cannot open URL 'http://www.stats.ox.ac.uk/pub/RWin/src/contrib/PACKAGES.rds': HTTP status was '404 Not Found'also installing the dependency 㤼㸱haven㤼㸲
-
-cannot open URL 'http://www.stats.ox.ac.uk/pub/RWin/bin/windows/contrib/3.4/PACKAGES.rds': HTTP status was '404 Not Found'trying URL 'https://cran.rstudio.com/bin/windows/contrib/3.4/haven_1.1.1.zip'
-Content type 'application/zip' length 881881 bytes (861 KB)
-downloaded 861 KB
-
-trying URL 'https://cran.rstudio.com/bin/windows/contrib/3.4/tidyverse_1.2.1.zip'
-Content type 'application/zip' length 82355 bytes (80 KB)
-downloaded 80 KB</code></pre>
-<!-- rnb-output-end -->
-<!-- rnb-output-begin eyJkYXRhIjoicGFja2FnZSDigJhoYXZlbuKAmSBzdWNjZXNzZnVsbHkgdW5wYWNrZWQgYW5kIE1ENSBzdW1zIGNoZWNrZWRcbnBhY2thZ2Ug4oCYdGlkeXZlcnNl4oCZIHN1Y2Nlc3NmdWxseSB1bnBhY2tlZCBhbmQgTUQ1IHN1bXMgY2hlY2tlZFxuXG5UaGUgZG93bmxvYWRlZCBiaW5hcnkgcGFja2FnZXMgYXJlIGluXG5cdEM6XFxVc2Vyc1xcRmFiaW9cXEFwcERhdGFcXExvY2FsXFxUZW1wXFxSdG1wMHdzOThCXFxkb3dubG9hZGVkX3BhY2thZ2VzXG4ifQ== -->
-<pre><code>package ‘haven’ successfully unpacked and MD5 sums checked
-package ‘tidyverse’ successfully unpacked and MD5 sums checked
-
-The downloaded binary packages are in
-    C:\Users\Fabio\AppData\Local\Temp\Rtmp0ws98B\downloaded_packages</code></pre>
-<!-- rnb-output-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiXG50aWR5dmVyc2UgaW5zdGFsbGVkXG5wYWNrYWdlIJF0aWR5dmVyc2WSIHdhcyBidWlsdCB1bmRlciBSIHZlcnNpb24gMy40LjNwYWNrYWdlIJFnZ3Bsb3QykiB3YXMgYnVpbHQgdW5kZXIgUiB2ZXJzaW9uIDMuNC4zcGFja2FnZSCRdGliYmxlkiB3YXMgYnVpbHQgdW5kZXIgUiB2ZXJzaW9uIDMuNC4zcGFja2FnZSCRdGlkeXKSIHdhcyBidWlsdCB1bmRlciBSIHZlcnNpb24gMy40LjNwYWNrYWdlIJFyZWFkcpIgd2FzIGJ1aWx0IHVuZGVyIFIgdmVyc2lvbiAzLjQuM3BhY2thZ2UgkXB1cnJykiB3YXMgYnVpbHQgdW5kZXIgUiB2ZXJzaW9uIDMuNC4zcGFja2FnZSCRZHBseXKSIHdhcyBidWlsdCB1bmRlciBSIHZlcnNpb24gMy40LjNwYWNrYWdlIJFzdHJpbmdykiB3YXMgYnVpbHQgdW5kZXIgUiB2ZXJzaW9uIDMuNC4zcGFja2FnZSCRZm9yY2F0c5Igd2FzIGJ1aWx0IHVuZGVyIFIgdmVyc2lvbiAzLjQuM1dhcm5pbmcgbWVzc2FnZTpcbkluIHJlYWRMaW5lcyhjb24pIDpcbiAgaW5jb21wbGV0ZSBmaW5hbCBsaW5lIGZvdW5kIG9uICdDOi9Vc2Vycy9GYWJpby9Eb2N1bWVudHMvUi93aW4tbGlicmFyeS8zLjQvcm1hcmtkb3duL3JtYXJrZG93bi90ZW1wbGF0ZXMvbXlfdGVtcGxhdGUvdGVtcGxhdGUueWFtbCdcbiJ9 -->
-<pre><code>
-tidyverse installed
-package 㤼㸱tidyverse㤼㸲 was built under R version 3.4.3package 㤼㸱ggplot2㤼㸲 was built under R version 3.4.3package 㤼㸱tibble㤼㸲 was built under R version 3.4.3package 㤼㸱tidyr㤼㸲 was built under R version 3.4.3package 㤼㸱readr㤼㸲 was built under R version 3.4.3package 㤼㸱purrr㤼㸲 was built under R version 3.4.3package 㤼㸱dplyr㤼㸲 was built under R version 3.4.3package 㤼㸱stringr㤼㸲 was built under R version 3.4.3package 㤼㸱forcats㤼㸲 was built under R version 3.4.3Warning message:
-In readLines(con) :
-  incomplete final line found on 'C:/Users/Fabio/Documents/R/win-library/3.4/rmarkdown/rmarkdown/templates/my_template/template.yaml'</code></pre>
-<!-- rnb-output-end -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuc291cmNlKFwiaGVscGVyX2Z1bmN0aW9ucy5SXCIpXG5nZXR3ZCgpXG5gYGAifQ== -->
-<pre class="r"><code>source(&quot;helper_functions.R&quot;)
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxucGFjbWFuOjpwX2xvYWQodGlkeXZlcnNlLCB3ZG1hbiwganNvbmxpdGUsIHJ2ZXN0LCB4bWwyLCBSU2VsZW5pdW0sIGhlcmUsIGNyYXlvbiwgaGVyZSlcbnNvdXJjZShcImhlbHBlcl9mdW5jdGlvbnMuUlwiKVxuZ2V0d2QoKVxuYGBgIn0= -->
+<pre class="r"><code>pacman::p_load(tidyverse, wdman, jsonlite, rvest, xml2, RSelenium, here, crayon, here)
+source(&quot;helper_functions.R&quot;)
 getwd()</code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-output-begin eyJkYXRhIjoiWzFdIFwiQzovVXNlcnMvRmFiaW8vRG9jdW1lbnRzL2dpdF9wcm9qL2FsdHJpZ2h0XCJcbiJ9 -->
 <pre><code>[1] &quot;C:/Users/Fabio/Documents/git_proj/altright&quot;</code></pre>
 <!-- rnb-output-end -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxub3B0aW9ucyhzY2lwZW4gPSA5OTkpXG50d2VldF9pZHMgPC0gZ2V0KGxvYWQoaGVyZShcImRhdGFcIiwgXCJ0d1wiLCBcInR3ZWV0X2lkc1wiLCBcInR3ZWV0X2lkcy5SZGF0YVwiKSkpXG50d2VldF9pZHMgPC0gdHdlZXRfaWRzICU+JVxuICBmaWx0ZXIoIWR1cGxpY2F0ZWQodHdlZXRfaWQpKVxuYGBgIn0= -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxub3B0aW9ucyhzY2lwZW4gPSA5OTkpXG50b2RvX2lkc19hciA8LSBnZXQobG9hZChoZXJlKFwiZGF0YVwiLCBcInR3XCIsIFwidG9kb19pZHNfYXIuUmRhdGFcIikpKVxudG9kb19pZHNfYXIgPC0gdG9kb19pZHNfYXIgJT4lXG4gIGZpbHRlcighZHVwbGljYXRlZCh0b2RvX2lkc19hcikpXG5kYXQgPC0gdG9kb19pZHNfYXJcbmBgYCJ9 -->
 <pre class="r"><code>options(scipen = 999)
-tweet_ids &lt;- get(load(here(&quot;data&quot;, &quot;tw&quot;, &quot;tweet_ids&quot;, &quot;tweet_ids.Rdata&quot;)))
-tweet_ids &lt;- tweet_ids %&gt;%
-  filter(!duplicated(tweet_id))</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoicGFja2FnZSDjpLzjuLFiaW5kcmNwcOOkvOO4siB3YXMgYnVpbHQgdW5kZXIgUiB2ZXJzaW9uIDMuNC4zXG4ifQ== -->
-<pre><code>package 㤼㸱bindrcpp㤼㸲 was built under R version 3.4.3</code></pre>
-<!-- rnb-output-end -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZGF0IDwtIHR3ZWV0X2lkc1xuYGBgIn0= -->
-<pre class="r"><code>dat &lt;- tweet_ids</code></pre>
+todo_ids_ar &lt;- get(load(here(&quot;data&quot;, &quot;tw&quot;, &quot;todo_ids_ar.Rdata&quot;)))
+todo_ids_ar &lt;- todo_ids_ar %&gt;%
+  filter(!duplicated(todo_ids_ar))
+dat &lt;- todo_ids_ar</code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
@@ -1237,7 +1203,7 @@ final_list &lt;- get_tweet_replies(dat, start, finish)</code></pre>
 <!-- rnb-text-end -->
 </div>
 
-<div id="rmd-source-code">LS0tDQp0aXRsZTogIlIgTm90ZWJvb2siDQpvdXRwdXQ6IGh0bWxfbm90ZWJvb2sNCi0tLQ0KDQojIFJ1biBUd2l0dGVyIFNjcmFwZSANCg0KYGBge3J9DQpwYWNtYW46OnBfbG9hZCh0aWR5dmVyc2UsIHdkbWFuLCBqc29ubGl0ZSwgcnZlc3QsIHhtbDIsIFJTZWxlbml1bSwgaGVyZSwgY3JheW9uLCBoZXJlKQ0Kc291cmNlKCJoZWxwZXJfZnVuY3Rpb25zLlIiKQ0KZ2V0d2QoKQ0Kb3B0aW9ucyhzY2lwZW4gPSA5OTkpDQoNCnR3ZWV0X2lkcyA8LSBnZXQobG9hZChoZXJlKCJkYXRhIiwgInR3IiwgInR3ZWV0X2lkcyIsICJ0d2VldF9pZHMuUmRhdGEiKSkpDQoNCnR3ZWV0X2lkcyA8LSB0d2VldF9pZHMgJT4lDQogIGZpbHRlcighZHVwbGljYXRlZCh0d2VldF9pZCkpDQoNCmRhdCA8LSB0d2VldF9pZHMNCg0KDQpgYGANCiMgTWFpbiBGdW5jdGlvbg0KDQpgYGB7cn0NCmxpYnJhcnkoUlNlbGVuaXVtKQ0KcG9ydCA8LSBzYW1wbGUoNDAwMEw6NTAwMEwsIDEpDQpyRCA8LSByc0RyaXZlcih2ZXJib3NlID0gRkFMU0UsIHBvcnQgPSBwb3J0KQ0KckQNCg0KcmVtRHIgPC0gckQkY2xpZW50DQojcmVtRHIkY2xvc2UoKQ0KDQpzdGFydCA8LSAxMzQyMQ0KZmluaXNoIDwtIDQ1NDc0DQoNCmZpbmFsX2xpc3QgPC0gZ2V0X3R3ZWV0X3JlcGxpZXMoZGF0LCBzdGFydCwgZmluaXNoKQ0KZmluYWxfZHQgPC0gYmluZF9yb3dzKGZpbmFsX2xpc3QpDQpiZWVwcjo6YmVlcCg4KQ0Kc2F2ZShmaW5hbF9kdCwgZmlsZSA9IHBhc3RlMCgiZGF0YS90d19kYXRhXyIsc3RhcnQsICJfIiwgZmluaXNoLCAiLlJkYXRhIikpDQpgYGANCg0K</div>
+<div id="rmd-source-code">LS0tDQp0aXRsZTogIlIgTm90ZWJvb2siDQpvdXRwdXQ6IGh0bWxfbm90ZWJvb2sNCi0tLQ0KDQojIFJ1biBUd2l0dGVyIFNjcmFwZSANCg0KYGBge3J9DQpwYWNtYW46OnBfbG9hZCh0aWR5dmVyc2UsIHdkbWFuLCBqc29ubGl0ZSwgcnZlc3QsIHhtbDIsIFJTZWxlbml1bSwgaGVyZSwgY3JheW9uLCBoZXJlKQ0Kc291cmNlKCJoZWxwZXJfZnVuY3Rpb25zLlIiKQ0KZ2V0d2QoKQ0Kb3B0aW9ucyhzY2lwZW4gPSA5OTkpDQoNCnRvZG9faWRzX2FyIDwtIGdldChsb2FkKGhlcmUoImRhdGEiLCAidHciLCAidG9kb19pZHNfYXIuUmRhdGEiKSkpDQoNCnRvZG9faWRzX2FyIDwtIHRvZG9faWRzX2FyICU+JQ0KICBmaWx0ZXIoIWR1cGxpY2F0ZWQodG9kb19pZHNfYXIpKQ0KDQpkYXQgPC0gdG9kb19pZHNfYXINCg0KDQpgYGANCiMgTWFpbiBGdW5jdGlvbg0KDQpgYGB7cn0NCmxpYnJhcnkoUlNlbGVuaXVtKQ0KcG9ydCA8LSBzYW1wbGUoNDAwMEw6NTAwMEwsIDEpDQpyRCA8LSByc0RyaXZlcih2ZXJib3NlID0gRkFMU0UsIHBvcnQgPSBwb3J0KQ0KckQNCg0KcmVtRHIgPC0gckQkY2xpZW50DQojcmVtRHIkY2xvc2UoKQ0KDQpzdGFydCA8LSAxMzQyMQ0KZmluaXNoIDwtIDQ1NDc0DQoNCmZpbmFsX2xpc3QgPC0gZ2V0X3R3ZWV0X3JlcGxpZXMoZGF0LCBzdGFydCwgZmluaXNoKQ0KZmluYWxfZHQgPC0gYmluZF9yb3dzKGZpbmFsX2xpc3QpDQpiZWVwcjo6YmVlcCg4KQ0Kc2F2ZShmaW5hbF9kdCwgZmlsZSA9IHBhc3RlMCgiZGF0YS90d19kYXRhXyIsc3RhcnQsICJfIiwgZmluaXNoLCAiLlJkYXRhIikpDQpgYGANCg0K</div>
 
 
 
