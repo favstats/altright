@@ -5,7 +5,7 @@ output: github_document
 ---
 
 ```{r echo=F}
-pacman::p_load(tidyverse, here)
+pacman::p_load(tidyverse, here, magrittr)
 
 altright <- tibble::tribble(
   ~Content,                ~FacebookID,         ~YouTubeChannelID,          ~TwitterID,         ~short,
@@ -75,11 +75,97 @@ save(id_data, file = here::here("data/id_data.Rdata"))
 knitr::kable(media)
 ```
 
+# Current Status
+
+~- Facebook Data~
+~- YouTube Data~
+- Twitter Data
+
+*1 - 13577*
+
+*45450 - 45473*
+
+*50.000 - 54.000*
+
+*100.000 - 102378*
+
+*126420 - 126866*
+
+*150001 - 150391*
+
+*180000 - 150391*
+
+*180291 - 180314*
+
+*200001 - 204901*
+
+*210001 - 219169*
+
+*250001 - 260070*
+
+*290001 - 312645*
+
+*330001 - 334221*
+
+*334211 - 334356*
+
+
+```{r, echo = F}
+library(dplyr)
+tweet_ids <- get(load(here("data", "tw", "tweet_ids", "tweet_ids.Rdata")))
+# 
+# ss <- as.data.frame(table(tweet_ids$handler))
+# colnames(ss) <- c("TwitterHandle", "Frequency")
+# ss %>% 
+#   mutate(CumSum = cumsum(Frequency))
+# 
+# # Oldest Lappi
+# tweet_ids[45450,] # ArktosMedia MsBlaireWhite navyhato: 50000
+# #PC
+# tweet_ids[126420,] # NewRightAmerica: 127750
+# tweet_ids[135630,] # IdentityEvropa: 136200
+# #Simon?
+# tweet_ids[228820,] # MillennialWoes: 230750
+# tweet_ids[310771,] # RichardBSpencer: 314300
+# Fachi
+# tweet_ids[337100,] # vdare: 344900
+# 
+# 136183 - 547
+```
+
+
+```{r}
+ids_done <-  c(1:13577, 45450:45473, 50000:54000, 100000:102378, 126420:126866, 150001:150391, 180000:180314, 200001:204901, 210001:219169, 250001:260070, 290001:312645, 330001:334221, 334211:334356)
+
+
+todo_ids <- tweet_ids %>% 
+  mutate(tweet_id = as.numeric(as.character(tweet_id))) %>%
+  mutate(row_ids = 1:n()) %>% 
+  filter(!(row_ids %in% ids_done))
+
+unique(todo_ids$handler)
+
+altrighters <- c("RealAlexJones", "AnnCoulter", "ArktosMedia", "MsBlaireWhite", "navyhato", "Cernovich", "NewRightAmerica", "IdentityEvropa", "infowars", "Lauren_Southern", "MillennialWoes", "AVoiceforMen", "BrittPettibone", "PrisonPlanet", "ramzpaul", "RichardBSpencer", "RoamingMil", "TRobinsonNewEra", "Styx666Official", "vdare")
+
+todo_ids_ar <- todo_ids %>% 
+    filter(handler %in% altrighters) 
+
+table(as.character(todo_ids_ar$handler))
+
+todo_ids_ar %<>% 
+  group_by(handler) %>% 
+  mutate(n = n()) %>% 
+  ungroup() %>% 
+  arrange(n)
+
+save(todo_ids_ar, file = "data/tw/todo_ids_ar.Rdata")
+```
+
 
 # To Do 
 
 
-- Flüge buchen
+~~- Flüge buchen~~
 - Research Papers/Books
 - Paper schreiben
 - Neuen Korpus für Alt Right

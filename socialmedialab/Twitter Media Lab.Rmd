@@ -8,9 +8,37 @@ output: html_notebook
 ```{r}
 #install.packages("pacman")
 #pacman::p_install_gh("systats/binoculaR")
-pacman::p_load(tidyverse, magrittr, haven, ggthemes, sjPlot, sjmisc, sjstats, binoculaR, janitor, here, SocialMediaLab, hrbrthemes, ggraph, twitteR , purrr, stringr, jsonlite)
+pacman::p_load(tidyverse, magrittr, haven, ggthemes, sjPlot, sjmisc, sjstats, binoculaR, janitor, here, SocialMediaLab, hrbrthemes, ggraph, twitteR , purrr, stringr, jsonlite, rlist)
 
 range01 <- function(x){(x - min(x, na.rm = T)) / (max(x, na.rm = T) - min(x, na.rm = T))}
+
+```
+
+# reading twitter ids
+
+```{r}
+#cnn_ids <- fromJSON(here("data", "tw", "cnn_month.json"))
+ 
+tweet_ids <- dir(here("data", "tw"))
+here::here("data", "tw")
+
+tweet_ids_list <- list()
+for (jj in seq_along(tweet_ids)) {
+  tweet_ids_list[[jj]] <- jsonlite::fromJSON(here("data", "tw", tweet_ids[jj]))
+}
+
+enframed_tweets <- enframe(tweet_ids_list)
+
+handlers <- c("ABC", "RealAlexJones", "AnnCoulter", "MsBlaireWhite", "navyhato", "BreitbartNews", "Cernovich", "CNN", "FoxNews", "infowars", "Lauren_Southern", "MSNBC", "PrisonPlanet", "TheRebelTV", "RoamingMil","TRobinsonNewEra", "washingtonpost")
+
+ff <- list()
+for (jj in seq_along(handlers)) {
+  ff[[jj]] <- cbind(enframed_tweets$value[[jj]], handlers[jj])
+}
+
+rlist::list.rbind(ff) %>% 
+   as.data.frame()
+
 
 ```
 
@@ -88,12 +116,13 @@ myaccesstoken <- "513351911-HnGVTozLlxCQJh4u0kntUajynJDVBHQP1qNFe588"
 # REPLACE WITH YOUR ACCESS TOKEN SECRET
 myaccesstokensecret <- "mfNN2NVnd9d0WNmS4tZCz85r6swsCZp2H23JdgHMJdXh1"
 # Change the next four lines based on your own consumer_key, consume_secret, access_token, and access_secret. 
-consumer_key <- "itt4vjXXihsdZAIEK48rK1XOR"
-consumer_secret <- "gIHdZX9ecZoP5i0k6zkPBZb2WuMvPYHYFQUPqCO4KXMO1EULWE"
+
 access_token <- "	513351911-HnGVTozLlxCQJh4u0kntUajynJDVBHQP1qNFe588"
 access_secret <- "	mfNN2NVnd9d0WNmS4tZCz85r6swsCZp2H23JdgHMJdXh1"
-#options(httr_oauth_cache=T)
-twitteR::setup_twitter_oauth(consumer_key, consumer_secret)
+
+
+
+
 tw = twitteR::searchTwitter("xD", n = 1e4, since = '2018-01-01', retryOnRateLimit = 1e3)
 d = twitteR::twListToDF(tw)
 
@@ -197,12 +226,9 @@ ggsave(file = here("images","network5.png"))
 ```
 
 
-# reading twitter ids
+
 
 ```{r}
-cnn_ids <- fromJSON(here("data", "tw", "cnn_month.json"))
-
-
 map_chr2 <- function(x, .f, ...) {
   map(x, .f, ...) %>% map_if(is_empty, ~ NA_character_) %>% flatten_chr()
 }
