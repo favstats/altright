@@ -157,3 +157,21 @@ bind_it_all(datasets, names)
 
 ```
 
+# Twitter Combine
+
+```{r}
+tw_sets <- dir(here::here("data", "tw"))[-33]
+
+dat_list <- list()
+for (jj in seq_along(tw_sets)) {
+  dat_list[[jj]] <- dplyr::bind_rows(get(load(here("data", "tw", tw_sets[jj]))))
+}
+tw_partial1 <- dplyr::bind_rows(dat_list)
+save(tw_partial1, file = here("data", "tw", "tw_partial1.Rdata"))
+
+table(tw_partial1$handle)
+
+tw_partial1 %>% 
+  filter(stringr::str_detect(text, "ethnostate"))
+```
+

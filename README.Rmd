@@ -75,11 +75,53 @@ save(id_data, file = here::here("data/id_data.Rdata"))
 knitr::kable(media)
 ```
 
+# Current Status
+
+~- Facebook Data~
+~- YouTube Data~
+- Twitter Data
+
+*1 - 13.000*
+
+*50.000 - 54.000*
+
+*100.000 - 102.000*
+
+*200.000 - 220.000*
+
+*250.000 - 260.000*
+
+*290.000 - 310.000*
+
+
+```{r, echo = F}
+library(dplyr)
+tweet_ids <- get(load(here("data", "tw", "tweet_ids", "tweet_ids.Rdata")))
+
+ss <- as.data.frame(table(tweet_ids$handler))
+colnames(ss) <- c("TwitterHandle", "Frequency")
+ss %>% 
+  mutate(CumSum = cumsum(Frequency))
+
+# Oldest Lappi
+tweet_ids[45450,] # ArktosMedia MsBlaireWhite navyhato: 50000
+#PC
+tweet_ids[126420,] # NewRightAmerica: 127750
+tweet_ids[135630,] # IdentityEvropa: 136200
+#Simon?
+tweet_ids[228820,] # MillennialWoes: 230750
+tweet_ids[310771,] # RichardBSpencer: 314300
+Fachi
+tweet_ids[337100,] # vdare: 344900
+
+136183 - 547
+```
+
 
 # To Do 
 
 
-- Flüge buchen
+~~- Flüge buchen~~
 - Research Papers/Books
 - Paper schreiben
 - Neuen Korpus für Alt Right

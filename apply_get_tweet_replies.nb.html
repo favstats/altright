@@ -177,20 +177,19 @@ $(document).ready(function () {
 <h1>Run Twitter Scrape</h1>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxucGFjbWFuOjpwX2xvYWQodGlkeXZlcnNlLCB3ZG1hbiwganNvbmxpdGUsIHJ2ZXN0LCB4bWwyLCBSU2VsZW5pdW0sIGhlcmUsIGNyYXlvbiwgaGVyZSlcbnNvdXJjZShcImhlbHBlcl9mdW5jdGlvbnMuUlwiKVxuZ2V0d2QoKVxuYGBgIn0= -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxucGFjbWFuOjpwX2xvYWQodGlkeXZlcnNlLCB3ZG1hbiwganNvbmxpdGUsIHJ2ZXN0LCB4bWwyLCBSU2VsZW5pdW0sIGhlcmUsIGNyYXlvbiwgaGVyZSlcbnNvdXJjZShcImhlbHBlcl9mdW5jdGlvbnMuUlwiKVxuZ2V0d2QoKVxub3B0aW9ucyhzY2lwZW4gPSA5OTkpXG5cbnR3ZWV0X2lkcyA8LSBnZXQobG9hZChoZXJlKFwiZGF0YVwiLCBcInR3XCIsIFwidHdlZXRfaWRzXCIsIFwidHdlZXRfaWRzLlJkYXRhXCIpKSlcblxudHdlZXRfaWRzIDwtIHR3ZWV0X2lkcyAlPiVcbiAgZmlsdGVyKCFkdXBsaWNhdGVkKHR3ZWV0X2lkKSlcblxuZGF0IDwtIHR3ZWV0X2lkc1xuXG5cbmBgYCJ9 -->
 <pre class="r"><code>pacman::p_load(tidyverse, wdman, jsonlite, rvest, xml2, RSelenium, here, crayon, here)
 source(&quot;helper_functions.R&quot;)
-getwd()</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiWzFdIFwiQzovVXNlcnMvRmFiaW8vRG9jdW1lbnRzL2dpdF9wcm9qL2FsdHJpZ2h0XCJcbiJ9 -->
-<pre><code>[1] &quot;C:/Users/Fabio/Documents/git_proj/altright&quot;</code></pre>
-<!-- rnb-output-end -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxub3B0aW9ucyhzY2lwZW4gPSA5OTkpXG5sb2FkKGhlcmUoXCJkYXRhXCIsIFwidHdcIiwgXCJoYW5kbGVyX2lkcy5SZGF0YVwiKSlcbmhhbmRsZXJfaWRzIDwtIGhhbmRsZXJfaWRzICU+JVxuICBmaWx0ZXIoIWR1cGxpY2F0ZWQodHdlZXRfaWQpKVxuZGF0IDwtIGhhbmRsZXJfaWRzXG5gYGAifQ== -->
-<pre class="r"><code>options(scipen = 999)
-load(here(&quot;data&quot;, &quot;tw&quot;, &quot;handler_ids.Rdata&quot;))
-handler_ids &lt;- handler_ids %&gt;%
+getwd()
+options(scipen = 999)
+
+tweet_ids &lt;- get(load(here(&quot;data&quot;, &quot;tw&quot;, &quot;tweet_ids&quot;, &quot;tweet_ids.Rdata&quot;)))
+
+tweet_ids &lt;- tweet_ids %&gt;%
   filter(!duplicated(tweet_id))
-dat &lt;- handler_ids</code></pre>
+
+dat &lt;- tweet_ids
+</code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
@@ -199,19 +198,29 @@ dat &lt;- handler_ids</code></pre>
 <h1>Main Function</h1>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxucGFzdGUwKFwiZGF0YS90d19kYXRhX1wiLHN0YXJ0LCBcIl9cIiwgZmluaXNoLCBcIi5SZGF0YVwiKVxuXG5gYGAifQ== -->
-<pre class="r"><code>paste0(&quot;data/tw_data_&quot;,start, &quot;_&quot;, finish, &quot;.Rdata&quot;)
-</code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGlicmFyeShSU2VsZW5pdW0pXG5wb3J0IDwtIHNhbXBsZSg0MDAwTDo1MDAwTCwgMSlcbnJEIDwtIHJzRHJpdmVyKHZlcmJvc2UgPSBGQUxTRSwgcG9ydCA9IHBvcnQpXG5yRFxuXG5yZW1EciA8LSByRCRjbGllbnRcbiNyZW1EciRjbG9zZSgpXG5cbnN0YXJ0IDwtIDE5OThcbmZpbmlzaCA8LSA1MDAwMFxuXG5maW5hbF9saXN0IDwtIGdldF90d2VldF9yZXBsaWVzKGRhdCwgc3RhcnQsIGZpbmlzaClcbmZpbmFsX2R0IDwtIGJpbmRfcm93cyhmaW5hbF9saXN0KVxuYmVlcHI6OmJlZXAoOClcbnNhdmUoZmluYWxfZHQsIGZpbGUgPSBwYXN0ZTAoXCJkYXRhL3R3X2RhdGFfXCIsc3RhcnQsIFwiX1wiLCBmaW5pc2gsIFwiLlJkYXRhXCIpKVxuYGBgIn0= -->
+<pre class="r"><code>library(RSelenium)
+port &lt;- sample(4000L:5000L, 1)
+rD &lt;- rsDriver(verbose = FALSE, port = port)
+rD
+
+remDr &lt;- rD$client
+#remDr$close()
+
+start &lt;- 1998
+finish &lt;- 50000
+
+final_list &lt;- get_tweet_replies(dat, start, finish)
+final_dt &lt;- bind_rows(final_list)
+beepr::beep(8)
+save(final_dt, file = paste0(&quot;data/tw_data_&quot;,start, &quot;_&quot;, finish, &quot;.Rdata&quot;))</code></pre>
 <!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiWzFdIFwiZGF0YS90d19kYXRhXzFfNTAwMDAuUmRhdGFcIlxuIn0= -->
-<pre><code>[1] &quot;data/tw_data_1_50000.Rdata&quot;</code></pre>
-<!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 <!-- rnb-text-end -->
 </div>
 
-<div id="rmd-source-code">LS0tDQp0aXRsZTogIlIgTm90ZWJvb2siDQpvdXRwdXQ6IGh0bWxfbm90ZWJvb2sNCi0tLQ0KDQojIFJ1biBUd2l0dGVyIFNjcmFwZSANCg0KYGBge3J9DQpwYWNtYW46OnBfbG9hZCh0aWR5dmVyc2UsIHdkbWFuLCBqc29ubGl0ZSwgcnZlc3QsIHhtbDIsIFJTZWxlbml1bSwgaGVyZSwgY3JheW9uLCBoZXJlKQ0Kc291cmNlKCJoZWxwZXJfZnVuY3Rpb25zLlIiKQ0KZ2V0d2QoKQ0Kb3B0aW9ucyhzY2lwZW4gPSA5OTkpDQoNCmxvYWQoaGVyZSgiZGF0YSIsICJ0dyIsICJoYW5kbGVyX2lkcy5SZGF0YSIpKQ0KDQpoYW5kbGVyX2lkcyA8LSBoYW5kbGVyX2lkcyAlPiUNCiAgZmlsdGVyKCFkdXBsaWNhdGVkKHR3ZWV0X2lkKSkNCg0KZGF0IDwtIGhhbmRsZXJfaWRzDQpgYGANCiMgTWFpbiBGdW5jdGlvbg0KDQpgYGB7cn0NCmxpYnJhcnkoUlNlbGVuaXVtKQ0KcG9ydCA8LSBzYW1wbGUoNDAwMEw6NTAwMEwsIDEpDQpyRCA8LSByc0RyaXZlcih2ZXJib3NlID0gRkFMU0UsIHBvcnQgPSBwb3J0KQ0KckQNCg0KcmVtRHIgPC0gckQkY2xpZW50DQojcmVtRHIkY2xvc2UoKQ0KDQpzdGFydCA8LSAxDQpmaW5pc2ggPC0gNTAwMDANCg0KZmluYWxfbGlzdCA8LSBnZXRfdHdlZXRfcmVwbGllcyhkYXQsIHN0YXJ0LCBmaW5pc2gpDQpmaW5hbF9kdCA8LSBiaW5kX3Jvd3MoZmluYWxfbGlzdCkNCmJlZXByOjpiZWVwKDgpDQpzYXZlKGZpbmFsX2R0LCBmaWxlID0gcGFzdGUwKCJkYXRhL3R3X2RhdGFfIixzdGFydCwgIl8iLCBmaW5pc2gsICIuUmRhdGEiKSkNCmBgYA0KDQo=</div>
+<div id="rmd-source-code">LS0tDQp0aXRsZTogIlIgTm90ZWJvb2siDQpvdXRwdXQ6IGh0bWxfbm90ZWJvb2sNCi0tLQ0KDQojIFJ1biBUd2l0dGVyIFNjcmFwZSANCg0KYGBge3J9DQpwYWNtYW46OnBfbG9hZCh0aWR5dmVyc2UsIHdkbWFuLCBqc29ubGl0ZSwgcnZlc3QsIHhtbDIsIFJTZWxlbml1bSwgaGVyZSwgY3JheW9uLCBoZXJlKQ0Kc291cmNlKCJoZWxwZXJfZnVuY3Rpb25zLlIiKQ0KZ2V0d2QoKQ0Kb3B0aW9ucyhzY2lwZW4gPSA5OTkpDQoNCnR3ZWV0X2lkcyA8LSBnZXQobG9hZChoZXJlKCJkYXRhIiwgInR3IiwgInR3ZWV0X2lkcyIsICJ0d2VldF9pZHMuUmRhdGEiKSkpDQoNCnR3ZWV0X2lkcyA8LSB0d2VldF9pZHMgJT4lDQogIGZpbHRlcighZHVwbGljYXRlZCh0d2VldF9pZCkpDQoNCmRhdCA8LSB0d2VldF9pZHMNCg0KDQpgYGANCiMgTWFpbiBGdW5jdGlvbg0KDQpgYGB7cn0NCmxpYnJhcnkoUlNlbGVuaXVtKQ0KcG9ydCA8LSBzYW1wbGUoNDAwMEw6NTAwMEwsIDEpDQpyRCA8LSByc0RyaXZlcih2ZXJib3NlID0gRkFMU0UsIHBvcnQgPSBwb3J0KQ0KckQNCg0KcmVtRHIgPC0gckQkY2xpZW50DQojcmVtRHIkY2xvc2UoKQ0KDQpzdGFydCA8LSAxOTk4DQpmaW5pc2ggPC0gNTAwMDANCg0KZmluYWxfbGlzdCA8LSBnZXRfdHdlZXRfcmVwbGllcyhkYXQsIHN0YXJ0LCBmaW5pc2gpDQpmaW5hbF9kdCA8LSBiaW5kX3Jvd3MoZmluYWxfbGlzdCkNCmJlZXByOjpiZWVwKDgpDQpzYXZlKGZpbmFsX2R0LCBmaWxlID0gcGFzdGUwKCJkYXRhL3R3X2RhdGFfIixzdGFydCwgIl8iLCBmaW5pc2gsICIuUmRhdGEiKSkNCmBgYA0KDQo=</div>
 
 
 

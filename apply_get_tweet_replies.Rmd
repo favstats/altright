@@ -11,12 +11,14 @@ source("helper_functions.R")
 getwd()
 options(scipen = 999)
 
-load(here("data", "tw", "handler_ids.Rdata"))
+tweet_ids <- get(load(here("data", "tw", "tweet_ids", "tweet_ids.Rdata")))
 
-handler_ids <- handler_ids %>%
+tweet_ids <- tweet_ids %>%
   filter(!duplicated(tweet_id))
 
-dat <- handler_ids
+dat <- tweet_ids
+
+
 ```
 # Main Function
 
@@ -29,7 +31,7 @@ rD
 remDr <- rD$client
 #remDr$close()
 
-start <- 1
+start <- 1998
 finish <- 50000
 
 final_list <- get_tweet_replies(dat, start, finish)
