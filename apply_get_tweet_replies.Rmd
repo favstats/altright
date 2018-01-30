@@ -11,15 +11,14 @@ source("helper_functions.R")
 
 options(scipen = 999)
 
-todo_ids_ar <- get(load(here("data", "tw", "tweet_ids",  "tweet_ids.Rdata")))
+tweet_ids <- get(load(here("data", "tw", "tweet_ids",  "tweet_ids.Rdata")))
 
-todo_ids_ar <- todo_ids_ar %>%
-  filter(!duplicated(todo_ids_ar))
+tweet_ids <- tweet_ids %>%
+  filter(!duplicated(tweet_id))
 
-dat <- todo_ids_ar %>% 
+dat <- tweet_ids %>% 
   mutate(tweet_id = as.factor(tweet_id))
 
-todo_ids_ar[26,]
 ```
 # Main Function
 
@@ -32,8 +31,8 @@ rD
 remDr <- rD$client
 #remDr$close()
 
-start <- 135732
-finish <- 145637
+start <- 13577
+finish <- 50000
 
 final_list <- get_tweet_replies(dat, start, finish)
 final_dt <- bind_rows(final_list)

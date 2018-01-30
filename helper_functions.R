@@ -169,11 +169,11 @@ get_tweet_replies <- function(dat, start, end){
   sqp <- start:end
   final_list <- list()
   
-  for(jj in seq_along(sqp)) {
+  for (jj in seq_along(sqp)) {
     paste0("\n +++ Tweet #: ", sqp[jj], " by: ", dat$handler[sqp[jj]], " +++ \n") %>%
       bgRed$bold() %>%
       cat()
-    beepr::beep(1)
+#    beepr::beep(1)
     rd <- get_replies_scroll(
       handle = dat$handler[sqp[jj]], 
       ids = dat$tweet_id[sqp[jj]]
