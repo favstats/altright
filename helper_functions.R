@@ -173,7 +173,7 @@ get_tweet_replies <- function(dat, start, end){
     paste0("\n +++ Tweet #: ", sqp[jj], " by: ", dat$handler[sqp[jj]], " +++ \n") %>%
       bgRed$bold() %>%
       cat()
-    beepr::beep(1)
+    #beepr::beep(1)
     rd <- get_replies_scroll(
       handle = dat$handler[sqp[jj]], 
       ids = dat$tweet_id[sqp[jj]]
