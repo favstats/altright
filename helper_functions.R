@@ -78,17 +78,45 @@ get_replies_scroll <- function(handle, ids) {
       html_text() %>% 
       length()
   }
-  
+
   ### prep
   u <- paste0("https://twitter.com/", handle, "/status/", ids, "?lang=en")
+  #u <- "https://twitter.com/ArktosMedia/status/821845084962516992" # produces error
+  #u <- "https://twitter.com/LevineJonathan/status/957265312646352897"
+  #u <- "https://twitter.com/ArktosMedia/status/920564862874472448"
   
   replies_page_list <- list()
   
   for(jj in seq_along(u)) {
+  
+    
+    #does tweet exist
+    test <- tryCatch({
+      xml2::read_html(u[jj]) %>% 
+        html_text() %>% 
+        str_detect("This account has been suspended.")
+    }, 
+    error = function(e){
+      e
+    }, finally = function(){
+      closeAllConnections()
+    }) 
+    
+    if (any(names(test) == "message")) {
+      if (stringr::str_detect(stringr::str_to_lower(test$message), "error")) {
+        cat(red("WARNING:") %+% white(" Tweet not found... moving on\n")) 
+        return(NA)
+      }
+    }
+    else if (test) {
+      cat(red("WARNING:") %+% white(" Account Suspended\n")) 
+        return(NA)
+      }
+    
     
     # call twitter url
     remDr$navigate(u[jj])
-    
+
     ### scroller
     k <- 50
     ntw_before <- ntweets()

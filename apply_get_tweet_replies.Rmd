@@ -8,7 +8,7 @@ output: html_notebook
 ```{r}
 pacman::p_load(tidyverse, wdman, jsonlite, rvest, xml2, RSelenium, here, crayon, here)
 source("helper_functions.R")
-getwd()
+
 options(scipen = 999)
 
 todo_ids_ar <- get(load(here("data", "tw", "todo_ids_ar.Rdata")))
@@ -16,9 +16,10 @@ todo_ids_ar <- get(load(here("data", "tw", "todo_ids_ar.Rdata")))
 todo_ids_ar <- todo_ids_ar %>%
   filter(!duplicated(todo_ids_ar))
 
-dat <- todo_ids_ar
+dat <- todo_ids_ar %>% 
+  mutate(tweet_id = as.factor(tweet_id))
 
-
+todo_ids_ar[26,]
 ```
 # Main Function
 
@@ -31,8 +32,8 @@ rD
 remDr <- rD$client
 #remDr$close()
 
-start <- 13421
-finish <- 45474
+start <- 25
+finish <- 10000
 
 final_list <- get_tweet_replies(dat, start, finish)
 final_dt <- bind_rows(final_list)
