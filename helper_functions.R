@@ -94,7 +94,7 @@ get_replies_scroll <- function(handle, ids) {
     test <- tryCatch({
       xml2::read_html(u[jj]) %>% 
         html_text() %>% 
-        str_detect("This account has been suspended.")
+        str_detect("This account has been suspended|has been withheld in Germany.")
     }, 
     error = function(e){
       e
@@ -109,7 +109,7 @@ get_replies_scroll <- function(handle, ids) {
       }
     }
     else if (test) {
-      cat(red("WARNING:") %+% white(" Account Suspended\n")) 
+      cat(red("WARNING:") %+% white(" Account Suspended/Tweet unavailable in Germany\n")) 
         return(NA)
       }
     
