@@ -112,7 +112,7 @@ knitr::kable(media)
 
 ```{r, echo = F}
 library(dplyr)
-tweet_ids <- get(load(here("data", "tw", "tweet_ids", "tweet_ids.Rdata")))
+tweet_ids <- get(load(here::here("data", "tw", "tweet_ids", "tweet_ids.Rdata")))
 # 
 # ss <- as.data.frame(table(tweet_ids$handler))
 # colnames(ss) <- c("TwitterHandle", "Frequency")
@@ -129,7 +129,8 @@ tweet_ids <- get(load(here("data", "tw", "tweet_ids", "tweet_ids.Rdata")))
 # tweet_ids[310771,] # RichardBSpencer: 314300
 # Fachi
 # tweet_ids[337100,] # vdare: 344900
-# 
+# tweet_ids[135637,] # vdare: 344900
+
 # 136183 - 547
 ```
 
