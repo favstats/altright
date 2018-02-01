@@ -83,13 +83,13 @@ knitr::kable(media)
 
 *1 - 13577*
 
-*45450 - 45473*
+<!-- *45450 - 45473* -->
 
 *50.000 - 54.000*
 
 *100.000 - 102378*
 
-*126420 - 126866*
+<!-- *126420 - 126866* -->
 
 *150001 - 150391*
 
@@ -168,7 +168,7 @@ save(todo_ids_ar, file = "data/tw/todo_ids_ar.Rdata")
 
 ~~- Flüge buchen~~
 - Research Papers/Books
-- Paper schreiben
+~~- Paper schreiben~~
 - Neuen Korpus für Alt Right
 - Include Alt Lite Figures!
 - Codewords erstellen 
@@ -183,6 +183,12 @@ save(todo_ids_ar, file = "data/tw/todo_ids_ar.Rdata")
 - Sentiment Analysis
 - Qualitative Robustness Check?
 - Nazi Data/ Labelled Online Harassment data
+
+# Possible Research Questions
+
+How does the Alt Right use "attention hacking" to spread their message and platform? (cf. Marwick & Lewis, 2017: 1)
+
+
 
 # Interesting Links:
 
