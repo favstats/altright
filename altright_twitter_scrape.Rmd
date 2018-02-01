@@ -12,7 +12,11 @@ knitr::opts_chunk$set(echo = TRUE)
 ## R Markdown
 
 ```{r}
+<<<<<<< HEAD
 pacman::p_load(tidyverse, wdman, jsonlite, rvest, xml2, RSelenium, here, crayon, here)
+=======
+pacman::p_load(tidyverse, wdman, jsonlite, rvest, xml2, RSelenium, here)
+>>>>>>> 69e842cbfac088196029d6ebc3611064652beda3
 ```
 
 # reading twitter ids
@@ -47,10 +51,13 @@ pacman::p_load(tidyverse, wdman, jsonlite, rvest, xml2, RSelenium, here, crayon,
 
 
 load(here("data", "tw", "handler_ids.Rdata"))
+<<<<<<< HEAD
 
 handler_ids <- handler_ids %>%
   filter(!duplicated(tweet_id))
 
+=======
+>>>>>>> 69e842cbfac088196029d6ebc3611064652beda3
 table(handler_ids$handler)
 ```
 
@@ -215,7 +222,11 @@ get_replies_scroll <- function(handle, ids) {
         # scroll
         webElem <- remDr$findElement("css", css_element)
         remDr$executeScript(script, args = list(webElem))
+<<<<<<< HEAD
         Sys.sleep(1)
+=======
+        Sys.sleep(1.5)
+>>>>>>> 69e842cbfac088196029d6ebc3611064652beda3
         
         ntw_after <- ntweets()
 
@@ -243,6 +254,7 @@ get_replies_scroll <- function(handle, ids) {
     })
   }
   
+<<<<<<< HEAD
   replies_all <- replies_page_list %>% 
     bind_rows() %>%
     filter(!duplicated(text)) %>%
@@ -314,3 +326,47 @@ final_dt <- bind_rows(final_list) # %>%
 table(duplicated(final_dt))
 ```
 
+=======
+  replies <- do.call("rbind", replies)
+  if(!is.null(replies)) replies$handle <- handle
+     # save(replies, file = "data/replies.Rdata")
+  return(replies)
+}
+```
+
+third loop
+
+```{r}
+dat <- handler_ids
+
+#handle <- dat$handler[8]
+#ids <- dat$tweet_id[8]
+
+
+start <- 1
+final <- list()
+
+for (jj in start:nrow(dat)) {
+  rd <- get_replies_df(dat$handler[jj], dat$tweet_id[jj])
+  
+  file_exists <- file.exists(paste0("data/replies_list", "_", start, "_", jj - 1, ".Rdata"))
+  is_available <- (!is.data.frame(rd) | !is.null(rd))
+  
+  if (is_available) {
+    if(file_exists) file.remove(paste0("data/replies_list", "_", start, "_", jj - 1, ".Rdata"))
+    final[[jj]] <- rd
+    save(final, file = paste0("data/replies_list", "_", start, "_", jj, ".Rdata"))
+
+  }
+
+  cat("Tweet Number:", jj, "By:", handler[jj])
+}
+
+final_dt <- bind_rows(final) %>%
+  ## extract unique elements
+  filter(!duplicated(text))
+beepr::beep(8)
+save(final_dt, file = "data/replies.Rdata")
+```
+
+>>>>>>> 69e842cbfac088196029d6ebc3611064652beda3
