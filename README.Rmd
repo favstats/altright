@@ -50,6 +50,12 @@ altright <- tibble::tribble(
 knitr::kable(altright)
 ```
 
+**Include Vox Day?**
+
+https://www.youtube.com/channel/UCU8jCPOhJCf5yvJTJgz6NYA
+
+
+
 # Media 
 
 ```{r echo=F}
