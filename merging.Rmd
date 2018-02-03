@@ -109,6 +109,26 @@ fb_all %<>%
 save(fb_all, file = here("data", "fb", "fb_all.Rdata"))
 ```
 
+```{r}
+load(here("data", "fb", "fb_all.Rdata"))
+
+sjw_keywords <- c("blm", "black lives matter", "feminis", "race", "racis", "sexis", "postmodern", "marx", "antifa", "pc", "political correctness", "regressive", "safe space", "social justice", "warrior", "snowflake", "identity politics", "classical liberal", "white knight", "mra", "cultural, marxism", "white, genocide", "sjw", "cuck", "dindu", "dindu, nuffin", "george, soros", "soros", "We, must, secure, the, existence, of, our, people, and, a, future, for, white, children", "\\(\\(\\(.*?\\)\\)\\)", "anti, white", "beta", "cuckservative", "cultural, enrichment", "hatefact", "lügenpresse", "mainstream, media", "mass, immigration", "postmodernism", "race, realism", "red, pill", "remove, kebab", "kebab", "cockroach", "safe, space", "shekel", "shoah", "oh, vey", "soy, boy", "snowflake", "white, guilt", "triggered", "virtue, signal", "white, guilt", "feminazi", "professional, victim", "mangina", "third, wave, feminism", "joo", "white, nation", "kek", "deus vult", "ethnostate")
+
+keywords1 <- paste(sjw_keywords, collapse = "|")
+
+fb_all %>% 
+  filter(!duplicated(message)) %>% 
+  filter(stringr::str_detect(message, "establishment")) #%>% 
+  # group_by(page) %>% 
+  # summarise(n = n())  %>%
+  # left_join(fb_all %>% 
+  # group_by(page) %>% 
+  # summarise(total = n())) %>% 
+  # mutate(perc = round(n / total * 100,3)) %>% 
+  # arrange(perc)
+
+table(fb_all$page)
+```
 
 
 ## YouTube Merger

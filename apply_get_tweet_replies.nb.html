@@ -177,6 +177,28 @@ $(document).ready(function () {
 <h1>Run Twitter Scrape</h1>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxucGFjbWFuOjpwX2xvYWQodGlkeXZlcnNlLCB3ZG1hbiwganNvbmxpdGUsIHJ2ZXN0LCB4bWwyLCBSU2VsZW5pdW0sIGhlcmUsIGNyYXlvbiwgaGVyZSlcbmBgYCJ9 -->
+<pre class="r"><code>pacman::p_load(tidyverse, wdman, jsonlite, rvest, xml2, RSelenium, here, crayon, here)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiV2FybmluZyBtZXNzYWdlOlxuSW4gcmVhZExpbmVzKGNvbikgOlxuICBpbmNvbXBsZXRlIGZpbmFsIGxpbmUgZm91bmQgb24gJ0M6L1VzZXJzL0ZhYmlvL0RvY3VtZW50cy9SL3dpbi1saWJyYXJ5LzMuNC9ybWFya2Rvd24vcm1hcmtkb3duL3RlbXBsYXRlcy9teV90ZW1wbGF0ZS90ZW1wbGF0ZS55YW1sJ1xuIn0= -->
+<pre><code>Warning message:
+In readLines(con) :
+  incomplete final line found on 'C:/Users/Fabio/Documents/R/win-library/3.4/rmarkdown/rmarkdown/templates/my_template/template.yaml'</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuc291cmNlKFwiaGVscGVyX2Z1bmN0aW9ucy5SXCIpXG5vcHRpb25zKHNjaXBlbiA9IDk5OSlcbnR3ZWV0X2lkcyA8LSBnZXQobG9hZChoZXJlKFwiZGF0YVwiLCBcInR3XCIsIFwidHdlZXRfaWRzXCIsICBcInR3ZWV0X2lkcy5SZGF0YVwiKSkpXG50d2VldF9pZHMgPC0gdHdlZXRfaWRzICU+JVxuICBmaWx0ZXIoIWR1cGxpY2F0ZWQodHdlZXRfaWQpKVxuYGBgIn0= -->
+<pre class="r"><code>source(&quot;helper_functions.R&quot;)
+options(scipen = 999)
+tweet_ids &lt;- get(load(here(&quot;data&quot;, &quot;tw&quot;, &quot;tweet_ids&quot;,  &quot;tweet_ids.Rdata&quot;)))
+tweet_ids &lt;- tweet_ids %&gt;%
+  filter(!duplicated(tweet_id))</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoicGFja2FnZSDjpLzjuLFiaW5kcmNwcOOkvOO4siB3YXMgYnVpbHQgdW5kZXIgUiB2ZXJzaW9uIDMuNC4zXG4ifQ== -->
+<pre><code>package 㤼㸱bindrcpp㤼㸲 was built under R version 3.4.3</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZGF0IDwtIHR3ZWV0X2lkcyAlPiUgXG4gIG11dGF0ZSh0d2VldF9pZCA9IGFzLmZhY3Rvcih0d2VldF9pZCkpXG5gYGAifQ== -->
+<pre class="r"><code>dat &lt;- tweet_ids %&gt;% 
+  mutate(tweet_id = as.factor(tweet_id))</code></pre>
+<!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 </div>
@@ -184,12 +206,17 @@ $(document).ready(function () {
 <h1>Main Function</h1>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGlicmFyeShSU2VsZW5pdW0pXG5wb3J0IDwtIHNhbXBsZSg0MDAwTDo1MDAwTCwgMSlcbnJEIDwtIHJzRHJpdmVyKHZlcmJvc2UgPSBGQUxTRSwgcG9ydCA9IHBvcnQpXG5gYGAifQ== -->
+<pre class="r"><code>library(RSelenium)
+port &lt;- sample(4000L:5000L, 1)
+rD &lt;- rsDriver(verbose = FALSE, port = port)</code></pre>
+<!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 <!-- rnb-text-end -->
 </div>
 
-<div id="rmd-source-code">LS0tDQp0aXRsZTogIlIgTm90ZWJvb2siDQpvdXRwdXQ6IGh0bWxfbm90ZWJvb2sNCi0tLQ0KDQojIFJ1biBUd2l0dGVyIFNjcmFwZSANCg0KYGBge3J9DQpwYWNtYW46OnBfbG9hZCh0aWR5dmVyc2UsIHdkbWFuLCBqc29ubGl0ZSwgcnZlc3QsIHhtbDIsIFJTZWxlbml1bSwgaGVyZSwgY3JheW9uLCBoZXJlKQ0Kc291cmNlKCJoZWxwZXJfZnVuY3Rpb25zLlIiKQ0KDQpvcHRpb25zKHNjaXBlbiA9IDk5OSkNCg0KdHdlZXRfaWRzIDwtIGdldChsb2FkKGhlcmUoImRhdGEiLCAidHciLCAidHdlZXRfaWRzIiwgICJ0d2VldF9pZHMuUmRhdGEiKSkpDQoNCnR3ZWV0X2lkcyA8LSB0d2VldF9pZHMgJT4lDQogIGZpbHRlcighZHVwbGljYXRlZCh0d2VldF9pZCkpDQoNCmRhdCA8LSB0d2VldF9pZHMgJT4lIA0KICBtdXRhdGUodHdlZXRfaWQgPSBhcy5mYWN0b3IodHdlZXRfaWQpKQ0KDQpgYGANCiMgTWFpbiBGdW5jdGlvbg0KDQpgYGB7cn0NCmxpYnJhcnkoUlNlbGVuaXVtKQ0KcG9ydCA8LSBzYW1wbGUoNDAwMEw6NTAwMEwsIDEpDQpyRCA8LSByc0RyaXZlcih2ZXJib3NlID0gRkFMU0UsIHBvcnQgPSBwb3J0KQ0KckQNCg0KcmVtRHIgPC0gckQkY2xpZW50DQojcmVtRHIkY2xvc2UoKQ0KDQpzdGFydCA8LSAyMTUxMQ0KZmluaXNoIDwtIDUwMDAwDQoNCmZpbmFsX2xpc3QgPC0gZ2V0X3R3ZWV0X3JlcGxpZXMoZGF0LCBzdGFydCwgZmluaXNoKQ0KZmluYWxfZHQgPC0gYmluZF9yb3dzKGZpbmFsX2xpc3QpDQpiZWVwcjo6YmVlcCg4KQ0Kc2F2ZShmaW5hbF9kdCwgZmlsZSA9IHBhc3RlMCgiZGF0YS90d19kYXRhXyIsc3RhcnQsICJfIiwgZmluaXNoLCAiLlJkYXRhIikpDQpgYGANCg0K</div>
+<div id="rmd-source-code">LS0tDQp0aXRsZTogIlIgTm90ZWJvb2siDQpvdXRwdXQ6IGh0bWxfbm90ZWJvb2sNCi0tLQ0KDQojIFJ1biBUd2l0dGVyIFNjcmFwZSANCg0KYGBge3J9DQpwYWNtYW46OnBfbG9hZCh0aWR5dmVyc2UsIHdkbWFuLCBqc29ubGl0ZSwgcnZlc3QsIHhtbDIsIFJTZWxlbml1bSwgaGVyZSwgY3JheW9uLCBoZXJlKQ0Kc291cmNlKCJoZWxwZXJfZnVuY3Rpb25zLlIiKQ0KDQpvcHRpb25zKHNjaXBlbiA9IDk5OSkNCg0KdHdlZXRfaWRzIDwtIGdldChsb2FkKGhlcmUoImRhdGEiLCAidHciLCAidHdlZXRfaWRzIiwgICJ0d2VldF9pZHMuUmRhdGEiKSkpDQoNCnR3ZWV0X2lkcyA8LSB0d2VldF9pZHMgJT4lDQogIGZpbHRlcighZHVwbGljYXRlZCh0d2VldF9pZCkpDQoNCmRhdCA8LSB0d2VldF9pZHMgJT4lIA0KICBtdXRhdGUodHdlZXRfaWQgPSBhcy5mYWN0b3IodHdlZXRfaWQpKQ0KDQpgYGANCiMgTWFpbiBGdW5jdGlvbg0KDQpgYGB7cn0NCmxpYnJhcnkoUlNlbGVuaXVtKQ0KcG9ydCA8LSBzYW1wbGUoNDAwMEw6NTAwMEwsIDEpDQpyRCA8LSByc0RyaXZlcih2ZXJib3NlID0gRkFMU0UsIHBvcnQgPSBwb3J0KQ0KckQNCg0KcmVtRHIgPC0gckQkY2xpZW50DQojcmVtRHIkY2xvc2UoKQ0KDQpzdGFydCA8LSAyMjg2MQ0KZmluaXNoIDwtIDUwMDAwDQoNCmZpbmFsX2xpc3QgPC0gZ2V0X3R3ZWV0X3JlcGxpZXMoZGF0LCBzdGFydCwgZmluaXNoKQ0KZmluYWxfZHQgPC0gYmluZF9yb3dzKGZpbmFsX2xpc3QpDQpiZWVwcjo6YmVlcCg4KQ0Kc2F2ZShmaW5hbF9kdCwgZmlsZSA9IHBhc3RlMCgiZGF0YS90d19kYXRhXyIsc3RhcnQsICJfIiwgZmluaXNoLCAiLlJkYXRhIikpDQpgYGANCg0K</div>
 
 
 
