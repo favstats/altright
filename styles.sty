@@ -1,0 +1,38 @@
+\usepackage{pgfkeys}
+\usepackage{tcolorbox}
+\usepackage{scrextend}
+\newtcolorbox{mybox}[1]{colback=red!5!white,colframe=red!75!black,fonttitle=\bfseries,title=#1}
+\usepackage{hyperref}
+\usepackage{cleveref}
+\usepackage{geometry}
+\usepackage{xcolor}
+\usepackage{amsmath}
+\usepackage[some]{background}
+\usepackage{lipsum}
+
+\definecolor{titlepagecolor}{cmyk}{0,.86,.96,0}
+
+\DeclareFixedFont{\bigsf}{T1}{phv}{b}{n}{1.5cm}
+\DeclareFixedFont{\bigsub}{T1}{phv}{b}{n}{0.45cm}
+\DeclareFixedFont{\bignice}{T1}{phv}{b}{n}{1cm}
+
+\backgroundsetup{
+scale=1,
+angle=0,
+opacity=1,
+contents={\begin{tikzpicture}[remember picture,overlay]
+ \path [fill=titlepagecolor] (-0.5\paperwidth,5) rectangle (0.5\paperwidth,10);  
+\end{tikzpicture}}
+}
+\makeatletter                       
+\def\printauthor{%                  
+    {\large \@author}}              
+\makeatother
+\author{%
+    Fabio Votta \\
+    University of Stuttgart \\
+    \texttt{fabio.votta@gmail.com}\vspace{40pt} \\
+    Simon Roth \\
+    University of Stuttgart \\
+    \texttt{nomis.roth@gmx.de}
+    }
