@@ -50,6 +50,12 @@ altright <- tibble::tribble(
 knitr::kable(altright)
 ```
 
+**Include Vox Day?**
+
+https://www.youtube.com/channel/UCU8jCPOhJCf5yvJTJgz6NYA
+
+
+
 # Media 
 
 ```{r echo=F}
@@ -174,6 +180,7 @@ save(todo_ids_ar, file = "data/tw/todo_ids_ar.Rdata")
 - Codewords erstellen 
 - Narratives
 --- white people are marginalized
+https://www.theatlantic.com/science/archive/2017/08/the-worlds-worst-support-group/536850/
 --- anti-feminism
 --- Muslim invasion
 --- "dysgenics/race-mixing/low IQ""
@@ -184,13 +191,55 @@ save(todo_ids_ar, file = "data/tw/todo_ids_ar.Rdata")
 - Qualitative Robustness Check?
 - Nazi Data/ Labelled Online Harassment data
 
+
 # Possible Research Questions
 
 How does the Alt Right use "attention hacking" to spread their message and platform? (cf. Marwick & Lewis, 2017: 1)
 
+**Narratives**
+
+3. Talking Points
+  * Political Antagonism 
+    + Anti-Political Correctness
+    + Cultural Marxism (can also be anti-semitic when tied to Jews)
+    + Liberals are Snowflakes
+  * Victimhood narrative/ mentality
+    + White people are marginalized
+    + Diversity/ Anti-racist is a code word for anti-white
+    + Everyone has ethnostates, why can’t whites?
+    + [The Atlantic Article - How White Supremacists Use Victimhood to Recruit](https://www.theatlantic.com/science/archive/2017/08/the-worlds-worst-support-group/536850/)
+    + [The Victim Ideology of White Supremacists and White Seperatists In The United States](https://www.jstor.org/stable/20832074?seq=1#page_scan_tab_contents)
+    
+  * Misogyny
+    + Anti-Feminism
+    + Strict male-female gender roles
+    + Women are untrustworthy/deceivers
+  * Racism
+    + White Ethnostates
+    + Segregation
+    + White Supremacy
+    + Race Realism (blacks less intelligent/ more violent biologically.)
+    + Dysgenics (against mixed-race relationships)
+  * Homophobia
+    + Degeneracy (Decline of Moral Values)
+    + Undermining Traditional Families
+    + Aids/Illnesses
+  * Anti-Semitism
+    + White Genocide through Mass Immigration
+    + Jews promote Degeneracy
+    + Undermining Nationalism (Jews are globalists).
+    + Cultural Marxism (when tied to Jews)
+  * Anti-Immigration
+    + Anti-Muslim-Immigration (“invasion”)
+    + Anti-Hispanic/Black-Immigration (“low IQ”)
+    + Anti-Multiculturalism
 
 
 # Interesting Links:
+
+**A Psychological Profile of the Alt-Right**
+
+https://osf.io/xge8q/
 
 **A Longitudinal Measurement Study of 4chan's Politically Incorrect Forum and its Effect on the Web**
 

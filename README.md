@@ -38,6 +38,10 @@ Tracking the Alt Right
 | Virtue of the West   | NA               | UCG6FJf6O\_-QS0KoIK3n5fiA  | NA                 | virtueofthewest     |
 | VDARE                | 385640741463156  | UCORGNJpLcsNSoIMyewxBZTw   | 27522964           | vdare               |
 
+**Include Vox Day?**
+
+<https://www.youtube.com/channel/UCU8jCPOhJCf5yvJTJgz6NYA>
+
 Media
 =====
 
@@ -50,24 +54,148 @@ Media
 | Washington Post | 6250307292      | UCHd62-u\_v4DvJ8TCFtpi4GA | 2467791   | wapo      |
 | New York Times  | 5281959998      | UCqnbDFdCpuN8CMEg0VuEBqA  | 807095    | nyt       |
 
+Current Status
+==============
+
+~- Facebook Data<sub>\ </sub>- YouTube Data~ - Twitter Data
+
+*1 - 13577*
+
+<!-- *45450 - 45473* -->
+*50.000 - 54.000*
+
+*100.000 - 102378*
+
+<!-- *126420 - 126866* -->
+*150001 - 150391*
+
+*180000 - 150391*
+
+*180291 - 180314*
+
+*200001 - 204901*
+
+*210001 - 219169*
+
+*250001 - 260070*
+
+*290001 - 312645*
+
+*330001 - 334221*
+
+*334211 - 334356*
+
+``` r
+ids_done <-  c(1:13577, 45450:45473, 50000:54000, 100000:102378, 126420:126866, 150001:150391, 180000:180314, 200001:204901, 210001:219169, 250001:260070, 290001:312645, 330001:334221, 334211:334356)
+
+
+todo_ids <- tweet_ids %>% 
+  mutate(tweet_id = as.numeric(as.character(tweet_id))) %>%
+  mutate(row_ids = 1:n()) %>% 
+  filter(!(row_ids %in% ids_done))
+```
+
+    ## Warning: package 'bindrcpp' was built under R version 3.4.3
+
+``` r
+unique(todo_ids$handler)
+```
+
+    ##  [1] ABC             RealAlexJones   AnnCoulter      ArktosMedia    
+    ##  [5] MsBlaireWhite   navyhato        BreitbartNews   Cernovich      
+    ##  [9] CNN             NewRightAmerica scrowder        IdentityEvropa 
+    ## [13] FoxNews         Gavin_McInnes   infowars        Lauren_Southern
+    ## [17] MSNBC           MillennialWoes  nytimes         AVoiceforMen   
+    ## [21] BrittPettibone  PrisonPlanet    ramzpaul        RichardBSpencer
+    ## [25] RoamingMil      TRobinsonNewEra Styx666Official vdare          
+    ## [29] washingtonpost 
+    ## 33 Levels: ABC RealAlexJones AnnCoulter ArktosMedia ... washingtonpost
+
+``` r
+altrighters <- c("RealAlexJones", "AnnCoulter", "ArktosMedia", "MsBlaireWhite", "navyhato", "Cernovich", "NewRightAmerica", "IdentityEvropa", "infowars", "Lauren_Southern", "MillennialWoes", "AVoiceforMen", "BrittPettibone", "PrisonPlanet", "ramzpaul", "RichardBSpencer", "RoamingMil", "TRobinsonNewEra", "Styx666Official", "vdare")
+
+todo_ids_ar <- todo_ids %>% 
+    filter(handler %in% altrighters) 
+
+table(as.character(todo_ids_ar$handler))
+```
+
+    ## 
+    ##      AnnCoulter     ArktosMedia    AVoiceforMen  BrittPettibone 
+    ##            3672             140            1367            1631 
+    ##       Cernovich  IdentityEvropa        infowars Lauren_Southern 
+    ##           17693             547            4383             716 
+    ##  MillennialWoes   MsBlaireWhite        navyhato NewRightAmerica 
+    ##            1881            1025            1474             846 
+    ##    PrisonPlanet        ramzpaul   RealAlexJones RichardBSpencer 
+    ##           12756            6499            7046            1606 
+    ##      RoamingMil Styx666Official TRobinsonNewEra           vdare 
+    ##            4102            2770           11647            7770
+
+``` r
+todo_ids_ar %<>% 
+  group_by(handler) %>% 
+  mutate(n = n()) %>% 
+  ungroup() %>% 
+  arrange(n)
+
+save(todo_ids_ar, file = "data/tw/todo_ids_ar.Rdata")
+```
+
 To Do
 =====
 
--   Flüge buchen
--   Research Papers/Books
--   Paper schreiben
--   Neuen Korpus für Alt Right
--   Include Alt Lite Figures!
--   Codewords erstellen
--   Narratives --- white people are marginalized --- anti-feminism --- Muslim invasion --- "dysgenics/race-mixing/low IQ"" --- white ethnostate
--   Hatefulness measuren
--   Predictions \# WHICH MEASURES?
--   Sentiment Analysis
--   Qualitative Robustness Check?
--   Nazi Data/ Labelled Online Harassment data
+~~- Flüge buchen~~ - Research Papers/Books ~~- Paper schreiben~~ - Neuen Korpus für Alt Right - Include Alt Lite Figures! - Codewords erstellen - Narratives --- white people are marginalized <https://www.theatlantic.com/science/archive/2017/08/the-worlds-worst-support-group/536850/> --- anti-feminism --- Muslim invasion --- "dysgenics/race-mixing/low IQ"" --- white ethnostate - Hatefulness measuren - Predictions \# WHICH MEASURES? - Sentiment Analysis - Qualitative Robustness Check? - Nazi Data/ Labelled Online Harassment data
+
+Possible Research Questions
+===========================
+
+How does the Alt Right use "attention hacking" to spread their message and platform? (cf. Marwick & Lewis, 2017: 1)
+
+**Narratives**
+
+1.  Talking Points
+
+-   Political Antagonism
+    -   Anti-Political Correctness
+    -   Cultural Marxism (can also be anti-semitic when tied to Jews)
+    -   Liberals are Snowflakes
+-   Victimhood narrative/ mentality
+    -   White people are marginalized
+    -   Diversity/ Anti-racist is a code word for anti-white
+    -   Everyone has ethnostates, why can’t whites?
+    -   [The Atlantic Article - How White Supremacists Use Victimhood to Recruit](https://www.theatlantic.com/science/archive/2017/08/the-worlds-worst-support-group/536850/)
+    -   [The Victim Ideology of White Supremacists and White Seperatists In The United States](https://www.jstor.org/stable/20832074?seq=1#page_scan_tab_contents)
+-   Misogyny
+    -   Anti-Feminism
+    -   Strict male-female gender roles
+    -   Women are untrustworthy/deceivers
+-   Racism
+    -   White Ethnostates
+    -   Segregation
+    -   White Supremacy
+    -   Race Realism (blacks less intelligent/ more violent biologically.)
+    -   Dysgenics (against mixed-race relationships)
+-   Homophobia
+    -   Degeneracy (Decline of Moral Values)
+    -   Undermining Traditional Families
+    -   Aids/Illnesses
+-   Anti-Semitism
+    -   White Genocide through Mass Immigration
+    -   Jews promote Degeneracy
+    -   Undermining Nationalism (Jews are globalists).
+    -   Cultural Marxism (when tied to Jews)
+-   Anti-Immigration
+    -   Anti-Muslim-Immigration (“invasion”)
+    -   Anti-Hispanic/Black-Immigration (“low IQ”)
+    -   Anti-Multiculturalism
 
 Interesting Links:
 ==================
+
+**A Psychological Profile of the Alt-Right**
+
+<https://osf.io/xge8q/>
 
 **A Longitudinal Measurement Study of 4chan's Politically Incorrect Forum and its Effect on the Web**
 
