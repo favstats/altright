@@ -118,7 +118,7 @@ keywords1 <- paste(sjw_keywords, collapse = "|")
 
 fb_all %>% 
   filter(!duplicated(message)) %>% 
-  filter(stringr::str_detect(message, "establishment")) #%>% 
+  filter(stringr::str_detect(message, "anti-male")) #%>% 
   # group_by(page) %>% 
   # summarise(n = n())  %>%
   # left_join(fb_all %>% 

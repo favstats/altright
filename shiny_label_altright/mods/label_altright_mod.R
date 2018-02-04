@@ -4,7 +4,12 @@ label_altright_UI <- function(id){
     column(width = 3,
            br(),
            span(
-             strong("Type of Language", style = "font-size: 15px;"), 
+             strong("Check ONE button (or none)", style = "font-size: 17px;")
+           ),
+           br(),
+           br(),
+           span(
+             strong("1. Type of Language", style = "font-size: 15px;"), 
              div(
                class = "small circular ui icon button", 
                `data-inverted` = "",
@@ -14,7 +19,7 @@ label_altright_UI <- function(id){
                uiicon("help")
              )
            ),
-           radioGroupButtons(
+           checkboxGroupButtons(
              inputId = ns("type"), 
              label = NULL, 
              #choiceValues = 1:5, 
@@ -29,14 +34,19 @@ label_altright_UI <- function(id){
              checkIcon = list(yes = icon("check"))
            ),
            ### colors
-           tags$script("$(\"input:radio[name='task-type'][value='3']\").parent().css('background-color', '#e63900');"),
-           tags$script("$(\"input:radio[name='task-type'][value='2']\").parent().css('background-color', '#ff8533');"),
-           tags$script("$(\"input:radio[name='task-type'][value='1']\").parent().css('background-color', '#ffd11a');"),
-           tags$script("$(\"input:radio[name='task-type'][value='99']\").parent().css('display', 'none');"),
+           tags$script("$(\"input:checkbox[name='task-type'][value='3']\").parent().css('background-color', '#e63900');"),
+           tags$script("$(\"input:checkbox[name='task-type'][value='2']\").parent().css('background-color', '#ff8533');"),
+           tags$script("$(\"input:checkbox[name='task-type'][value='1']\").parent().css('background-color', '#ffd11a');"),
+           tags$script("$(\"input:checkbox[name='task-type'][value='99']\").parent().css('display', 'none');"),
            br(),
            br(),
            span(
-             strong("Anti-Immigration", style = "font-size: 15px;"), 
+             strong("Check ALL that applies (or none)", style = "font-size: 17px;")
+           ),
+           br(),
+           br(),
+           span(
+             strong("2. Anti-Immigration", style = "font-size: 15px;"), 
              div(
                class = "small circular ui icon button", 
                `data-inverted` = "",
@@ -46,7 +56,7 @@ label_altright_UI <- function(id){
                uiicon("help")
              )
            ),
-           radioGroupButtons(
+           checkboxGroupButtons(
              inputId = ns("type"), 
              label = NULL, 
              #choiceValues = 1:5, 
@@ -61,14 +71,14 @@ label_altright_UI <- function(id){
              checkIcon = list(yes = icon("check"))
            ),
            ### colors
-           tags$script("$(\"input:radio[name='task-type'][value='3']\").parent().css('background-color', '#e63900');"),
-           tags$script("$(\"input:radio[name='task-type'][value='2']\").parent().css('background-color', '#ff8533');"),
-           tags$script("$(\"input:radio[name='task-type'][value='1']\").parent().css('background-color', '#ffd11a');"),
-           tags$script("$(\"input:radio[name='task-type'][value='99']\").parent().css('display', 'none');"),
+           tags$script("$(\"input:checkbox[name='task-type'][value='3']\").parent().css('background-color', '#e63900');"),
+           tags$script("$(\"input:checkbox[name='task-type'][value='2']\").parent().css('background-color', '#ff8533');"),
+           tags$script("$(\"input:checkbox[name='task-type'][value='1']\").parent().css('background-color', '#ffd11a');"),
+           tags$script("$(\"input:checkbox[name='task-type'][value='99']\").parent().css('display', 'none');"),
            br(),
            br(),
            span(
-             strong("Feeling of Victimization", style = "font-size: 15px;"), 
+             strong("3. Feeling of Victimization", style = "font-size: 15px;"), 
              div(
                class = "small circular ui icon button", 
                `data-inverted` = "",
@@ -78,7 +88,7 @@ label_altright_UI <- function(id){
                uiicon("help")
              )
            ),
-           radioGroupButtons(
+           checkboxGroupButtons(
              inputId = ns("type"), 
              label = NULL, 
              #choiceValues = 1:5, 
@@ -93,14 +103,14 @@ label_altright_UI <- function(id){
              checkIcon = list(yes = icon("check"))
            ),
            ### colors
-           tags$script("$(\"input:radio[name='task-type'][value='3']\").parent().css('background-color', '#e63900');"),
-           tags$script("$(\"input:radio[name='task-type'][value='2']\").parent().css('background-color', '#ff8533');"),
-           tags$script("$(\"input:radio[name='task-type'][value='1']\").parent().css('background-color', '#ffd11a');"),
-           tags$script("$(\"input:radio[name='task-type'][value='99']\").parent().css('display', 'none');"),
+           tags$script("$(\"input:checkbox[name='task-type'][value='3']\").parent().css('background-color', '#e63900');"),
+           tags$script("$(\"input:checkbox[name='task-type'][value='2']\").parent().css('background-color', '#ff8533');"),
+           tags$script("$(\"input:checkbox[name='task-type'][value='1']\").parent().css('background-color', '#ffd11a');"),
+           tags$script("$(\"input:checkbox[name='task-type'][value='99']\").parent().css('display', 'none');"),
            br(),
            br(),
            span(
-             strong("Irony", style = "font-size: 20px;"), 
+             strong("5. Irony or Sarcasm", style = "font-size: 15px;"), 
              div(
                class = "small circular ui icon button", 
                `data-inverted` = "",
@@ -123,7 +133,7 @@ label_altright_UI <- function(id){
                numericInput(ns("select"), label = NULL, value = 1, min = 1) # starts at 0 due to observe event | bug
            ),
            div(style="display: inline-block;vertical-align:top; width: 150px;",
-               actionButton(ns("submit"), label = "submit", icon = icon("cloud"))
+               actionButton(ns("submit"), label = "Submit Coding", icon = icon("cloud"))
            )
     ),
     column(width = 5,
@@ -135,6 +145,12 @@ label_altright_UI <- function(id){
     ),
 
     column(width = 4,
+           br(),
+           span(
+             strong("6. Judging Text Content", style = "font-size: 17px;")
+           ),
+           br(),
+           br(),
            span(
              strong("Anti-Left/Liberal Sentiment", style = "font-size: 15px;"),
              div(
@@ -236,7 +252,27 @@ label_altright_UI <- function(id){
                   "4", "Strongly Present")
     ),
     span(
-      strong("Anti-Elite/Establishment Sentiment and Conspiracy Theories", style = "font-size: 15px;"),
+      strong("Anti-Elite Sentiment and Conspiracies", style = "font-size: 15px;"),
+      div(
+        class = "small circular ui icon button",
+        `data-inverted` = "",
+        `data-tooltip` = "Expressing grievances over the Elite/Establishment/Mainstream Media/Culture",
+        `data-variation` = "wide",
+        `data-position` = "top left",
+        uiicon("help")
+      )
+    ),
+    sliderTextInput(
+      inputId = "mySliderText", 
+      label = "", 
+      grid = TRUE, 
+      force_edges = TRUE,
+      choices = c("Not Present",
+                  "2", "3", 
+                  "4", "Strongly Present")
+    ),
+    span(
+      strong("Anti-Muslim Sentiment", style = "font-size: 15px;"),
       div(
         class = "small circular ui icon button",
         `data-inverted` = "",

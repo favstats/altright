@@ -32,7 +32,7 @@ remDr <- rD$client
 #remDr$close()
 
 start <- 22861
-finish <- 50000
+finish <- 45449
 
 final_list <- get_tweet_replies(dat, start, finish)
 final_dt <- bind_rows(final_list)
