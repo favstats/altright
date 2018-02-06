@@ -33,22 +33,55 @@ source("mods/leaderboard_mod.R")
 ui <- function(){
   navbarPageWithInputs(
     #shinyjs::useShinyjs(),
-    title = span(icon("flag", "fa-1x"), "Coding Alt-Right"), 
+    title = span(
+      icon("flag", "fa-1x"), 
+      "Coding Alt-Right"
+    ), 
     windowTitle = "App Name",
-    theme = shinythemes::shinytheme("united"), # sandstone, united, paper, flatly, cosmo
+    theme = shinythemes::shinytheme("yeti"), # sandstone, united, paper, flatly, cosmo
     inputs = logout_button(),
-    tabPanel("Instructions", 
-             instructions_UI("first")
+    tabPanel(
+      "Start", 
+      instructions_UI("first")
     ),
-    tabPanel(span(icon("sliders"), "Task"),
-             label_altright_UI("task")
+    tabPanel(
+      span(icon("sliders"), "Task"),
+      label_altright_UI("task")
     ),
-    tabPanel(span(icon("trophy"), "Leaderboard"), 
-             leaderboard_UI("winner")
+    tabPanel(
+      "Instructions",
+      # tags$style(
+      #   HTML('blockquote {
+      #           background: #f9f9f9;
+      #           border-left: 10px solid #ccc;
+      #           margin: 1.5em 10px;
+      #           padding: 0.5em 10px;
+      #         }
+      #         blockquote:before {
+      #           color: #ccc;
+      #           content: open-quote;
+      #           font-size: 4em;
+      #           line-height: 0.1em;
+      #           margin-right: 0.25em;
+      #           vertical-align: -0.4em;
+      #         }
+      #         blockquote p {
+      #           display: inline;
+      #         }
+      #        ')
+      # ),
+      #includeMarkdown("include.md")
+      tags$iframe(src = 'include.html', # put testdoc.html to /www
+                  width = '100%', height = '800px', 
+                  frameborder = 0, scrolling = 'auto')
     ),
-    tabPanel(span(icon("database"), "Corpus"), 
-             ""
+    tabPanel(
+      span(icon("trophy"), "Leaderboard"), 
+      leaderboard_UI("winner")
     )
+    # tabPanel(span(icon("database"), "Corpus"), 
+    #          ""
+    # )
     #shinythemes::themeSelector()
   )
 }
