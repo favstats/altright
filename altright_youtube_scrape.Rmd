@@ -253,7 +253,7 @@ extract_comments(ids$yt_code, 1, content)
 
 types <- c("cernovich", "lauren", "pjw", "milo", "roaming", "bps", "blaire_white", "molymeme", "crowder", "pettibone", "europa", "ramzpaul", "roosh", "returnofkings", "styxenhammer", "mw", "redicetv", "countercurrent", "altright", "americanrenaissance", "arktosmedia", "bakedalaska", "NPIRadix")
 different <- c("alexjones", "rebelmedia", "foxnews", "msnbc", "cnn", "wapo", "nyt")
-
+# breitbart fehlt, gavinmcinnes
 load("data/id_data.Rdata")
 
 `%notin%` <- Negate(`%in%`)

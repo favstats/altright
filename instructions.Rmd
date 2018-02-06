@@ -76,7 +76,7 @@ The findings of this project will be presented at a [Voxpol Online-Extremism wor
 
 **How can you contribute?**
 
-Help us code 500 comments/tweets that come from a wide variety of Social Media Accounts that are associated with the Alt Right. We included several scales that will be used to classify the commentary. We also hope to differentiate between the so-called "Alt-Light" and "Alt-Right". The following section includes the instructions on how to code the comments and tweets, please feel free to reference those whenever you have trouble.
+Help us code 500 comments/tweets (you are welcome to do more if you can and want to) that come from a wide variety of Social Media Accounts that are associated with the Alt Right. We included several scales that will be used to classify the commentary. We also hope to differentiate between the so-called "Alt-Light" and "Alt-Right". The following section includes the instructions on how to code the comments and tweets, please feel free to reference those whenever you have trouble.
 
 **You are interested in some academic sources on the topic?**
 
@@ -260,7 +260,7 @@ All blacks do benefit from the constant threat of theft and murder that keeps ot
     
 ### Anti-Muslim Sentiment
 
-> Text expresses hatred, dislike, or mistrust of Muslims, or prejudice against them. This would include notions that Muslims are secretly plotting to establish Sharia law or that they are rapists and criminals who "invade the West". Another common trope is that all Muslims are designated as (potential) terrorists. Please also include extreme (mis-)characterizations of the religion of Islam that brandmark every believer as evil and/or untrustworthy.
+> Text expresses hatred, dislike, or mistrust of Muslims, or prejudice against them. This would include notions that Muslims are secretly plotting to establish Sharia law or that they are rapists and criminals who "invade the West". Another common trope is that all Muslims are designated as (potential) terrorists. Please also include (mis-)characterizations of the religion of Islam that brandmarks every believer as evil and/or untrustworthy.
 
 \begin{mybox}{Example for "Strongly present" \emph{Anti-Muslim Sentiment}}
 We fight each other while we need to fight the muslims. Wake the uck up america.	these "reformers" are not real muslims,becuase it the quran it says to kill the infidels, this is what Islam tells them to do. If you see a muslim trying to rape your women or aboutto blow up, KILL him!!! It's very straight forward.

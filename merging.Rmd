@@ -180,41 +180,93 @@ bind_it_all(datasets, names)
 # Twitter Combine
 
 ```{r}
-tw_sets <- dir(here::here("data"))[-c(1:2, 58:60)]
+tw_sets <- dir(here::here("data"))[-c(1:2, 33:35)]
 
 dat_list <- list()
 for (jj in seq_along(tw_sets)) {
   dat_list[[jj]] <- do.call("rbind",(get(load(here("data", tw_sets[jj])))))
 }
-tw_partial2 <- do.call("rbind", dat_list)
-save(tw_partial2, file = here("data", "tw", "tw_partial2.Rdata"))
+tw_partial3 <- do.call("rbind", dat_list)
+save(tw_partial3, file = here("data", "tw", "tw_partial3.Rdata"))
 
-table(tw_partial2$handle)
+table(tw_partial3$handle)
 
-tw_partial2 %>% 
-  filter(stringr::str_detect(text, "ethnostate"))
+# tw_partial2 %>% 
+#   filter(stringr::str_detect(text, "ethnostate"))
 ```
 
 ```{r}
 load(here("data", "tw", "tw_partial1.Rdata"))
 load(here("data", "tw", "tw_partial2.Rdata"))
+load(here("data", "tw", "tw_partial3.Rdata"))
 
-tw_partial1_2 <- rbind(tw_partial1, tw_partial2)
+tw_partial123 <- rbind(tw_partial1, tw_partial2, tw_partial3)
 
-save(tw_partial1_2, file = here("data", "tw", "tw_partial1_2.Rdata"))
+save(tw_partial123, file = here("data", "tw", "tw_partial123.Rdata"))
 
-table(tw_partial1_2$handle)
+table(tw_partial123$handle)
 
-tw_partial1_2 %>% 
-  filter(stringr::str_detect(text, "jew.|Jew.")) %>% 
-  group_by(handle) %>% 
-  summarise(n = n()) %>% 
-  left_join(tw_partial1_2 %>% 
-  group_by(handle) %>% 
-  summarise(total = n())) %>% 
-  mutate(perc = round(n / total * 100,3)) %>% 
-  arrange(perc)
+# tw_partial1_2 %>% 
+#   filter(stringr::str_detect(text, "jew.|Jew.")) %>% 
+#   group_by(handle) %>% 
+#   summarise(n = n()) %>% 
+#   left_join(tw_partial1_2 %>% 
+#   group_by(handle) %>% 
+#   summarise(total = n())) %>% 
+#   mutate(perc = round(n / total * 100,3)) %>% 
+#   arrange(perc)
 
 
+```
+
+
+# Keeping Track of Scrapers
+
+```{r}
+final_lists <- dir("C:/Users/Fabio/Desktop/altrighters")
+
+options(scipen = 999)
+
+finished_ones <- final_lists %>% 
+  str_replace_all("final_list_|.Rdata", "") %>% 
+  str_split("_") %>% 
+  do.call("rbind", .) %>% 
+  as.data.frame() %>% 
+  rename(start = V1, end = V2) %>% 
+  mutate_all(as.character) %>% 
+  mutate_all(as.numeric) %>% 
+  arrange(start, end) %>% 
+  mutate(index = 1:n()) 
+
+finished_ones_gathered <- finished_ones %>% 
+  gather("position", "value", -index)
+
+finished_ones_gathered %>% 
+  ggplot(aes(1, value, group = index)) +
+  geom_line() +
+  coord_flip()
+
+plotly::ggplotly()
+
+all <- c()
+for (jj in seq_along(finished_ones$start)) {
+  temp <- finished_ones$start[jj]:finished_ones$end[jj]
+  all <- append(all, temp)
+}
+
+every_id <- 1:390000
+
+remainers  <- setdiff(every_id, all)
+
+lastone <- c()
+for (jj in seq_along(remainers)) {
+  if ((remainers[jj] + 1) == remainers[jj + 1]) {
+    NULL
+  } else {
+  lastone  <- append(lastone, remainers[jj + 1])
+  }
+}
+
+finished_ones$start:finished_ones$end
 ```
 
