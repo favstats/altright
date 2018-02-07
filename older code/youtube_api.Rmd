@@ -1,0 +1,71 @@
+---
+title: "Skeptic Community"
+output: html_notebook
+---
+
+```{r}
+#devtools::install_github("soodoku/tuber")
+
+pacman::p_load(tidyverse, tuber, magrittr, stringi, qdapRegex, purrr)
+
+```
+
+```{r}
+key <- "AIzaSyDmV5jHx7c8GeAmpTkv6To_ERdkZ_HNl70"
+
+client_id <- "580511698053-p8mu77kktkcvb503g9q737svu9gcq101.apps.googleusercontent.com"
+
+client_key <- "Y0eW96yy-WRg90RZjVJS615o"
+
+tuber::yt_oauth(client_id, client_key)
+
+```
+
+# Video Details
+
+- Hier gibt es zum Beispiel Tags
+
+```{r}
+sargon <- get_video_details(video_id = "6s2jgb0S4a8")
+
+mw_details <- purrr::map(mw_ids, get_video_details)
+
+mw_details[[1]]$items[[1]]$snippet$publishedAt # time
+
+redice_details <- purrr::map(redice_ids, get_video_details)
+
+redice_details[[1]]$items[[1]]$snippet$publishedAt # time
+```
+
+# Comments!
+
+```{r}
+sargon_comments <- get_all_comments(video_id = "xjZdOujIa-s")
+
+```
+
+# Trash Links for Google API
+
+https://www.googleapis.com/youtube/v3/search?key=AIzaSyDmV5jHx7c8GeAmpTkv6To_ERdkZ_HNl70&channelId=UC-yewGHQbNFpDrGM0diZOLA
+&part=snippet,id&order=date&maxResults=500
+
+https://www.googleapis.com/youtube/v3/channels?id=UC-yewGHQbNFpDrGM0diZOLA
+&key=AIzaSyDmV5jHx7c8GeAmpTkv6To_ERdkZ_HNl70&part=contentDetails
+
+https://www.googleapis.com/youtube/v3/playlistItems?playlistId=UU-yewGHQbNFpDrGM0diZOLA&key=AIzaSyDmV5jHx7c8GeAmpTkv6To_ERdkZ_HNl70&part=snippet&maxResults=100
+
+https://www.googleapis.com/youtube/v3/channels?part=contentDetails&channelId=UC-yewGHQbNFpDrGM0diZOLA&key=AIzaSyDmV5jHx7c8GeAmpTkv6To_ERdkZ_HNl70
+
+https://www.googleapis.com/youtube/v3/channels?part=contentDetails&forUsername=MillennialWoes&key=AIzaSyDmV5jHx7c8GeAmpTkv6To_ERdkZ_HNl70
+
+https://www.googleapis.com/youtube/v3/playlistItems?part=snippet%2CcontentDetails&maxResults=50&playlistId=UU-yewGHQbNFpDrGM0diZOLA&key=AIzaSyDmV5jHx7c8GeAmpTkv6To_ERdkZ_HNl70&pageToken=2
+
+nextPageToken 
+
+
+https://www.googleapis.com/youtube/v3/playlistItems?part=snippet%2CcontentDetails&maxResults=50&playlistId=UULfhh63n0fWn0gXXKQ5NWvw&key=AIzaSyDmV5jHx7c8GeAmpTkv6To_ERdkZ_HNl70
+
+UCLfhh63n0fWn0gXXKQ5NWvw
+
+
+"http://youtube.com/watch?
