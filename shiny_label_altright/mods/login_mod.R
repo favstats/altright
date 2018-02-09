@@ -3,30 +3,30 @@ login_mod_UI <- function(id){
   shiny.semantic::semanticPage(
     useSweetAlert(),
     div(class="ui five column grid", 
-        div(class="column", ""),
-        div(class="column", ""),
-        div(class="column",
-            br(),
-            br(),
-            br(),
-            div(class="ui card", 
-                id = "login_card",
-                div(class="content",
-                    div(class="header",
-                        "Welcome!"
-                    )
-                ),
-                div(class="content", 
-                    textInput(ns("user"), "Username"),
-                    passwordInput(ns("pw"), "Password"),
-                    br(),
-                    actionButton(ns("login"), "Log in")
-                    #selectInput('effect', NULL, choices = get_jqui_effects())
-                )
-            )
-        ),
-        div(class="column", ""),
-        div(class="column", "")
+      div(class="column", ""),
+      div(class="column", ""),
+      div(class="column",
+        br(),
+        br(),
+        br(),
+        div(class="ui card", 
+          id = "login_card",
+          div(class="content",
+              div(class="header",
+                  "Welcome!"
+              )
+          ),
+          div(class="content", 
+              textInput(ns("user"), "Username"),
+              passwordInput(ns("pw"), "Password"),
+              br(),
+              actionButton(ns("login"), "Log in")
+              #selectInput('effect', NULL, choices = get_jqui_effects())
+          )
+        )
+      ),
+      div(class="column", ""),
+      div(class="column", "")
     )
   )
 }
@@ -38,13 +38,13 @@ login_mod_UI <- function(id){
 # )
 
 login_mod <- function(input, output, session){
-  
+
   status <- reactive({
     user <- isolate(input$user)
     pw <- isolate(input$pw)
     
-    accounts_id <- gs_title("accounts")
-    accounts <- gs_read(accounts_id)
+    accounts <- gs_title("code_altright_accounts") %>%
+      gs_read()
     
     status <- accounts %>%
       dplyr::filter(
@@ -59,12 +59,18 @@ login_mod <- function(input, output, session){
     shinyjqui::jqui_hide("#login_card", effect = "drope") #input$effect
     sendSweetAlert(
       session = session,
-      title = "Login successfully!",
-      text = "...",
+      title = paste0("Welcome ", status()$user_name, "!"), 
+      text = "Successful Login",
       type = "success"
     )
     #Sys.sleep(1)
-    return(list(log = T, user = input$user))
+    return(
+      list(
+        log = T, 
+        user = status()$user_name, 
+        dlink = status()$dlink
+      )
+    )
   } else {
     sendSweetAlert(
       session = session,
@@ -72,6 +78,6 @@ login_mod <- function(input, output, session){
       text = "Please try again.",
       type = "error"
     )
-    return(list(log = F, user = ""))
+    return(list(log = F, user = "", dlink = ""))
   }
 }

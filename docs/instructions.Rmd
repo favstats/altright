@@ -10,7 +10,7 @@ output:
 \newgeometry{left=1cm,right=4cm}
 \vspace*{2cm}
 \noindent
-\textcolor{white}{\bigsf Tracking the Alt Right}
+\textcolor{white}{\bigsf Decoding the Alt Right}
 
 \begin{addmargin}[1em]{0em}
 \textcolor{white}{\bigsub Using Machine Learning to Track Alt Right Commentary on Social Media}

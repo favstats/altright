@@ -3,10 +3,10 @@ title: "Coding Guidlines"
 output: 
   html_document:
     #theme: "spacelab"
-    #css: styles.css
+    css: styles.css
     toc: true
-    toc_float:
-      collapsed: false
+    toc_float: true
+      #collapsed: false
     #number_sections: true
     #self_contained: no
   #   toc: true
@@ -23,12 +23,19 @@ knitr::opts_chunk$set(echo = TRUE)
 
 <img src="images/banner.png" width="100%">
 
+The following section includes the instructions on how to code the comments and tweets, please feel free to reference those whenever you have trouble. In order to download or print the coding guidelines you can get a **PDF** version [**here**](https://github.com/favstats/Statistische-Modellbildung-II/raw/master/Instructions.pdf).
+
 ## **1. Type of Language**
 
-```{r, fig.align='center',echo=FALSE}
-knitr::include_graphics(here::here("docs", "images", "type_of_language.png"))
-```
+<center>
+  <img src="images/type_of_language.png" width = "30%">
+</center>
 
+Please select **only one** of the following options for the type of language. 
+
+**Note:** The priority goes Vulgar < Hostile < Call for Violence
+
+So if there is *Hostile* and *Vulgar Language* present, please code *Hostile Language*. If there is a *Call for Violence present*, that trumps all other options in priority.  
 
 ### Vulgar Language
  
@@ -55,13 +62,12 @@ Text includes a call to act out violence against a certain group of people (espe
 
 > Deport all immigrants who refuse to be deported or kill them if they resist this is literally the law.
 
-\newpage
 
 ## **2. Anti-Immigration** 
 
-```{r, fig.align='center',echo=FALSE}
-knitr::include_graphics(here::here("docs", "images", "anti_immigration.png"))
-```
+<center>
+  <img src="images/anti_immigration.png" width = "30%">
+</center>
 
 
 ### Illegal Immigration
@@ -91,13 +97,13 @@ Text makes references to immigrants that cannot/will not or have trouble integra
 > Immigration from shithole brown countries means low IQ immigration and low IQ immigration means more crime, more rape, more glorious diversity. No thanks!
 
 
-\newpage
 
 ## **3. Feeling of Victimization**
 
-```{r, fig.align='center',echo=FALSE}
-knitr::include_graphics(here::here("docs", "images", "victim.png"))
-```
+<center>
+  <img src="images/victim.png" width = "30%">
+</center>
+
 
 ### Feeling Victimized in General
 
@@ -124,7 +130,6 @@ Text mentions a feeling of being unfairly treated or oppressed because of being 
 
 > America has been pushing this kind of anti-white racism in the culture, the academy, the media and in leftist politics for better than the last ten years, worse every year. Of course this was on a campus of America's rancid Ivy League.
 
-\newpage
   
 ## **4. Irony and Trolling**
 
@@ -138,9 +143,10 @@ Is the person being ironic? Can the comment be reasonably interpreted as ironic 
 
 In this part we would like you to rate the presence of certain Alt Right attitudes. Please classify a text as *"Not present"* if there is no indication of that attitude and classify any text as *"Strongly present"* if the text endorses a particularly vile/strong version of that attitude. Use the number 2 - 3 to indicate states in between these two endpoints.
 
-```{r, fig.align='center',echo=FALSE}
-knitr::include_graphics(here::here("docs", "images", "1arating.png"))
-```
+<center>
+<img src="images/1arating.png" width = "50%">
+</center>
+
 
 ### Focus on White Identity
  
@@ -148,7 +154,7 @@ Text mentions a collective white identity/race. This could include expressing a 
 
 **Example for "Strongly present" Focus on White Identity:**
 
-> Im sorry to say.. This is going to sound extremely racist, but without all the white influence in this world back then, if there were never white people, this whole world would suck and be uncivilized. The world is a better place when there are white ethnostates.
+> Im sorry to say. This is going to sound extremely racist, but without all the white influence in this world back then, if there were never white people, this whole world would suck and be uncivilized. The world is a better place when there are white ethnostates.
 
 ### Lamenting about Moral Decline
    
@@ -180,12 +186,9 @@ Text includes a negative sentiment towards liberals or "the Left" as a whole. Th
 
 > Liberal SJWs wants to censor or shut down anyone who oppose them. Insecure, whiney, narcissist snowflakes who have been given a position that allow them too much manipulation of many. Fuck Censorship. Fuck Political Correctness. Fuck Cultural Marxism.
 
-
-\newpage
-
-```{r, fig.align='center',echo=FALSE}
-knitr::include_graphics(here::here("docs", "images", "1brating.png"))
-```
+<center>
+  <img src="images/1brating.png" width = "50%">
+</center>
 
 ### Misogyny and Anti-Feminism
  
@@ -193,7 +196,7 @@ Text expresses hatred, dislike, or mistrust of women, or prejudice against women
 
 **Example for "Strongly present" Misogyny and Anti-Feminism:** 
 
-> Feminism will push women away from men.. the idea that women don't need men is completely idiotic and dangerous. Patriarchy has always existed and will always exist and that's a good thing.
+> Feminism will push women away from men. the idea that women don't need men is completely idiotic and dangerous. Patriarchy has always existed and will always exist and that's a good thing.
 
  
 ### Racism

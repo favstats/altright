@@ -2,13 +2,14 @@ leaderboard_UI <- function(id){
   ns <- NS(id)
   tagList(
     div(class="ui two column grid", 
-        div(class="column", 
-            actionButton(ns("refresh"), icon = icon("refresh"), label = "Reload Stats"),
-            DT::dataTableOutput(ns("top"))
-        ),
-        div(class="column", 
-            highcharter::highchartOutput(ns("high"))
-        )
+      div(class="column", 
+        br(),
+        actionButton(ns("refresh"), icon = icon("refresh"), label = "Reload Stats"),
+        DT::dataTableOutput(ns("top"))
+      ),
+      div(class="column", 
+        highcharter::highchartOutput(ns("high"))
+      )
     )
     #progressBar(id = ns("total_progress"), value = 0, total = 2000, status = "info", display_pct = TRUE, striped = TRUE, title = "First goal: ")
   )
@@ -18,7 +19,7 @@ leaderboard <- function(input, output, session){
   
   dat <- shiny::reactive({
     input$refresh
-    with_label_id <- gs_title("bitcoin_with_label")
+    with_label_id <- gs_title("altright_data_final")
     with_label_dat <- gs_read(with_label_id)
     
     with_label_dat %>% 
@@ -38,7 +39,7 @@ leaderboard <- function(input, output, session){
       select(coder, n) %>%
       arrange(desc(n)) %>%
       formattable(., 
-                  list(n = color_tile("white", "blue"))
+        list(n = color_tile("lightblue", "blue"))
       ) %>% 
       as.datatable()
   })

@@ -1,5 +1,4 @@
 ### 
-
 # pacman::p_load(shiny,
 # shiny.semantic,
 # shinyjqui,
@@ -11,7 +10,6 @@
 # highcharter,
 # formattable,
 # DT)
-
 library(shiny)
 library(shiny.semantic)
 library(shinyjqui)
@@ -25,55 +23,42 @@ library(formattable)
 library(DT)
 
 source("mods/helper.R")
-source("mods/instructions_mod.R")
+#source("mods/instructions_mod.R")
 source("mods/label_altright_mod.R")
 source("mods/leaderboard_mod.R")
-# source("mods/login_mod.R")
+source("mods/login_mod.R")
 
-ui <- function(){
+ui <- shinyUI(
+  fluidPage(
+    uiOutput("main")
+  )
+)
+
+ui_content <- function(){
   navbarPageWithInputs(
     #shinyjs::useShinyjs(),
     title = span(
       icon("flag", "fa-1x"), 
-      "Coding Alt-Right"
+      "Decoding the Alt-Right"
     ), 
-    windowTitle = "App Name",
+    windowTitle = "Decoding the Alt-Right", 
     theme = shinythemes::shinytheme("yeti"), # sandstone, united, paper, flatly, cosmo
     inputs = logout_button(),
     tabPanel(
       "Start", 
-      instructions_UI("first")
+      tags$iframe(src = 'startingpage.html', # put testdoc.html to /www
+                  width = '100%', height = '800px', 
+                  frameborder = 0, scrolling = 'auto')      
+    ),
+    tabPanel(
+      "Coding Guidlines",
+      tags$iframe(src = 'docs2.html', # put testdoc.html to /www
+                  width = '100%', height = '800px', 
+                  frameborder = 0, scrolling = 'auto')
     ),
     tabPanel(
       span(icon("sliders"), "Task"),
       label_altright_UI("task")
-    ),
-    tabPanel(
-      "Instructions",
-      # tags$style(
-      #   HTML('blockquote {
-      #           background: #f9f9f9;
-      #           border-left: 10px solid #ccc;
-      #           margin: 1.5em 10px;
-      #           padding: 0.5em 10px;
-      #         }
-      #         blockquote:before {
-      #           color: #ccc;
-      #           content: open-quote;
-      #           font-size: 4em;
-      #           line-height: 0.1em;
-      #           margin-right: 0.25em;
-      #           vertical-align: -0.4em;
-      #         }
-      #         blockquote p {
-      #           display: inline;
-      #         }
-      #        ')
-      # ),
-      #includeMarkdown("include.md")
-      tags$iframe(src = 'include.html', # put testdoc.html to /www
-                  width = '100%', height = '800px', 
-                  frameborder = 0, scrolling = 'auto')
     ),
     tabPanel(
       span(icon("trophy"), "Leaderboard"), 
@@ -88,14 +73,63 @@ ui <- function(){
 
 server <- function(input, output, session) {
   
-  callModule(instructions, "first")
+  ### login part 
+  client <- reactiveValues(data = list(log = F, user = "", dlink = ""))
+  
+  # login module
+  observeEvent(input$`pre-login`, {
+    client$data <- callModule(login_mod, id = "pre")
+  }) 
+  
+  # logout process
+  observeEvent(input$logout, { 
+    client$data$log <- F
+  })
+  
+  # output log in tab database
+  output$log <- renderPrint({
+    client$data
+  })
+  
+  ### sentiment labeling
+  observeEvent(client$data$log, {
+    if(client$data$log){
+      callModule(
+        label_altright,
+        id = "task",
+        gs_title = client$data$dlink,
+        user = client$data$user
+      )
+    }
+  })
+  
+  ### leader board
   observe({
     callModule(
-      label_altright,
-      id = "task",
-      user = reactive({ "client$data$user" })
+      leaderboard,
+      id = "winner"
     )
+  })
+  
+  # ### datastore board
+  # observe({
+  #   callModule(
+  #     database,
+  #     id = "data"
+  #   )
+  # })
+  
+  ### UI output handler
+  output$main <- renderUI({
+    if(client$data$log) {
+      ui_content()
+    } else {
+      login_mod_UI("pre")
+    }
   })
 }
 
 shinyApp(ui, server)
+
+
+
