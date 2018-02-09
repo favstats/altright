@@ -333,6 +333,9 @@ with_label_dat <- gs_read(with_label_id)
 
 label_altright <- function(input, output, session, gs_title, user){
   
+  
+  coder <- reactive({ user })
+  
   social_data <- reactive({
     input$refresh
     #if(gs_title == "") { return(NULL) }
@@ -340,14 +343,16 @@ label_altright <- function(input, output, session, gs_title, user){
     no_label_id <- gs_title(gs_title)
     no_label <- gs_read(no_label_id)
     
-    user_label <- with_label_dat %>%
-      filter(coder == user)
+    user_dat <- with_label_dat %>% 
+      dplyr::filter(coder == coder()) %>%
+      select(id, text)
     
-    label_task <- no_label %>%
-      filter(
-        !(id %in% user_label$id), 
-        !(text %in% user_label$text)
-      )
+    label_task <- no_label %>% 
+      anti_join(user_dat, by = c("id", "text")) %>%
+      filter(!duplicated(text))
+    
+    #dplyr::filter(!id_label %in% user_dat$id_label)
+    #no_label[!stringr::str_detect(no_label$id, paste(user_dat$id, collapse = "|")), ]
     
     label_task_init <- data.frame(
       label_task,
@@ -367,10 +372,10 @@ label_altright <- function(input, output, session, gs_title, user){
       timestamp = NA
     )
     
-    num_finish <- nrow(user_label)
+    num_finish <- nrow(user_dat)
     
     return(list(no_label = label_task_init,
-                with_label = user_label, 
+                with_label = user_dat, 
                 num_finish = num_finish))
   })
   
@@ -435,7 +440,7 @@ label_altright <- function(input, output, session, gs_title, user){
       anti_sem <- input$anti_sem
       elite <- input$elite
       anti_mus <- input$anti_mus
-      coder <- user
+      coder <- coder()
     })
     
     raw$dat$identity[index] <- identity
