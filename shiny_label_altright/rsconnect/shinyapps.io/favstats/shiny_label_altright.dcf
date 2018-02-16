@@ -1,0 +1,13 @@
+name: shiny_label_altright
+title: shiny_label_altright
+username:
+account: favstats
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 276055
+bundleId: 1216501
+url: https://favstats.shinyapps.io/shiny_label_altright/
+when: 1518272861.65531
+asMultiple: FALSE
+asStatic: FALSE
+ignoredFiles: .httr-oauth|comps.nb.html|comps.Rmd|dataset1.Rdata|desktop.ini|upload.Rmd

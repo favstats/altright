@@ -21,12 +21,12 @@ library(googlesheets)
 library(highcharter)
 library(formattable)
 library(DT)
+library(stringr)
 
-source("mods/helper.R")
-#source("mods/instructions_mod.R")
-source("mods/label_altright_mod.R")
-source("mods/leaderboard_mod.R")
+#source("mods/helper.R")
 source("mods/login_mod.R")
+source("mods/leaderboard_mod.R")
+source("mods/label_altright_mod.R")
 
 ui <- shinyUI(
   fluidPage(
@@ -35,15 +35,13 @@ ui <- shinyUI(
 )
 
 ui_content <- function(){
-  navbarPageWithInputs(
-    #shinyjs::useShinyjs(),
+  navbarPage(
     title = span(
       icon("flag", "fa-1x"), 
       "Decoding the Alt-Right"
     ), 
     windowTitle = "Decoding the Alt-Right", 
     theme = shinythemes::shinytheme("yeti"), # sandstone, united, paper, flatly, cosmo
-    inputs = logout_button(),
     tabPanel(
       "Start", 
       tags$iframe(src = 'startingpage.html', # put testdoc.html to /www
@@ -64,12 +62,10 @@ ui_content <- function(){
       span(icon("trophy"), "Leaderboard"), 
       leaderboard_UI("winner")
     )
-    # tabPanel(span(icon("database"), "Corpus"), 
-    #          ""
-    # )
     #shinythemes::themeSelector()
   )
 }
+
 
 server <- function(input, output, session) {
   
@@ -81,11 +77,6 @@ server <- function(input, output, session) {
     client$data <- callModule(login_mod, id = "pre")
   }) 
   
-  # logout process
-  observeEvent(input$logout, { 
-    client$data$log <- F
-  })
-  
   # output log in tab database
   output$log <- renderPrint({
     client$data
@@ -93,14 +84,20 @@ server <- function(input, output, session) {
   
   ### sentiment labeling
   observeEvent(client$data$log, {
+    
+    with_label_id <- gs_title("altright_data_final")
+    with_label_dat <- gs_read(with_label_id)
+    
     if(client$data$log){
       callModule(
         label_altright,
         id = "task",
+        data = with_label_dat,
         gs_title = client$data$dlink,
         user = client$data$user
       )
     }
+    
   })
   
   ### leader board
@@ -111,12 +108,9 @@ server <- function(input, output, session) {
     )
   })
   
-  # ### datastore board
-  # observe({
-  #   callModule(
-  #     database,
-  #     id = "data"
-  #   )
+  # observeEvent(input$refresh, {
+  #   client$data$log <- F
+  #   js$refresh()
   # })
   
   ### UI output handler
@@ -130,6 +124,3 @@ server <- function(input, output, session) {
 }
 
 shinyApp(ui, server)
-
-
-
