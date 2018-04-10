@@ -6,7 +6,6 @@ blockquote {
 }
 blockquote:before {
   color: #ccc;
-  content: open-quote;
   font-size: 4em;
   line-height: 0.1em;
   margin-right: 0.25em;
@@ -15,3 +14,39 @@ blockquote:before {
 blockquote p {
   display: inline;
 }
+
+.list-group-item.active, .list-group-item.active:focus, .list-group-item.active:hover {
+    font-weight: bold;
+    z-index: 2;
+    color: #fff;
+    background-color: #FF0D0A;
+    border-color: #FF0D0A;
+}
+
+a:link {
+    color: #FF0D0A;
+}
+
+a:link {
+    color: #FF0D0A;
+}
+
+/* visited link 
+h1.title {
+  color: #FF0D0A;
+}
+a:visited {
+    color: green;
+}
+*/
+
+/* mouse over link 
+a:hover {
+    color: green;
+}
+*/
+/* selected link 
+a:active {
+    color: blue;
+}
+*/

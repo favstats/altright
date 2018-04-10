@@ -1,20 +1,16 @@
 ---
-output: html_document
+title: "Welcome to the Alt Right Machine Learning Project!"
+output: 
+  html_document:
+    css: styles.css
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-<center>
-  <font size="+15">Welcome to the Alt Right Coding Project!</font>
-</center>
+> Let us first thank you personally for participating in this project. It's great that you are taking the time to do this and we really appreciate it. Without your help, this project would not be possible in this way. Please feel free to contact us at any time if you have any questions.
 
-<br>
-
-Let us first thank you personally for participating in this project. It's great that you are taking the time to do this and we really appreciate it. Without your help, this project would not be possible in this way. Please feel free to contact us at any time if you have any questions.
-
-<br>
 
 # What is the Goal of this Project?
 
@@ -33,7 +29,7 @@ The findings of this project will be presented at a [Voxpol Online-Extremism wor
 
 # How can you contribute?
 
-Help us code 500 comments/tweets (more is possible) that come from a wide variety of Social Media Accounts that are associated with the Alt Right. We included several scales that will be used to classify the commentary. We also hope to differentiate between the so-called "Alt-Light" and "Alt-Right". The following section includes the instructions on how to code the comments and tweets, please feel free to reference those whenever you have trouble.
+Help us code 500 comments/tweets (more is possible) that come from a wide variety of Social Media Accounts that are associated with the Alt Right. We included several scales that will be used to classify the commentary. We also hope to differentiate between the so-called "Alt-Light" and "Alt-Right". 
 
 **We would like to introduce you to the framework you will be using:**
 
@@ -43,9 +39,9 @@ Help us code 500 comments/tweets (more is possible) that come from a wide variet
 
 <br>
 
-You should start by reading the **Instructions**.
+You should start by reading the **Coding Guidlines** (next tab).
 
-Once you feel confident enough, you can start labelling when you click on the **Task** Tab.
+Once you feel confident enough, you can start labeling when you click on the **Task** Tab.
 
 <br>
 

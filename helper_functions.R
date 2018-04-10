@@ -78,7 +78,7 @@ get_replies_scroll <- function(handle, ids) {
       html_text() %>% 
       length()
   }
-
+  
   ### prep
   u <- paste0("https://twitter.com/", handle, "/status/", ids, "?lang=en")
   #u <- "https://twitter.com/ArktosMedia/status/821845084962516992" # produces error
@@ -88,7 +88,7 @@ get_replies_scroll <- function(handle, ids) {
   replies_page_list <- list()
   
   for(jj in seq_along(u)) {
-  
+    
     
     #does tweet exist
     test <- tryCatch({
@@ -110,13 +110,13 @@ get_replies_scroll <- function(handle, ids) {
     }
     else if (test) {
       cat(red("WARNING:") %+% white(" Account Suspended/Tweet unavailable in Germany\n")) 
-        return(NA)
-      }
+      return(NA)
+    }
     
     
     # call twitter url
     remDr$navigate(u[jj])
-
+    
     ### scroller
     k <- 50
     ntw_before <- ntweets()
@@ -173,7 +173,7 @@ get_tweet_replies <- function(dat, start, end){
     paste0("\n +++ Tweet #: ", sqp[jj], " by: ", dat$handler[sqp[jj]], " +++ \n") %>%
       bgRed$bold() %>%
       cat()
-#    beepr::beep(1)
+    #    beepr::beep(1)
     rd <- get_replies_scroll(
       handle = dat$handler[sqp[jj]], 
       ids = dat$tweet_id[sqp[jj]]

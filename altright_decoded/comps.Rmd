@@ -1,0 +1,115 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+load packages
+
+* [authentification to google](https://cran.r-project.org/web/packages/googleAuthR/vignettes/google-authentication-types.html)
+
+
+
+```{r}
+pacman::p_load(dplyr, ggplot2, googlesheets, openxlsx)
+```
+
+## prepare the OAuth token and set up the target sheet:
+
+- do this interactively
+- do this EXACTLY ONCE
+
+* [Example App](https://github.com/jennybc/googlesheets/blob/master/inst/shiny-examples/10_read-write-private-sheet/global.R)
+* [Solution](https://stackoverflow.com/questions/32537882/adding-rows-to-a-google-sheet-using-the-r-package-googlesheets
+)
+
+```{r}
+shiny_token <- gs_auth() # authenticate w/ your desired Google identity here
+saveRDS(shiny_token, "shiny_app_token.rds")
+```
+
+Into the App!!
+
+```{r, eval = F}
+# googlesheets::gs_auth(token = "shiny_app_token.rds")
+# sheet_key <- "1qIPAnsvFh23IZJl-5tfYPc1SnYrbApJ82sXfA4acuaw"
+# ss <- googlesheets::gs_key(sheet_key)
+```
+
+
+## load raw data
+
+```{r}
+load("data/rt_sample.Rdata")
+bitcoin_no_label <- rt_sample %>% sample_n(size = 2000)
+glimpse(bitcoin_no_label)
+
+# browser athentification
+gs_auth()
+
+# speed up big data uploads by csv upload
+write.xlsx(bitcoin_no_label, file = "data/bitcoin_no_label.xlsx")
+
+gs_upload(
+  file = "data/bitcoin_no_label.xlsx", 
+  sheet_title = "bitcoin_no_label"
+)
+```
+
+next we register the `with_label` data. 
+
+```{r}
+#id <- gs_title("no_label")
+#id %>% gs_browse()
+#no_label <- gs_read(id)
+
+init <- data.frame(
+      bitcoin_no_label, 
+      sent = NA, 
+      spam = NA, 
+      inter = NA, 
+      category = NA,
+      star = NA,
+      coder = NA,
+      timestamp = NA
+    )[1,]
+
+## if you version control your app, don't forget to ignore the token file!
+## e.g., put it into .gitignore
+bitcoin_with_label <- gs_new(
+  "bitcoin_with_label", 
+  input = init, 
+  trim = TRUE
+)
+
+sheet_key <- bitcoin_with_label$sheet_key 
+# new 
+#"16kjt23nknV3ljsORwNon4n1I_BnI9BbilvoRj34ueV8"
+
+bitcoin_with_label <- bitcoin_with_label %>% 
+  gs_add_row(input = init)
+```
+
+setup user data.frame
+
+```{r}
+accounts_df <- data.frame(
+  user_name = c("syro", "favoo", "becci", "karsten", "rudi", "paraboost", "test1", "test2"), 
+  password = c("2018", "2018", "2018", "2018", "2018", "2018", "2018", "2018"),
+  stringsAsFactors = F
+)
+
+## if you version control your app, don't forget to ignore the token file!
+## e.g., put it into .gitignore
+accounts <- gs_new(
+  "accounts", 
+  input = accounts_df, 
+  trim = TRUE
+)
+
+accounts$sheet_key 
+# clients new 
+#"1MAmsTJgM6tw2cBdvHOG-2xqtY9MLUGDooiumKiitOmE"
+
+accounts <- accounts %>% 
+  gs_add_row(input = c("jony", "2018"))
+```
